@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyQuizMobile.DetailFour"
+             Title="Seite Vier">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Text" VerticalOptions="Center" HorizontalOptions="Center" StyleClass="Header" TextColor="Black"/>
+            <Label Text="Zeile eins" VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black"/>
+            <Button Text="Klick mich!" VerticalOptions="Center" HorizontalOptions="Center" ></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
