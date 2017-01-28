@@ -7,12 +7,7 @@ namespace MyQuizMobile
 	{
 	    public RootViewViewModel RootViewViewModel;
 	    public static NavigationPage rootNavigationPage;
-
-	    public static RootView rootView
-	    {
-	        get;
-	        set;
-	    }
+	    public static RootView rootView { get;set;}
 
 	    public RootView()
 		{

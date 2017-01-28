@@ -8,7 +8,7 @@ namespace MyQuizMobile
 		public MasterMenu ()
 		{
 			InitializeComponent();
-		    MasterMenuViewModel = DependencyService.Get<MasterMenuViewModel>(DependencyFetchTarget.GlobalInstance);
+		    MasterMenuViewModel = new MasterMenuViewModel();
 		    BindingContext = MasterMenuViewModel;
 
 		    listView.ItemSelected += MasterMenuViewModel.OnItemSelected;

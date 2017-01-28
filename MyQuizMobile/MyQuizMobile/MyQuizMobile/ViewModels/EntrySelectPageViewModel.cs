@@ -29,6 +29,8 @@ namespace MyQuizMobile
         {
             PickDone?.Invoke(this, e);
         }
+
+        // TODO : add missing types questionlists, questions, persons
         public EntrySelectPageViewModel(string type, DetailMain detailmain)
         {
             _type = type;
@@ -43,21 +45,17 @@ namespace MyQuizMobile
                     break;
             }
         }
+        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            var item = e.SelectedItem as EntrySelectItem;
+            if (item == null) return;
+            OnPicked(new StringEventArg { Name = item.Title });
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            var item = e.SelectedItem as EntrySelectItem;
-
-            if (item == null) return;
-            OnPicked(new StringEventArg {Name = item.Title});
-
         }
     }
 
