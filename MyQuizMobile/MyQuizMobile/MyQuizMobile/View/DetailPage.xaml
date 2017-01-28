@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyQuizMobile.View.DetailPage"
+             Title="{Binding Title}">
+  <Grid RowSpacing="0">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    
+    <ScrollView Grid.Row="0" Padding="20">
+      <StackLayout Spacing="20" Padding="0">
+        <Label Text="{Binding Item.Text}" FontSize="Medium"/>
+        <Label Text="{Binding Item.Description}" FontSize="Small"/>
+      </StackLayout>
+    </ScrollView>
+
+    <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="10" Padding="20,0">
+      <Label Text="Quantity"
+              LineBreakMode="NoWrap"
+              Style="{DynamicResource ListItemDetailTextStyle}"
+              VerticalOptions="Center"/>
+      <Label Text=": "
+              LineBreakMode="NoWrap"
+              Style="{DynamicResource ListItemDetailTextStyle}"
+              VerticalOptions="Center"/>
+      <Label Text="{Binding Quantity}"
+              LineBreakMode="NoWrap"
+              Style="{DynamicResource ListItemDetailTextStyle}"
+              VerticalOptions="Center"
+              HorizontalOptions="StartAndExpand"/>
+
+      <Stepper Minimum="1"
+                Maximum="3"
+                Value="{Binding Quantity}"
+                VerticalOptions="Center"/>
+    </StackLayout>
+    
+    
+    <Grid Grid.Row="2" Padding="10,10,10,20" VerticalOptions="End">
+      <Button 
+            Text="Add to My Items"
+            Command="{Binding SaveCommand}"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="White"/>
+      <ActivityIndicator
+            VerticalOptions="Center"
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding IsBusy}"
+            IsRunning="{Binding IsBusy}"/>
+    </Grid>
+  </Grid>
+</ContentPage>
