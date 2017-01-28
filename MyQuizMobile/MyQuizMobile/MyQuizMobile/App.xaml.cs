@@ -13,7 +13,7 @@ namespace MyQuizMobile
 		{
 			InitializeComponent();
 
-			MainPage = new MyQuizMobile.MainPage();
+			MainPage = new MyQuizMobile.RootView();
 		}
 
 		protected override void OnStart ()
