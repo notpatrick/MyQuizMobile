@@ -4,6 +4,6 @@
              xmlns:themes="clr-namespace:Xamarin.Forms.Themes;assembly=Xamarin.Forms.Theme.Light"
              x:Class="MyQuizMobile.App">
     <Application.Resources>
-        <ResourceDictionary MergedWith="themes:LightThemeResources" />
+        <ResourceDictionary MergedWith="themes:LightThemeResources"/>
     </Application.Resources>
 </Application>

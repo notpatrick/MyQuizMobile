@@ -5,12 +5,12 @@
              Title="RootPage">
     
     <MasterDetailPage.Master>
-        <local:MasterMenu x:Name="masterMenu" />
+        <local:SideMenuPage x:Name="sideMenu" />
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
         <NavigationPage x:Name="rootNavigation">
             <x:Arguments>
-                <local:DetailMain></local:DetailMain>
+                <local:AbstimmungStartenPage></local:AbstimmungStartenPage>
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>
