@@ -14,6 +14,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converters\PersonenbezogenConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SendButtonColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Timer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMenuItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Antwort.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Frage.cs" />
@@ -22,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Veranstaltung.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AbstimmungStartenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AuswahlViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LiveResultViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SideMenuViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RootViewViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AbstimmungStartenPage.xaml.cs">
@@ -38,6 +40,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\FrageVerwaltenPage.xaml.cs">
       <DependentUpon>FrageVerwaltenPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\LiveResultPage.xaml.cs">
+      <DependentUpon>LiveResultPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\SideMenuPage.xaml.cs">
@@ -64,7 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\FrageListeVerwaltenView.xaml">
@@ -98,6 +103,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\VeranstaltungenVerwaltenPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\LiveResultPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

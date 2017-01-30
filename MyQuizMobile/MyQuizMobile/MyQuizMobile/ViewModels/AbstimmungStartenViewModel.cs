@@ -147,9 +147,15 @@ namespace MyQuizMobile
             }
         }
 
-        public void weiterButton_Clicked(object sender, EventArgs e)
+        public void personenbezogenSwitch_Toggled(object sender, ToggledEventArgs e)
         {
-            
+            IsPersonenbezogen = e.Value;
+        }
+
+        public async void weiterButton_Clicked(object sender, EventArgs e)
+        {
+            var nextPage = new LiveResultPage();
+            await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
         #region inotify
         public event PropertyChangedEventHandler PropertyChanged;
@@ -160,10 +166,6 @@ namespace MyQuizMobile
         }
         #endregion
 
-        public void personenbezogenSwitch_Toggled(object sender, ToggledEventArgs e)
-        {
-            IsPersonenbezogen = e.Value;
-        }
     }
 
     public class MenuItem : IMenuItem

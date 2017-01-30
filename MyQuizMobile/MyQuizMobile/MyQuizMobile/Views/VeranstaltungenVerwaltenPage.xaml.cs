@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace MyQuizMobile.Views
+namespace MyQuizMobile
 {
 	public partial class VeranstaltungenVerwaltenPage : ContentPage
 	{

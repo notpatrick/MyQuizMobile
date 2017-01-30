@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:myQuizMobile="clr-namespace:MyQuizMobile"
+             x:Class="MyQuizMobile.LiveResultPage"
+             Title="{Binding CurrentPerson.DisplayText, StringFormat='{0}s Ergebnisse'}">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <myQuizMobile:PersonenbezogenConverter x:Key="PersonenbezogenConverter"/>
+      <myQuizMobile:SendButtonColorConverter x:Key="SendButtonColorConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ContentPage.Content>
+    <StackLayout>
+      <ListView x:Name="listView" ItemsSource="{Binding ResultCollection}" VerticalOptions="Fill" RowHeight="150">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+            <StackLayout VerticalOptions="FillAndExpand">
+              <Label Text="{Binding DisplayText}" TextColor="#212121" />
+              <Label Text="{Binding Antworten[0].DisplayText, StringFormat=' 15   {0}'}"/>
+              <Label Text="{Binding Antworten[1].DisplayText, StringFormat='  6   {0}'}"/>
+              <Label Text="{Binding Antworten[2].DisplayText, StringFormat=' 11   {0}'}"/>
+              <Label Text="{Binding Antworten[3].DisplayText, StringFormat='  2   {0}'}"/>
+              <Label>
+              </Label>
+            </StackLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand" Padding="10">
+
+        <Grid HorizontalOptions="FillAndExpand" >
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="7*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+          </Grid.RowDefinitions>
+          <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="1"/>
+          <Label Text="Sekunden" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
+        </Grid>
+        <Button x:Name="weiterButton" Text="Fragen senden" HorizontalOptions="FillAndExpand"  IsEnabled="{Binding CanSend}" BackgroundColor="{Binding CanSend, Converter={StaticResource SendButtonColorConverter}}"></Button>
+      </StackLayout>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>
