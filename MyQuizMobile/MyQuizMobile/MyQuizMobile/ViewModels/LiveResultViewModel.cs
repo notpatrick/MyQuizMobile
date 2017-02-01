@@ -6,12 +6,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using MyQuizMobile.Helpers;
+using Xamarin.Forms;
 
 namespace MyQuizMobile
 {
     public class LiveResultViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ResultItem> ResultCollection { get; set; }
+        public ObservableCollection<IMenuItem> ResultCollection { get; set; }
         private int _timeInSeconds;
         public int TimeInSeconds
         {
@@ -32,9 +33,7 @@ namespace MyQuizMobile
                 OnPropertyChanged("CanSend");
             }
         }
-
         private Person _currentPerson;
-
         public Person CurrentPerson
         {
             get { return _currentPerson; }
@@ -44,25 +43,30 @@ namespace MyQuizMobile
                 OnPropertyChanged("CurrentPerson");
             }
         }
-
+        private bool _isPersonenbezogen;
+        public bool IsPersonenbezogen
+        {
+            get { return _isPersonenbezogen; }
+            set
+            {
+                _isPersonenbezogen = value;
+                OnPropertyChanged("IsPersonenbezogen");
+            }
+        }
         public ObservableCollection<Person> Persons { get; set; }
 
         private Timer _timer;
-        public LiveResultViewModel()
+        public LiveResultViewModel(AbstimmungStartenViewModel asvm)
         {
             CanSend = true;
-            TimeInSeconds = 30;
+            TimeInSeconds = asvm.TimeInSeconds;
+            IsPersonenbezogen = asvm.IsPersonenbezogen;
             ResultCollection = ResultItem.ResultsDummy;
-            Persons = new ObservableCollection<Person>()
+            if (IsPersonenbezogen)
             {
-                new Person() {DisplayText = "Lloyd"},
-                new Person() {DisplayText = "Julian"},
-                new Person() {DisplayText = "Philipp"},
-                new Person() {DisplayText = "Jovan"},
-                new Person() {DisplayText = "Patrick"},
-            };
-            CurrentPerson = Persons[0];
-
+                Persons = ((Veranstaltung)asvm.OptionCollection[0]).Personen;
+                CurrentPerson = Persons[0];
+            }
         }
 
         #region notify
@@ -91,9 +95,24 @@ namespace MyQuizMobile
                 _timer.Cancel();
                 CanSend = !CanSend;
                 TimeInSeconds = 30;
-                var curindex = Persons.IndexOf(CurrentPerson);
-                CurrentPerson = curindex < Persons.Count ? Persons[(curindex + 1)] : Persons[0];
+                if (IsPersonenbezogen)
+                {
+                    var curindex = Persons.IndexOf(CurrentPerson);
+                    CurrentPerson = curindex < Persons.Count ? Persons[(curindex + 1)] : Persons[0];
+                }
             }
+        }
+
+        public void TimeEntryOnFocused(object sender, FocusEventArgs focusEventArgs)
+        {
+            var entry = focusEventArgs.VisualElement as Entry;
+            if (entry != null) entry.Text = entry.Text.Replace("s", "");
+        }
+
+        public void TimeEntryOnUnfocused(object sender, FocusEventArgs focusEventArgs)
+        {
+            var entry = focusEventArgs.VisualElement as Entry;
+            if (entry != null) entry.Text += "s";
         }
     }
 
@@ -109,7 +128,7 @@ namespace MyQuizMobile
             ItemType = ItemType.Frage;
         }
 
-        public static ObservableCollection<ResultItem> ResultsDummy = new ObservableCollection<ResultItem>
+        public static ObservableCollection<IMenuItem> ResultsDummy = new ObservableCollection<IMenuItem>
                 {
                 new ResultItem() { DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage, Antworten = new  ObservableCollection<Antwort>() {
                     new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},

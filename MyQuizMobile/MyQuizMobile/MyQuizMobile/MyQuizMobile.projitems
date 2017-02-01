@@ -12,11 +12,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\AppendTrailingSecondConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBoolConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\PersonenbezogenConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SendButtonColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\BindablePicker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Timer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMenuItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Antwort.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BeantworteteFrage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Frage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\FrageListe.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Person.cs" />

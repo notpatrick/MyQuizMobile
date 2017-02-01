@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MyQuizMobile
 {
@@ -8,7 +9,7 @@ namespace MyQuizMobile
         public string DisplayText { get; set; }
         public ItemType ItemType { get; set; }
         public string Name { get; set; }
-        public List<Person> Personen { get;set; }
+        public ObservableCollection<Person> Personen { get;set; }
 
         public Veranstaltung()
         {

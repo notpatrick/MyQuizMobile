@@ -154,7 +154,7 @@ namespace MyQuizMobile
 
         public async void weiterButton_Clicked(object sender, EventArgs e)
         {
-            var nextPage = new LiveResultPage();
+            var nextPage = new LiveResultPage(this);
             await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
         #region inotify
