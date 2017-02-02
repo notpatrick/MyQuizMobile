@@ -13,14 +13,15 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="listView" ItemsSource="{Binding ResultCollection}" VerticalOptions="FillAndExpand" HasUnevenRows="True" RowHeight="-1" CachingStrategy="RecycleElement">
+            <ListView x:Name="listView" ItemsSource="{Binding ResultCollection}" VerticalOptions="FillAndExpand"
+                      HasUnevenRows="True" RowHeight="-1" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                      <ViewCell>
-                        <StackLayout>
-                          <Label Text="{Binding DisplayText}"></Label>
-                          <Label Text="{Binding AnswerCount, StringFormat='{0} Antworten erhalten'}"></Label>
-                        </StackLayout>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding DisplayText}" />
+                                <Label Text="{Binding AnswerCount, StringFormat='{0} Antworten erhalten'}" />
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

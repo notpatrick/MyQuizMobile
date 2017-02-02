@@ -1,16 +1,13 @@
 ﻿using Xamarin.Forms;
 
-namespace MyQuizMobile
-{
-	public partial class RootView : MasterDetailPage
-	{
-	    public RootViewViewModel RootViewViewModel;
+namespace MyQuizMobile {
+    public partial class RootView : MasterDetailPage {
+        public RootViewViewModel RootViewViewModel;
 
-	    public RootView()
-		{
-			InitializeComponent();
+        public RootView() {
+            InitializeComponent();
             RootViewViewModel = new RootViewViewModel();
             BindingContext = RootViewViewModel;
-		}
-	}
+        }
+    }
 }

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace MyQuizMobile.DataModel
-{
-    public class QuestionBlock : MenuItem
-    {
+namespace MyQuizMobile.DataModel {
+    public class QuestionBlock : MenuItem {
         public override int Id { get; set; }
         public string Title { get; set; }
         public List<Question> Questions { get; set; }

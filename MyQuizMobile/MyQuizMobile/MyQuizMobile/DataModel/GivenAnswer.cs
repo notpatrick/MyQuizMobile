@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace MyQuizMobile.DataModel
-{
-    public class GivenAnswer : MenuItem
-    {
+namespace MyQuizMobile.DataModel {
+    public class GivenAnswer : MenuItem {
         public DateTime TimeStamp { get; set; }
         public QuestionBlock QuestionBlock { get; set; }
         public Question Question { get; set; }
@@ -16,8 +14,7 @@ namespace MyQuizMobile.DataModel
         public override ItemType ItemType { get; set; }
     }
 
-    public class IdGivenAnswer
-    {
+    public class IdGivenAnswer {
         public DateTime TimeStamp { get; set; }
         public int? QuestionBlockId { get; set; }
         public int QuestionId { get; set; }

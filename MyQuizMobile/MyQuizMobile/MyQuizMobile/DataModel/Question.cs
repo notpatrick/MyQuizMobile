@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace MyQuizMobile.DataModel
-{
-    public class Question : MenuItem
-    {
+namespace MyQuizMobile.DataModel {
+    public class Question : MenuItem {
         public override int Id { get; set; }
         public string Text { get; set; }
         public QuestionCategory Category { get; set; }
@@ -14,8 +12,7 @@ namespace MyQuizMobile.DataModel
         public override ItemType ItemType { get; set; }
     }
 
-    public enum QuestionCategory
-    {
+    public enum QuestionCategory {
         Umfrage,
         Quiz
     }

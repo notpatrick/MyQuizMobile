@@ -1,10 +1,3 @@
-﻿namespace MyQuizMobile
-{
-    public class RootViewViewModel
-    {
-        public RootViewViewModel()
-        {
-
-        }
-    }
+﻿namespace MyQuizMobile {
+    public class RootViewViewModel {}
 }

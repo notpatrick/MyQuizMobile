@@ -1,9 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace MyQuizMobile.DataModel
-{
-    public class Group : MenuItem
-    {
+namespace MyQuizMobile.DataModel {
+    public class Group : MenuItem {
         public override int Id { get; set; }
         public string Title { get; set; }
         public string EnterGroupPin { get; set; }
@@ -11,9 +9,6 @@ namespace MyQuizMobile.DataModel
         public override string DisplayText { get; set; }
         public override ItemType ItemType { get; set; }
 
-        public void SetDisplayText()
-        {
-            DisplayText = $"{Title}";
-        }
+        public void SetDisplayText() { DisplayText = $"{Title}"; }
     }
 }

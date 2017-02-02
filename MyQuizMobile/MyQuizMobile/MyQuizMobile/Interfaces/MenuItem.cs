@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace MyQuizMobile
-{
-    public abstract class MenuItem
-    {
+namespace MyQuizMobile {
+    public abstract class MenuItem {
         public abstract int Id { get; set; }
         [JsonIgnore]
         public abstract string DisplayText { get; set; }
@@ -11,8 +9,7 @@ namespace MyQuizMobile
         public abstract ItemType ItemType { get; set; }
     }
 
-    public enum ItemType
-    {
+    public enum ItemType {
         Veranstaltung,
         Frageliste,
         Frage,

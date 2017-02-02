@@ -1,16 +1,16 @@
 ﻿<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MyQuizMobile"
-             x:Class="MyQuizMobile.RootView"
-             Title="RootPage">
-    
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:local="clr-namespace:MyQuizMobile"
+                  x:Class="MyQuizMobile.RootView"
+                  Title="RootPage">
+
     <MasterDetailPage.Master>
         <local:SideMenuPage x:Name="sideMenu" />
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
         <NavigationPage x:Name="rootNavigation">
             <x:Arguments>
-                <local:AbstimmungStartenPage></local:AbstimmungStartenPage>
+                <local:AbstimmungStartenPage />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>

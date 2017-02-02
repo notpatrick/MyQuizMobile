@@ -1,13 +1,10 @@
 ﻿using Xamarin.Forms;
 
-namespace MyQuizMobile
-{
-    public partial class AbstimmungStartenPage : ContentPage
-    {
+namespace MyQuizMobile {
+    public partial class AbstimmungStartenPage : ContentPage {
         public AbstimmungStartenViewModel AbstimmungStartenViewModel;
 
-        public AbstimmungStartenPage()
-        {
+        public AbstimmungStartenPage() {
             InitializeComponent();
             AbstimmungStartenViewModel = new AbstimmungStartenViewModel();
             BindingContext = AbstimmungStartenViewModel;
@@ -18,7 +15,5 @@ namespace MyQuizMobile
             weiterButton.Clicked += AbstimmungStartenViewModel.weiterButton_Clicked;
             personenbezogenSwitch.Toggled += AbstimmungStartenViewModel.personenbezogenSwitch_Toggled;
         }
-
-
     }
 }

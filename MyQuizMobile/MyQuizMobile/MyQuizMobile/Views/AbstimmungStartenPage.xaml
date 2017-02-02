@@ -3,39 +3,47 @@
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.AbstimmungStartenPage"
              Title="Abstimmung starten">
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <local:SendButtonColorConverter x:Key="SendButtonColorConverter" />
-    </ResourceDictionary>
-  </ContentPage.Resources>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:SendButtonColorConverter x:Key="SendButtonColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-  <ContentPage.Content>
-    <StackLayout>
-      <ListView x:Name="listView" ItemsSource="{Binding OptionCollection}" VerticalOptions="Fill">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <TextCell Text="{Binding ItemType}" Detail="{Binding DisplayText}" TextColor="#212121" DetailColor="#616161"/>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-      <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand" Padding="10">
-        
-        <Grid HorizontalOptions="FillAndExpand" >
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="7*"></ColumnDefinition>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-          </Grid.RowDefinitions>
-          <Switch x:Name="personenbezogenSwitch" HorizontalOptions="FillAndExpand" IsToggled="{Binding IsPersonenbezogen}" Grid.Column="0" Grid.Row="0" IsEnabled="{Binding VeranstaltungHasPersons}"></Switch>
-          <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="0"/>
-          <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="1"/>
-          <Label Text="Sekunden pro Frage" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
-        </Grid>
-        <Button x:Name="weiterButton" Text="Weiter" HorizontalOptions="FillAndExpand" IsEnabled="{Binding CanSend}" BackgroundColor="{Binding CanSend, Converter={StaticResource SendButtonColorConverter}}"></Button>
-      </StackLayout>
-    </StackLayout>
-  </ContentPage.Content>
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="listView" ItemsSource="{Binding OptionCollection}" VerticalOptions="Fill">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding ItemType}" Detail="{Binding DisplayText}" TextColor="#212121"
+                                  DetailColor="#616161" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand" Padding="10">
+
+                <Grid HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="7*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Switch x:Name="personenbezogenSwitch" HorizontalOptions="FillAndExpand"
+                            IsToggled="{Binding IsPersonenbezogen}" Grid.Column="0" Grid.Row="0"
+                            IsEnabled="{Binding VeranstaltungHasPersons}" />
+                    <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="0" />
+                    <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric"
+                           HorizontalTextAlignment="End" HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="1" />
+                    <Label Text="Sekunden pro Frage" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"
+                           HorizontalOptions="Start" Grid.Column="1" Grid.Row="1" />
+                </Grid>
+                <Button x:Name="weiterButton" Text="Weiter" HorizontalOptions="FillAndExpand"
+                        IsEnabled="{Binding CanSend}"
+                        BackgroundColor="{Binding CanSend, Converter={StaticResource SendButtonColorConverter}}" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

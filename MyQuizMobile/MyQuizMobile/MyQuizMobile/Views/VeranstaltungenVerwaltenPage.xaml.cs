@@ -1,20 +1,15 @@
-﻿using MYQuizMobile;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
-namespace MyQuizMobile
-{
-	public partial class VeranstaltungenVerwaltenPage : ContentPage
-	{
-	    public VeranstaltungenVerwaltenViewModel VeranstaltungenVerwaltenViewModel;
+namespace MyQuizMobile {
+    public partial class VeranstaltungenVerwaltenPage : ContentPage {
+        public VeranstaltungenVerwaltenViewModel VeranstaltungenVerwaltenViewModel;
 
-
-        public VeranstaltungenVerwaltenPage ()
-		{
-			InitializeComponent ();
+        public VeranstaltungenVerwaltenPage() {
+            InitializeComponent();
             VeranstaltungenVerwaltenViewModel = new VeranstaltungenVerwaltenViewModel();
-		    this.BindingContext = VeranstaltungenVerwaltenViewModel;
+            BindingContext = VeranstaltungenVerwaltenViewModel;
 
-		    addButton.Clicked += VeranstaltungenVerwaltenViewModel.addButton_Clicked;
-		}
-	}
+            addButton.Clicked += VeranstaltungenVerwaltenViewModel.addButton_Clicked;
+        }
+    }
 }
