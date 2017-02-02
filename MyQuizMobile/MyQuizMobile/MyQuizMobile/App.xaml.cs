@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using MYQuizMobile;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -9,13 +10,12 @@ namespace MyQuizMobile
 		public App ()
 		{
 			InitializeComponent();
-
-			MainPage = new MyQuizMobile.RootView();
+            MainPage = new MyQuizMobile.RootView();
 		}
 
 		protected override void OnStart ()
 		{
-			// Handle when your app starts
+		    var x = DependencyService.Get<Networking>();
 		}
 
 		protected override void OnSleep ()

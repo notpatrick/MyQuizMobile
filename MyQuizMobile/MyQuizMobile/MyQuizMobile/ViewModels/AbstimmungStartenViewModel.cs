@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using MyQuizMobile;
+using MyQuizMobile.DataModel;
 
 namespace MyQuizMobile
 {
     public class AbstimmungStartenViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<IMenuItem> OptionCollection { get; set; }
+        public ObservableCollection<MenuItem> OptionCollection { get; set; }
         private int _timeInSeconds;
         public int TimeInSeconds
         {
@@ -43,29 +40,39 @@ namespace MyQuizMobile
                 OnPropertyChanged("CanSend");
             }
         }
-
+        private bool _veranstaltungHasPersons;
+        public bool VeranstaltungHasPersons
+        {
+            get { return _veranstaltungHasPersons; }
+            set
+            {
+                _veranstaltungHasPersons = value;
+                OnPropertyChanged("VeranstaltungHasPersons");
+            }
+        }
 
         public AbstimmungStartenViewModel()
         {
             TimeInSeconds = 30;
             IsPersonenbezogen = false;
             CanSend = false;
-            OptionCollection = new ObservableCollection<IMenuItem>
+            VeranstaltungHasPersons = false;
+            OptionCollection = new ObservableCollection<MenuItem>
             {
-                new MenuItem() {Id = -1, ItemType = ItemType.Veranstaltung},
-                new MenuItem() {Id = -1, ItemType = ItemType.Frageliste}
+                new SelectMenuItem() {Id = -1, ItemType = ItemType.Veranstaltung},
+                new SelectMenuItem() {Id = -1, ItemType = ItemType.Frageliste}
             };
         }
 
         public async void OnMenuItemTapped(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as IMenuItem;
+            var item = e.SelectedItem as MenuItem;
 
             if (item == null) return;
             var nextPage = new AuswahlPage(item);
             nextPage.AuswahlViewModel.PickDone += SetItemAfterPick;
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
 
         private async void SetItemAfterPick(object sender, MenuItemPickedEventArgs e)
@@ -76,12 +83,22 @@ namespace MyQuizMobile
             {
                 case ItemType.Veranstaltung:
                     OptionCollection[0] = item;
+                    if ((item as Group)?.SingleTopics != null)
+                    {
+                        VeranstaltungHasPersons = true;
+                        IsPersonenbezogen = true;
+                    }
+                    else
+                    {
+                        VeranstaltungHasPersons = false;
+                        IsPersonenbezogen = false;
+                    }
                     break;
                 case ItemType.Frageliste:
                     OptionCollection[1] = item;
                     if (item.Id == 0)
                     {
-                        OptionCollection.Add(new MenuItem()
+                        OptionCollection.Add(new SelectMenuItem()
                         {
                             Id = -1,
                             DisplayText = "Frage auswählen",
@@ -168,10 +185,10 @@ namespace MyQuizMobile
 
     }
 
-    public class MenuItem : IMenuItem
+    public class SelectMenuItem : MenuItem
     {
-        public int Id { get; set; }
-        public string DisplayText { get; set; }
-        public ItemType ItemType { get; set; }
+        public override int Id { get; set; }
+        public override string DisplayText { get; set; }
+        public override ItemType ItemType { get; set; }
     }
 }

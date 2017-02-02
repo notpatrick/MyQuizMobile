@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
+using MyQuizMobile.DataModel;
 using MyQuizMobile.Helpers;
 using Xamarin.Forms;
+using Device = Xamarin.Forms.Device;
 
 namespace MyQuizMobile
 {
     public class LiveResultViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<IMenuItem> ResultCollection { get; set; }
+        public ObservableCollection<MenuItem> ResultCollection { get; set; }
         private int _timeInSeconds;
         public int TimeInSeconds
         {
@@ -20,7 +20,7 @@ namespace MyQuizMobile
             set
             {
                 _timeInSeconds = value;
-                OnPropertyChanged("TimeInSeconds");
+                OnPropertyChanged();
             }
         }
         private bool _canSend;
@@ -30,17 +30,27 @@ namespace MyQuizMobile
             set
             {
                 _canSend = value;
-                OnPropertyChanged("CanSend");
+                OnPropertyChanged();
             }
         }
-        private Person _currentPerson;
-        public Person CurrentPerson
+        private bool _canEdit;
+        public bool CanEdit
         {
-            get { return _currentPerson; }
+            get { return _canEdit; }
             set
             {
-                _currentPerson = value;
-                OnPropertyChanged("CurrentPerson");
+                _canEdit = value;
+                OnPropertyChanged();
+            }
+        }
+        private SingleTopic _currentSingleTopic;
+        public SingleTopic CurrentSingleTopic
+        {
+            get { return _currentSingleTopic; }
+            set
+            {
+                _currentSingleTopic = value;
+                OnPropertyChanged();
             }
         }
         private bool _isPersonenbezogen;
@@ -50,22 +60,36 @@ namespace MyQuizMobile
             set
             {
                 _isPersonenbezogen = value;
-                OnPropertyChanged("IsPersonenbezogen");
+                OnPropertyChanged();
             }
         }
-        public ObservableCollection<Person> Persons { get; set; }
+        public ObservableCollection<SingleTopic> SingleTopics { get; set; }
+        private readonly int _initialTime;
+        private bool _abstimmungFertig;
+        private string _buttonText;
+        public string ButtonText
+        {
+            get { return _buttonText; }
+            set {
+                _buttonText = value;
+                OnPropertyChanged();
+            }
+        }
 
         private Timer _timer;
         public LiveResultViewModel(AbstimmungStartenViewModel asvm)
         {
             CanSend = true;
+            CanEdit = true;
+            ButtonText = SendenText;
             TimeInSeconds = asvm.TimeInSeconds;
+            _initialTime = asvm.TimeInSeconds;
             IsPersonenbezogen = asvm.IsPersonenbezogen;
             ResultCollection = ResultItem.ResultsDummy;
             if (IsPersonenbezogen)
             {
-                Persons = ((Veranstaltung)asvm.OptionCollection[0]).Personen;
-                CurrentPerson = Persons[0];
+                SingleTopics = ((Group)asvm.OptionCollection[0]).SingleTopics;
+                CurrentSingleTopic = SingleTopics.FirstOrDefault();
             }
         }
 
@@ -78,10 +102,19 @@ namespace MyQuizMobile
         }
 #endregion
 
-        public void weiterButton_Clicked(object sender, EventArgs e)
+        public async void weiterButton_Clicked(object sender, EventArgs e)
         {
-            CanSend = !CanSend;
-            _timer = new Timer(new TimerCallback(TimerOnElapsed), null, 0, 1000);
+            if (!_abstimmungFertig)
+            {
+                CanSend = false;
+                CanEdit = false;
+                _timer = new Timer(TimerOnElapsed, null, 0, 1000);
+                // TODO: Open websocket connection here to start
+            }
+            else
+            {
+                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync();
+            }
         }
 
         private void TimerOnElapsed(object sender)
@@ -93,89 +126,303 @@ namespace MyQuizMobile
             else
             {
                 _timer.Cancel();
-                CanSend = !CanSend;
-                TimeInSeconds = 30;
+                CanSend = true;
+                CanEdit = true;
                 if (IsPersonenbezogen)
                 {
-                    var curindex = Persons.IndexOf(CurrentPerson);
-                    CurrentPerson = curindex < Persons.Count ? Persons[(curindex + 1)] : Persons[0];
+                    CurrentSingleTopic.UmfrageDone = true;
+                    if (SingleTopics.Any(singleTopic => !singleTopic.UmfrageDone))
+                    {
+                        TimeInSeconds = _initialTime;
+                        var index = SingleTopics.IndexOf(CurrentSingleTopic);
+                        if (index < SingleTopics.Count - 1 && !SingleTopics.ElementAt(index + 1).UmfrageDone)
+                            CurrentSingleTopic = SingleTopics.ElementAt(index + 1);
+                        else
+                            CurrentSingleTopic = SingleTopics.FirstOrDefault(x => x.UmfrageDone == false);
+                    }
                 }
+                
+                CheckIfAbstimmungFertig();
             }
         }
 
-        public void TimeEntryOnFocused(object sender, FocusEventArgs focusEventArgs)
+        private void CheckIfAbstimmungFertig()
         {
-            var entry = focusEventArgs.VisualElement as Entry;
-            if (entry != null) entry.Text = entry.Text.Replace("s", "");
+            if (SingleTopics.Any(singleTopic => !singleTopic.UmfrageDone))
+            {
+                _abstimmungFertig = false;
+                if (CurrentSingleTopic.UmfrageDone)
+                {
+                    CanSend = false;
+                    ButtonText = GesendetText;
+                }
+                else
+                {
+                    CanSend = true;
+                    ButtonText = SendenText;
+                }
+                return;
+            }
+            _abstimmungFertig = true;
+            ButtonText = BeendenText;
         }
 
-        public void TimeEntryOnUnfocused(object sender, FocusEventArgs focusEventArgs)
+        public void timeEntry_OnFocused(object sender, FocusEventArgs e)
         {
-            var entry = focusEventArgs.VisualElement as Entry;
-            if (entry != null) entry.Text += "s";
+            var entry = e.VisualElement as Entry;
+            if (entry == null) return;
+            // TODO: not mvvm style
+            entry.Text = "";
         }
+
+        public void timeEntry_OnUnfocused(object sender, FocusEventArgs e)
+        {
+            var entry = e.VisualElement as Entry;
+            if (entry == null) return;
+            int newTime;
+            if (int.TryParse(entry.Text, out newTime))
+            {
+                if (newTime < 1)
+                    newTime = 1;
+                else if (newTime > 9999)
+                    newTime = 9999;
+                TimeInSeconds = newTime;
+            }
+            else
+            {
+                TimeInSeconds = _initialTime;
+            }
+        }
+
+        public bool OnBackButtonPressed(ContentPage page)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var result = await page.DisplayAlert("Achtung!",
+                    "Wollen Sie die aktuelle Umfrage wirklich vorzeitig beenden? Ergebnisse können dann unvollständig sein!",
+                    "Umfrage Beenden", "Zurück");
+                if (result)
+                    await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync();
+            });
+
+            return true;
+        }
+
+        public void listView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item == null) return;
+            ((ListView) sender).SelectedItem = null;
+        }
+
+        public void personPicker_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            CheckIfAbstimmungFertig();
+        }
+
+        private const string SendenText = "Absenden";
+        private const string BeendenText = "Umfrage beenden";
+        private const string GesendetText = "Bereits gesendet";
     }
 
-    public class ResultItem : IMenuItem
+    public class ResultItem : MenuItem
     {
-        public int Id { get; set; }
-        public string DisplayText { get; set; }
-        public ItemType ItemType { get; set; }
-        public ObservableCollection<Antwort> Antworten { get; set; }
+        public override int Id { get; set; }
+        public override string DisplayText { get; set; }
+        public override ItemType ItemType { get; set; }
+        public ObservableCollection<AnswerOption> Antworten { get; set; }
+        public int AnswerCount { get; set; }
 
         public ResultItem()
         {
             ItemType = ItemType.Frage;
         }
 
-        public static ObservableCollection<IMenuItem> ResultsDummy = new ObservableCollection<IMenuItem>
+        public static ObservableCollection<MenuItem> ResultsDummy = new ObservableCollection<MenuItem>
                 {
-                new ResultItem() { DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage, Antworten = new  ObservableCollection<Antwort>() {
-                    new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
+                new ResultItem() { DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage, AnswerCount = 11, Antworten = new  ObservableCollection<AnswerOption>() {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
                 }},
-                new ResultItem() { DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage,
-                Antworten = new ObservableCollection<Antwort>()
+                new ResultItem() { DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage, AnswerCount = 7,
+                Antworten = new ObservableCollection<AnswerOption>()
                 {
-                    new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
                 }},
-                            new ResultItem() { DisplayText = "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!", Id = 2, ItemType = ItemType.Frage,
-                Antworten = new ObservableCollection<Antwort>()
+                            new ResultItem() { DisplayText = "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!", Id = 2, ItemType = ItemType.Frage, AnswerCount = 15,
+                Antworten = new ObservableCollection<AnswerOption>()
                 {
-                    new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
                 }},
-                            new ResultItem() { DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage,
-                Antworten = new ObservableCollection<Antwort>()
+                            new ResultItem() { DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage, AnswerCount = 21,
+                Antworten = new ObservableCollection<AnswerOption>()
                 {
-                    new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
                 }},
-                            new ResultItem() { DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage,
-                Antworten = new ObservableCollection<Antwort>()
+                            new ResultItem() { DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage, AnswerCount = 11,
+                Antworten = new ObservableCollection<AnswerOption>()
                 {
-                    new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
                 }},
-                            new ResultItem() { DisplayText = "Brauchst du eine Pause?",Id = 5, ItemType = ItemType.Frage,
-                Antworten = new ObservableCollection<Antwort>()
+                            new ResultItem() { DisplayText = "Brauchst du eine Pause?",Id = 5, ItemType = ItemType.Frage, AnswerCount = 4,
+                Antworten = new ObservableCollection<AnswerOption>()
                 {
-                    new Antwort() {DisplayText = "Antwort a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
-                    new Antwort() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false, Count = 0},
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                new ResultItem() { DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage, AnswerCount = 11, Antworten = new  ObservableCollection<AnswerOption>() {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                new ResultItem() { DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage, AnswerCount = 7,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!", Id = 2, ItemType = ItemType.Frage, AnswerCount = 15,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage, AnswerCount = 21,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage, AnswerCount = 11,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Brauchst du eine Pause?",Id = 5, ItemType = ItemType.Frage, AnswerCount = 4,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                new ResultItem() { DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage, AnswerCount = 11, Antworten = new  ObservableCollection<AnswerOption>() {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                new ResultItem() { DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage, AnswerCount = 7,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!", Id = 2, ItemType = ItemType.Frage, AnswerCount = 15,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage, AnswerCount = 21,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage, AnswerCount = 11,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Brauchst du eine Pause?",Id = 5, ItemType = ItemType.Frage, AnswerCount = 4,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                new ResultItem() { DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage, AnswerCount = 11, Antworten = new  ObservableCollection<AnswerOption>() {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                new ResultItem() { DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage, AnswerCount = 7,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!", Id = 2, ItemType = ItemType.Frage, AnswerCount = 15,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage, AnswerCount = 21,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage, AnswerCount = 11,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                }},
+                            new ResultItem() { DisplayText = "Brauchst du eine Pause?",Id = 5, ItemType = ItemType.Frage, AnswerCount = 4,
+                Antworten = new ObservableCollection<AnswerOption>()
+                {
+                    new AnswerOption() {DisplayText = "AnswerOption a", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Vielleicht b", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Es ist doch c", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
+                    new AnswerOption() {DisplayText = "Aber d ist immer richtig", Id = 0, ItemType = ItemType.Antwort, IsCorrect = false},
                 }}
-                        };
+                };
     }
 }

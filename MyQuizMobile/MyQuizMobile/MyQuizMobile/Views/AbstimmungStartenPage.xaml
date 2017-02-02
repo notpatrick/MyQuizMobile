@@ -5,7 +5,6 @@
              Title="Abstimmung starten">
   <ContentPage.Resources>
     <ResourceDictionary>
-        <local:PersonenbezogenConverter x:Key="PersonenbezogenConverter"/>
       <local:SendButtonColorConverter x:Key="SendButtonColorConverter" />
     </ResourceDictionary>
   </ContentPage.Resources>
@@ -30,12 +29,12 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
           </Grid.RowDefinitions>
-          <Switch x:Name="personenbezogenSwitch" HorizontalOptions="FillAndExpand" IsToggled="False" Grid.Column="0" Grid.Row="0"></Switch>
+          <Switch x:Name="personenbezogenSwitch" HorizontalOptions="FillAndExpand" IsToggled="{Binding IsPersonenbezogen}" Grid.Column="0" Grid.Row="0" IsEnabled="{Binding VeranstaltungHasPersons}"></Switch>
           <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="0"/>
           <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="1"/>
           <Label Text="Sekunden pro Frage" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
         </Grid>
-        <Button x:Name="weiterButton" Text="{Binding IsPersonenbezogen, Converter={StaticResource PersonenbezogenConverter}}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding CanSend}" BackgroundColor="{Binding CanSend, Converter={StaticResource SendButtonColorConverter}}"></Button>
+        <Button x:Name="weiterButton" Text="Weiter" HorizontalOptions="FillAndExpand" IsEnabled="{Binding CanSend}" BackgroundColor="{Binding CanSend, Converter={StaticResource SendButtonColorConverter}}"></Button>
       </StackLayout>
     </StackLayout>
   </ContentPage.Content>

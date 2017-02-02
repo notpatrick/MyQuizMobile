@@ -7,7 +7,7 @@ namespace MyQuizMobile
     {
         public AuswahlViewModel AuswahlViewModel;
 
-        public AuswahlPage(IMenuItem item)
+        public AuswahlPage(MenuItem item)
         {
             InitializeComponent();
             AuswahlViewModel = new AuswahlViewModel(item);

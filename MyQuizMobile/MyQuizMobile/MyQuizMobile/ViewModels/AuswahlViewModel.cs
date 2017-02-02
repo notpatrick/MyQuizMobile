@@ -2,13 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using MyQuizMobile.DataModel;
 using Xamarin.Forms;
 
 namespace MyQuizMobile
 {
     public class AuswahlViewModel : INotifyPropertyChanged
     {
-        public AuswahlViewModel(IMenuItem item)
+        public AuswahlViewModel(MenuItem item)
         {
             ItemType = item.ItemType;
             switch (ItemType)
@@ -32,12 +33,12 @@ namespace MyQuizMobile
             }
         }
 
-        public ObservableCollection<IMenuItem> AuswahlItemCollection { get; set; }
+        public ObservableCollection<MenuItem> AuswahlItemCollection { get; set; }
         public ItemType ItemType { get; set; }
 
         public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as IMenuItem;
+            var item = e.SelectedItem as MenuItem;
             if (item == null) return;
             OnPicked(new MenuItemPickedEventArgs {Item = item});
         }
@@ -69,150 +70,118 @@ namespace MyQuizMobile
 
     public class MenuItemPickedEventArgs : EventArgs
     {
-        public IMenuItem Item { get; set; }
+        public MenuItem Item { get; set; }
     }
 
-    public class AuswahlItem : IMenuItem
+    public class AuswahlItem : MenuItem
     {
         //dummystuff
-        public static ObservableCollection<IMenuItem> VeranstaltungsDummy = new ObservableCollection<IMenuItem>
+        public static ObservableCollection<MenuItem> VeranstaltungsDummy = new ObservableCollection<MenuItem>
         {
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "7235 - Projektmanagement",
                 Id = 0,
                 ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
+                SingleTopics = new ObservableCollection<SingleTopic>
                 {
-                    new Person {DisplayText = "Lloyd"},
-                    new Person {DisplayText = "Julian"},
-                    new Person {DisplayText = "Philipp"},
-                    new Person {DisplayText = "Jovan"},
-                    new Person {DisplayText = "Patrick"}
+                    new SingleTopic {DisplayText = "Lloyd"},
+                    new SingleTopic {DisplayText = "Julian"},
+                    new SingleTopic {DisplayText = "Philipp"},
+                    new SingleTopic {DisplayText = "Jovan"},
+                    new SingleTopic {DisplayText = "Patrick"}
                 }
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "5678 - Theoretische Informatik",
                 Id = 1,
                 ItemType = ItemType.Veranstaltung
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "0798 - Projektarbeit",
                 Id = 2,
                 ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
+                SingleTopics = new ObservableCollection<SingleTopic>
                 {
-                    new Person {DisplayText = "Lloyd"},
-                    new Person {DisplayText = "Julian"},
-                    new Person {DisplayText = "Philipp"},
-                    new Person {DisplayText = "Jovan"},
-                    new Person {DisplayText = "Patrick"}
+                    new SingleTopic {DisplayText = "Lloyd"},
+                    new SingleTopic {DisplayText = "Julian"},
+                    new SingleTopic {DisplayText = "Philipp"},
+                    new SingleTopic {DisplayText = "Jovan"},
+                    new SingleTopic {DisplayText = "Patrick"}
                 }
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "3456 - Masterstudenten",
                 Id = 3,
                 ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
+                SingleTopics = new ObservableCollection<SingleTopic>
                 {
-                    new Person {DisplayText = "Hans"},
-                    new Person {DisplayText = "Franz"},
-                    new Person {DisplayText = "Matthias"},
-                    new Person {DisplayText = "Marco"},
-                    new Person {DisplayText = "Samer"}
+                    new SingleTopic {DisplayText = "Hans"},
+                    new SingleTopic {DisplayText = "Franz"},
+                    new SingleTopic {DisplayText = "Matthias"},
+                    new SingleTopic {DisplayText = "Marco"},
+                    new SingleTopic {DisplayText = "Samer"}
                 }
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "2349 - Erstsemester '17",
                 Id = 4,
-                ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
-                {
-                    new Person {DisplayText = "Dominik"},
-                    new Person {DisplayText = "Julian"},
-                    new Person {DisplayText = "Philipp"},
-                    new Person {DisplayText = "Jovan"},
-                    new Person {DisplayText = "Patrick"}
-                }
+                ItemType = ItemType.Veranstaltung
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "7914 - Grundlagen der Informatik",
                 Id = 5,
-                ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
-                {
-                    new Person {DisplayText = "Lloyd"},
-                    new Person {DisplayText = "Julian"},
-                    new Person {DisplayText = "Philipp"},
-                    new Person {DisplayText = "Jovan"},
-                    new Person {DisplayText = "Patrick"}
-                }
+                ItemType = ItemType.Veranstaltung
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "5746 - Anwendungsentwicklung",
                 Id = 6,
-                ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
-                {
-                    new Person {DisplayText = "Lloyd"},
-                    new Person {DisplayText = "Julian"},
-                    new Person {DisplayText = "Philipp"},
-                    new Person {DisplayText = "Jovan"},
-                    new Person {DisplayText = "Patrick"}
-                }
+                ItemType = ItemType.Veranstaltung
             },
-            new Veranstaltung
+            new Group
             {
                 DisplayText = "0225 - Edutainment und Lernspiele",
                 Id = 7,
-                ItemType = ItemType.Veranstaltung,
-                Personen = new ObservableCollection<Person>
-                {
-                    new Person {DisplayText = "Lloyd"},
-                    new Person {DisplayText = "Julian"},
-                    new Person {DisplayText = "Philipp"},
-                    new Person {DisplayText = "Jovan"},
-                    new Person {DisplayText = "Patrick"}
-                }
+                ItemType = ItemType.Veranstaltung
             }
         };
 
-        public static ObservableCollection<IMenuItem> FragelistenDummy = new ObservableCollection<IMenuItem>
+        public static ObservableCollection<MenuItem> FragelistenDummy = new ObservableCollection<MenuItem>
         {
-            new FrageListe {DisplayText = "Eine einzelne Frage wählen", Id = 0, ItemType = ItemType.Frageliste},
-            new FrageListe
+            new QuestionBlock {DisplayText = "Eine einzelne Frage wählen", Id = 0, ItemType = ItemType.Frageliste},
+            new QuestionBlock
             {
                 DisplayText =
                     "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!",
                 Id = 1,
                 ItemType = ItemType.Frageliste
             },
-            new FrageListe {DisplayText = "Vorlesungsfeedback", Id = 2, ItemType = ItemType.Frageliste},
-            new FrageListe {DisplayText = "Gastdozenteneindruck", Id = 3, ItemType = ItemType.Frageliste},
-            new FrageListe {DisplayText = "XAML Quiz", Id = 4, ItemType = ItemType.Frageliste},
-            new FrageListe {DisplayText = "Wetterumfrage", Id = 5, ItemType = ItemType.Frageliste}
+            new QuestionBlock {DisplayText = "Vorlesungsfeedback", Id = 2, ItemType = ItemType.Frageliste},
+            new QuestionBlock {DisplayText = "Gastdozenteneindruck", Id = 3, ItemType = ItemType.Frageliste},
+            new QuestionBlock {DisplayText = "XAML Quiz", Id = 4, ItemType = ItemType.Frageliste},
+            new QuestionBlock {DisplayText = "Wetterumfrage", Id = 5, ItemType = ItemType.Frageliste}
         };
 
-        public static ObservableCollection<IMenuItem> FragenDummy = new ObservableCollection<IMenuItem>
+        public static ObservableCollection<MenuItem> FragenDummy = new ObservableCollection<MenuItem>
         {
-            new Frage {DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage},
-            new Frage {DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage},
-            new Frage
+            new Question {DisplayText = "Wie fandest du die Vorlesung?", Id = 0, ItemType = ItemType.Frage},
+            new Question {DisplayText = "An welchem Tag soll die Prüfung stattfinden?", Id = 1, ItemType = ItemType.Frage},
+            new Question
             {
                 DisplayText =
                     "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!",
                 Id = 2,
                 ItemType = ItemType.Frage
             },
-            new Frage {DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage},
-            new Frage {DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage},
-            new Frage {DisplayText = "Brauchst du eine Pause?", Id = 5, ItemType = ItemType.Frage}
+            new Question {DisplayText = "Wo geht morgens die Sonne auf?", Id = 3, ItemType = ItemType.Frage},
+            new Question {DisplayText = "Wie geht es dir heute?", Id = 4, ItemType = ItemType.Frage},
+            new Question {DisplayText = "Brauchst du eine Pause?", Id = 5, ItemType = ItemType.Frage}
         };
 
         public AuswahlItem()
@@ -220,15 +189,15 @@ namespace MyQuizMobile
             DisplayText = "Default Entry";
         }
 
-        public AuswahlItem(IMenuItem item)
+        public AuswahlItem(MenuItem item)
         {
             Id = item.Id;
             DisplayText = item.DisplayText;
             ItemType = item.ItemType;
         }
 
-        public int Id { get; set; }
-        public string DisplayText { get; set; }
-        public ItemType ItemType { get; set; }
+        public override int Id { get; set; }
+        public override string DisplayText { get; set; }
+        public override ItemType ItemType { get; set; }
     }
 }

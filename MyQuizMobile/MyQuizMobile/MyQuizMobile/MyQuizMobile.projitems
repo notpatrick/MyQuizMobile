@@ -12,24 +12,25 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\AppendTrailingSecondConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\BindablePicker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBoolConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\PersonenbezogenConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SendButtonColorConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\BindablePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\AnswerOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\Device.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\GivenAnswer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\Group.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\Question.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\QuestionBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Timer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMenuItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Antwort.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\BeantworteteFrage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Frage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\FrageListe.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Person.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Veranstaltung.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\MenuItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AbstimmungStartenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AuswahlViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LiveResultViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SideMenuViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RootViewViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VeranstaltungenVerwaltenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AbstimmungStartenPage.xaml.cs">
       <DependentUpon>AbstimmungStartenPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -73,9 +74,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Data\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\FrageListeVerwaltenView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -116,5 +114,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
   </ItemGroup>
 </Project>

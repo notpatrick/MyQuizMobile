@@ -18,7 +18,7 @@ namespace MyQuizMobile
                 new SideMenuItem("Abstimmung starten", "Hier können Abstimmungen gestartet werden",typeof(AbstimmungStartenPage)),
                 new SideMenuItem("Veranstaltungen verwalten", "Hier können Veranstaltungen verwaltet werden",typeof(VeranstaltungenVerwaltenPage)),
                 new SideMenuItem("Fragelisten verwalten", "Hier können Fragelisten verwaltet werden",typeof(VeranstaltungenVerwaltenPage)),
-                new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden",typeof(LiveResultPage))
+                new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden",typeof(VeranstaltungenVerwaltenPage))
             };
         }
 
