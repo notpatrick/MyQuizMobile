@@ -34,7 +34,8 @@ namespace MyQuizMobile {
         }
 
         public async void saveButton_Clicked(object sender, EventArgs e) {
-            await _networking.Post("api/groups/", Group);
+            var res = await _networking.Post("api/groups/", Group);
+            await _networking.Post($"api/groups/{res}/topics/", Group.SingleTopics);
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
 

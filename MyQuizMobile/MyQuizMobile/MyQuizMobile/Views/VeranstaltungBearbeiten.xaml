@@ -34,7 +34,7 @@
             <ListView Header="Personen" ItemsSource="{Binding SingleTopics}" >
               <ListView.ItemTemplate>
                 <DataTemplate>
-                  <TextCell Text="{Binding DisplayText}" TextColor="#212121" DetailColor="#616161" ></TextCell>
+                  <EntryCell Text="{Binding DisplayText}" Placeholder="Name"></EntryCell>
                 </DataTemplate>
               </ListView.ItemTemplate>
             </ListView>

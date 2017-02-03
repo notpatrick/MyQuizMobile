@@ -26,12 +26,8 @@ namespace MyQuizMobile {
         private async Task GetAllGroups() {
             IsLoading = true;
             _allGroups = await _networking.Get<List<Group>>("api/groups/");
-            Groups.Clear();
-            foreach (var g in _allGroups) {
-                Groups.Add(g);
-            }
-            Filter();
             IsLoading = false;
+            Filter();
         }
 
         public async void addButton_Clicked(object sender, EventArgs e) {
@@ -51,16 +47,7 @@ namespace MyQuizMobile {
         public void searchBar_TextChanged(object sender, TextChangedEventArgs e) { Filter(); }
 
         public void Filter() {
-            IEnumerable<Group> filtered;
-            if (SearchString == string.Empty) {
-                filtered = _allGroups;
-                Groups.Clear();
-                foreach (var g in filtered) {
-                    Groups.Add(g);
-                }
-                return;
-            }
-            filtered = _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            var filtered = SearchString == string.Empty ? _allGroups : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
             Groups.Clear();
             foreach (var g in filtered) {
                 Groups.Add(g);

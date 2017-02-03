@@ -15,5 +15,10 @@ namespace MyQuizMobile {
             weiterButton.Clicked += AbstimmungStartenViewModel.weiterButton_Clicked;
             personenbezogenSwitch.Toggled += AbstimmungStartenViewModel.personenbezogenSwitch_Toggled;
         }
+
+        protected override void OnDisappearing() {
+            listView.SelectedItem = null;
+            base.OnDisappearing();
+        }
     }
 }
