@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile {
+    [NotifyPropertyChanged]
     public abstract class MenuItem {
         public abstract int Id { get; set; }
         [JsonIgnore]

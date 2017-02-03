@@ -4,22 +4,14 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MyQuizMobile.DataModel;
-using MyQuizMobile.Droid.Annotations;
 using MYQuizMobile;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile {
-    public class VeranstaltungBearbeitenViewModel : INotifyPropertyChanged {
+    [NotifyPropertyChanged]
+    public class VeranstaltungBearbeitenViewModel {
         private readonly Networking _networking;
-        private Group _group;
-        public Group Group {
-            get { return _group; }
-            set {
-                if (_group != value) {
-                    _group = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public Group Group {get; set; }
         private List<SingleTopic> _allSingleTopics = new List<SingleTopic>();
 
         public VeranstaltungBearbeitenViewModel(Group group) {
@@ -50,15 +42,6 @@ namespace MyQuizMobile {
             await _networking.Delete($"api/groups/{Group.Id}");
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
-
-        #region notify
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
 
         #region event
         public event BearbeitenDoneHanler BearbeitenDone;

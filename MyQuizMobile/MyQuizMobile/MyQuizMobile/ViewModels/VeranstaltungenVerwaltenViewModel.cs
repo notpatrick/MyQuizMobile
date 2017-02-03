@@ -1,40 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MyQuizMobile.DataModel;
 using MYQuizMobile;
+using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
 namespace MyQuizMobile {
-    public class VeranstaltungenVerwaltenViewModel : INotifyPropertyChanged {
+    [NotifyPropertyChanged]
+    public class VeranstaltungenVerwaltenViewModel {
         private readonly Networking _networking;
-
         private List<Group> _allGroups = new List<Group>();
-        private bool _isLoading;
-
-        private string _searchString;
-        public bool IsLoading {
-            get { return _isLoading; }
-            set {
-                if (_isLoading != value) {
-                    _isLoading = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string SearchString {
-            get { return _searchString; }
-            set {
-                if (_searchString != value) {
-                    _searchString = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public bool IsLoading { get; set; }
+        public string SearchString { get; set; }
         public ObservableCollection<Group> Groups { get; set; }
 
         public VeranstaltungenVerwaltenViewModel() {
@@ -42,8 +22,6 @@ namespace MyQuizMobile {
             SearchString = string.Empty;
             _networking = App.Networking;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private async Task GetAllGroups() {
             IsLoading = true;
@@ -66,10 +44,6 @@ namespace MyQuizMobile {
             var previousPage = await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
             ((VeranstaltungBearbeiten)previousPage).VeranstaltungBearbeitenViewModel.BearbeitenDone -= BearbeitenDone;
             await GetAllGroups();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public async void listView_Refreshing(object sender, EventArgs e) { await GetAllGroups(); }

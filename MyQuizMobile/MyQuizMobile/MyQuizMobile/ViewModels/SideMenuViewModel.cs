@@ -3,9 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile {
-    public class SideMenuViewModel : INotifyPropertyChanged {
+    [NotifyPropertyChanged]
+    public class SideMenuViewModel {
         public ObservableCollection<SideMenuItem> SideMenuItems { get; set; }
 
         public SideMenuViewModel() {
@@ -31,16 +33,9 @@ namespace MyQuizMobile {
                 new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
 
             ((ListView)sender).SelectedItem = null;
-            ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
+            if(Device.OS != TargetPlatform.WinPhone && Device.OS != TargetPlatform.Windows)
+                ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
         }
-
-        #region propertychanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 
     public class SideMenuItem {
