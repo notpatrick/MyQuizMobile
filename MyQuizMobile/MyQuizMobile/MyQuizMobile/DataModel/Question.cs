@@ -14,8 +14,7 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType => ItemType.Question;
 
         #region POST
-        public static async Task<Question> Post(Question g)
-        {
+        public static async Task<Question> Post(Question g) {
             var question = await App.Networking.Post("api/questions/", g);
             return question;
         }
@@ -26,8 +25,13 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region GET
-        public static async Task<List<Question>> GetAll() { return await App.Networking.Get<List<Question>>("api/questions/"); }
-        public static async Task<Question> GetById(int i) { return await App.Networking.Get<Question>($"api/questions/{i}"); }
+        public static async Task<List<Question>> GetAll() {
+            return await App.Networking.Get<List<Question>>("api/questions/");
+        }
+
+        public static async Task<Question> GetById(int i) {
+            return await App.Networking.Get<Question>($"api/questions/{i}");
+        }
         #endregion
     }
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Xamarin.Forms;
 using PostSharp.Patterns.Model;
+using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
@@ -33,8 +31,9 @@ namespace MyQuizMobile {
                 new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
 
             ((ListView)sender).SelectedItem = null;
-            if(Device.OS != TargetPlatform.WinPhone && Device.OS != TargetPlatform.Windows)
+            if (Device.OS != TargetPlatform.WinPhone && Device.OS != TargetPlatform.Windows) {
                 ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
+            }
         }
     }
 

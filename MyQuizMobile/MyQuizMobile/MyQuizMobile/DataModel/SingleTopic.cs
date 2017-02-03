@@ -13,10 +13,8 @@ namespace MyQuizMobile.DataModel {
         [JsonIgnore]
         public bool UmfrageDone { get; set; } = false;
 
-
         #region POST
-        public static async Task<SingleTopic> Post(SingleTopic g)
-        {
+        public static async Task<SingleTopic> Post(SingleTopic g) {
             var group = await App.Networking.Post("api/groups/", g);
             return group;
         }
@@ -27,8 +25,13 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region GET
-        public static async Task<List<SingleTopic>> GetAll() { return await App.Networking.Get<List<SingleTopic>>("api/groups/"); }
-        public static async Task<SingleTopic> GetById(int i) { return await App.Networking.Get<SingleTopic>($"api/groups/{i}"); }
+        public static async Task<List<SingleTopic>> GetAll() {
+            return await App.Networking.Get<List<SingleTopic>>("api/groups/");
+        }
+
+        public static async Task<SingleTopic> GetById(int i) {
+            return await App.Networking.Get<SingleTopic>($"api/groups/{i}");
+        }
         #endregion
     }
 }

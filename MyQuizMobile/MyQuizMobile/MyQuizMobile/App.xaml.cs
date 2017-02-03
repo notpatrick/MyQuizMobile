@@ -1,4 +1,5 @@
-﻿using MYQuizMobile;
+﻿using System.Threading.Tasks;
+using MYQuizMobile;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,14 +14,10 @@ namespace MyQuizMobile {
             MainPage = new RootView();
         }
 
-        protected override void OnStart() { Networking = new Networking(); }
-
-        protected override void OnSleep() {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume() {
-            // Handle when your app resumes
+        protected override void OnStart() {
+            Networking = new Networking();
+            Task.Run(async () => { await Networking.Get<string>($"api/devices/{1}"); });
+            // TODO: Device authentication here
         }
     }
 }

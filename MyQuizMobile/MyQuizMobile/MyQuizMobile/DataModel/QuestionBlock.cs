@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -14,8 +13,7 @@ namespace MyQuizMobile.DataModel {
         public override string DetailText => Questions != null ? $"{Questions.Count} Fragen" : string.Empty;
 
         #region POST
-        public static async Task<QuestionBlock> Post(QuestionBlock g)
-        {
+        public static async Task<QuestionBlock> Post(QuestionBlock g) {
             var questionBlock = await App.Networking.Post("api/questionBlock/", g);
             return questionBlock;
         }
@@ -26,8 +24,13 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region GET
-        public static async Task<List<QuestionBlock>> GetAll() { return await App.Networking.Get<List<QuestionBlock>>("api/questionBlock/"); }
-        public static async Task<QuestionBlock> GetById(int i) { return await App.Networking.Get<QuestionBlock>($"api/questionBlock/{i}"); }
+        public static async Task<List<QuestionBlock>> GetAll() {
+            return await App.Networking.Get<List<QuestionBlock>>("api/questionBlock/");
+        }
+
+        public static async Task<QuestionBlock> GetById(int i) {
+            return await App.Networking.Get<QuestionBlock>($"api/questionBlock/{i}");
+        }
         #endregion
     }
 }

@@ -15,7 +15,8 @@ namespace MyQuizMobile {
         private readonly Networking _networking;
         public bool IsLoading { get; set; }
         public string SearchString { get; set; }
-        public ObservableCollection<MenuItem> AuswahlItemCollection { get; set; } = new ObservableCollection<MenuItem>();
+        public ObservableCollection<MenuItem> AuswahlItemCollection { get; set; } = new ObservableCollection<MenuItem>()
+            ;
         public ItemType ItemType { get; set; }
 
         public AuswahlViewModel(MenuItem item) {
@@ -25,35 +26,37 @@ namespace MyQuizMobile {
 
         public async Task GetAll() {
             IsLoading = true;
-            switch (ItemType) {
-            case ItemType.Group:
-                var resultGroups = await _networking.Get<List<Group>>("api/groups/");
-                _allItems.Clear();
-                AuswahlItemCollection.Clear();
-                foreach (var g in resultGroups) {
-                    _allItems.Add(g);
-                    AuswahlItemCollection.Add(g);
+            await Task.Run(async () => {
+                switch (ItemType) {
+                case ItemType.Group:
+                    var resultGroups = await _networking.Get<List<Group>>("api/groups/");
+                    _allItems.Clear();
+                    AuswahlItemCollection.Clear();
+                    foreach (var g in resultGroups) {
+                        _allItems.Add(g);
+                        AuswahlItemCollection.Add(g);
+                    }
+                    break;
+                case ItemType.QuestionBlock:
+                    var resultQuestionBlock = await _networking.Get<List<QuestionBlock>>("api/questionBlock/");
+                    _allItems.Clear();
+                    AuswahlItemCollection.Clear();
+                    foreach (var g in resultQuestionBlock) {
+                        _allItems.Add(g);
+                        AuswahlItemCollection.Add(g);
+                    }
+                    break;
+                case ItemType.Question:
+                    var resultQuestion = await _networking.Get<List<Question>>("api/questions/");
+                    _allItems.Clear();
+                    AuswahlItemCollection.Clear();
+                    foreach (var g in resultQuestion) {
+                        _allItems.Add(g);
+                        AuswahlItemCollection.Add(g);
+                    }
+                    break;
                 }
-                break;
-            case ItemType.QuestionBlock:
-                var resultQuestionBlock = await _networking.Get<List<QuestionBlock>>("api/questionBlock/");
-                _allItems.Clear();
-                AuswahlItemCollection.Clear();
-                foreach (var g in resultQuestionBlock) {
-                    _allItems.Add(g);
-                    AuswahlItemCollection.Add(g);
-                }
-                break;
-            case ItemType.Question:
-                var resultQuestion = await _networking.Get<List<Question>>("api/questions/");
-                _allItems.Clear();
-                AuswahlItemCollection.Clear();
-                foreach (var g in resultQuestion) {
-                    _allItems.Add(g);
-                    AuswahlItemCollection.Add(g);
-                }
-                break;
-            }
+            });
             IsLoading = false;
         }
 
@@ -76,25 +79,27 @@ namespace MyQuizMobile {
             OnPicked(new MenuItemPickedEventArgs {Item = res});
         }
 
-        public void Filter() {
-            IEnumerable<MenuItem> filtered;
-            if (SearchString == string.Empty) {
-                filtered = _allItems;
+        public async Task Filter() {
+            await Task.Run(() => {
+                IEnumerable<MenuItem> filtered;
+                if (SearchString == string.Empty) {
+                    filtered = _allItems;
+                    AuswahlItemCollection.Clear();
+                    foreach (var g in filtered) {
+                        AuswahlItemCollection.Add(g);
+                    }
+                    return;
+                }
+                filtered = _allItems.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
                 AuswahlItemCollection.Clear();
                 foreach (var g in filtered) {
                     AuswahlItemCollection.Add(g);
                 }
-                return;
-            }
-            filtered = _allItems.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
-            AuswahlItemCollection.Clear();
-            foreach (var g in filtered) {
-                AuswahlItemCollection.Add(g);
-            }
+            });
         }
 
         public async void listView_Refreshing(object sender, EventArgs e) { await GetAll(); }
-        public void searchBar_TextChanged(object sender, TextChangedEventArgs e) { Filter(); }
+        public async void searchBar_TextChanged(object sender, TextChangedEventArgs e) { await Filter(); }
         public async void OnAppearing(object sender, EventArgs e) { await GetAll(); }
 
         #region event

@@ -9,10 +9,8 @@ namespace MyQuizMobile.DataModel {
         public override string DisplayText { get { return Text; } set { Text = value; } }
         public override ItemType ItemType => ItemType.AnswerOption;
 
-
         #region POST
-        public static async Task<AnswerOption> Post(AnswerOption g)
-        {
+        public static async Task<AnswerOption> Post(AnswerOption g) {
             var group = await App.Networking.Post("api/groups/", g);
             return group;
         }
@@ -23,8 +21,13 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region GET
-        public static async Task<List<AnswerOption>> GetAll() { return await App.Networking.Get<List<AnswerOption>>("api/groups/"); }
-        public static async Task<AnswerOption> GetById(int i) { return await App.Networking.Get<AnswerOption>($"api/groups/{i}"); }
+        public static async Task<List<AnswerOption>> GetAll() {
+            return await App.Networking.Get<List<AnswerOption>>("api/groups/");
+        }
+
+        public static async Task<AnswerOption> GetById(int i) {
+            return await App.Networking.Get<AnswerOption>($"api/groups/{i}");
+        }
         #endregion
     }
 }

@@ -47,7 +47,8 @@ namespace MyQuizMobile {
                 if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
                     OptionCollection[0] = (Group)item;
                 }
-                if (((Group)OptionCollection[0]).SingleTopics != null && ((Group)OptionCollection[0]).SingleTopics.Any()) {
+                if (((Group)OptionCollection[0]).SingleTopics != null
+                    && ((Group)OptionCollection[0]).SingleTopics.Any()) {
                     VeranstaltungHasPersons = true;
                     IsPersonenbezogen = true;
                 } else {
@@ -90,7 +91,9 @@ namespace MyQuizMobile {
             } else {
                 CanSend = false;
             }
-            var previousPage = await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
+
+            var previousPage =
+                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
             ((AuswahlPage)previousPage).AuswahlViewModel.PickDone -= SetItemAfterPick;
         }
 

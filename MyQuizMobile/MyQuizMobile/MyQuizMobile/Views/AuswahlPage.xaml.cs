@@ -15,8 +15,8 @@ namespace MyQuizMobile {
             searchBar.TextChanged += AuswahlViewModel.searchBar_TextChanged;
             Appearing += AuswahlViewModel.OnAppearing;
         }
-        protected override void OnDisappearing()
-        {
+
+        protected override void OnDisappearing() {
             listAuswahl.SelectedItem = null;
             base.OnDisappearing();
         }

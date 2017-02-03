@@ -25,9 +25,11 @@ namespace MyQuizMobile {
 
         private async Task GetAllGroups() {
             IsLoading = true;
-            _allGroups = await _networking.Get<List<Group>>("api/groups/");
+            await Task.Run(async () => {
+                _allGroups = await _networking.Get<List<Group>>("api/groups/");
+                await Filter();
+            });
             IsLoading = false;
-            Filter();
         }
 
         public async void addButton_Clicked(object sender, EventArgs e) {
@@ -44,14 +46,18 @@ namespace MyQuizMobile {
 
         public async void listView_Refreshing(object sender, EventArgs e) { await GetAllGroups(); }
 
-        public void searchBar_TextChanged(object sender, TextChangedEventArgs e) { Filter(); }
+        public async void searchBar_TextChanged(object sender, TextChangedEventArgs e) { await Filter(); }
 
-        public void Filter() {
-            var filtered = SearchString == string.Empty ? _allGroups : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
-            Groups.Clear();
-            foreach (var g in filtered) {
-                Groups.Add(g);
-            }
+        public async Task Filter() {
+            await Task.Run(() => {
+                var filtered = SearchString == string.Empty
+                                   ? _allGroups
+                                   : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+                Groups.Clear();
+                foreach (var g in filtered) {
+                    Groups.Add(g);
+                }
+            });
         }
 
         public async void OnMenuItemTapped(object sender, SelectedItemChangedEventArgs e) {
