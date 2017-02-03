@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyQuizMobile.GroupManagePage"
+             xmlns:local="clr-namespace:MyQuizMobile"
+             Title="Veranstaltungen verwalten"
+             Padding="5">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:InvertBoolConverter x:Key="InvertBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <SearchBar x:Name="searchBar" Text="{Binding SearchString}" Placeholder="Suche"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Start"
+                       IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}" />
+            <StackLayout VerticalOptions="FillAndExpand">
+                <ListView x:Name="listView" ItemsSource="{Binding Groups}" IsPullToRefreshEnabled="True"
+                          IsRefreshing="{Binding IsLoading}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding DisplayText}" TextColor="#212121" Detail="{Binding DetailText}"
+                                      DetailColor="#616161" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <Button x:Name="addButton" Text="Hinzufügen" HorizontalOptions="FillAndExpand" VerticalOptions="End" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

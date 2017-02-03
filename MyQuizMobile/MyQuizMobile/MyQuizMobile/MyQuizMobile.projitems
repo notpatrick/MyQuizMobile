@@ -13,54 +13,58 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\BindablePicker.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBoolConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\SendButtonColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\InvertBoolConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ButtonEnabledToColorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\AnswerOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Device.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\GivenAnswer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Group.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\Item.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Question.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\QuestionBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Timer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\MenuItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AbstimmungStartenViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AuswahlViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LiveResultViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingStartViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingSelectionViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingResultLiveViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SideMenuViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RootViewViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VeranstaltungenVerwaltenViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\AbstimmungStartenPage.xaml.cs">
-      <DependentUpon>AbstimmungStartenPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupEditViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupManageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Base\RootPage.xaml.cs">
+      <DependentUpon>RootPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\AuswahlPage.xaml.cs">
-      <DependentUpon>AuswahlPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Base\SideMenuPage.xaml.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\FrageListeVerwaltenView.xaml.cs">
-      <DependentUpon>FrageListeVerwaltenView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\FrageVerwaltenPage.xaml.cs">
-      <DependentUpon>FrageVerwaltenPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\LiveResultPage.xaml.cs">
-      <DependentUpon>LiveResultPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\SideMenuPage.xaml.cs">
       <DependentUpon>SideMenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\VotingStartPage.xaml.cs">
+      <DependentUpon>VotingStartPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\VeranstaltungenVerwaltenPage.xaml.cs">
-      <DependentUpon>VeranstaltungenVerwaltenPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\VotingSelectionPage.xaml.cs">
+      <DependentUpon>VotingSelectionPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\RootView.xaml.cs">
-      <DependentUpon>RootView.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\QuestionBlockManagePage.xaml.cs">
+      <DependentUpon>QuestionBlockManagePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\QuestionManagePage.xaml.cs">
+      <DependentUpon>QuestionManagePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\VotingResultLivePage.xaml.cs">
+      <DependentUpon>VotingResultLivePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\GroupEditPage.xaml.cs">
+      <DependentUpon>GroupEditPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\GroupManagePage.xaml.cs">
+      <DependentUpon>GroupManagePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -68,54 +72,55 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\RootView.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Base\RootPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Base\SideMenuPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\FrageListeVerwaltenView.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\QuestionBlockManagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\FrageVerwaltenPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\QuestionManagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AuswahlPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\VotingSelectionPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AbstimmungStartenPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\VotingStartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\SideMenuPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\GroupManagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\VeranstaltungenVerwaltenPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\VotingResultLivePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\LiveResultPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\GroupEditPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
   </ItemGroup>
 </Project>

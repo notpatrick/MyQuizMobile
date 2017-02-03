@@ -1,31 +1,25 @@
-﻿using MYQuizMobile;
+﻿using System.Threading.Tasks;
+using MYQuizMobile;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace MyQuizMobile
-{
-	public partial class App : Application
-	{
-		public App ()
-		{
-			InitializeComponent();
-            MainPage = new MyQuizMobile.RootView();
-		}
 
-		protected override void OnStart ()
-		{
-		    var x = DependencyService.Get<Networking>();
-		}
+namespace MyQuizMobile {
+    public partial class App : Application {
+        public static Networking Networking;
 
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
+        public App() {
+            InitializeComponent();
+            MainPage = new RootPage();
+        }
 
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+        protected override void OnStart() {
+            Networking = new Networking();
+            Task.Run(async () => {
+                // TODO: Device authentication here
+                await Networking.Get<string>($"api/devices/{1}");
+            });
+        }
+    }
 }
