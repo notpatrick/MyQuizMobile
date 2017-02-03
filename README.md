@@ -1,6 +1,6 @@
 # MyQuizMobile
 
-#### This repository contains a project for one of my university courses.
+#### :mortar_board: This repository contains a project for one of my university courses. :mortar_board: 
 
 
 ### Description
@@ -18,6 +18,7 @@ The application represents an alternative implementation to combine the [**MyQui
 
 ### Milestones
 
-- [ ] Full vote capabilities
-- [ ] Full data management capabilities
-- [ ] Full statistics capabilities
+- [ ] :mega: Full vote capabilities 
+- [ ] :open_file_folder: Full data management capabilities 
+- [ ] :bar_chart: Full statistics capabilities 
+- [ ] :santa: Nice look and feel 
