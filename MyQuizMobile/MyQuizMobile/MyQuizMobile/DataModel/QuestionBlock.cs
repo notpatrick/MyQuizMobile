@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace MyQuizMobile.DataModel {
-    public class QuestionBlock : MenuItem {
+    public class QuestionBlock : Item {
         public override int Id { get; set; }
         public string Title { get; set; }
         [JsonIgnore]
@@ -13,14 +13,13 @@ namespace MyQuizMobile.DataModel {
         public override string DetailText => Questions != null ? $"{Questions.Count} Fragen" : string.Empty;
 
         #region POST
-        public static async Task<QuestionBlock> Post(QuestionBlock g) {
-            var questionBlock = await App.Networking.Post("api/questionBlock/", g);
-            return questionBlock;
+        public static async Task<QuestionBlock> Post(QuestionBlock questionBlock) {
+            return await App.Networking.Post("api/questionBlock/", questionBlock);
         }
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int i) { await App.Networking.Delete($"api/questionBlock/{i}"); }
+        public static async void DeleteById(int id) { await App.Networking.Delete($"api/questionBlock/{id}"); }
         #endregion
 
         #region GET
@@ -28,8 +27,8 @@ namespace MyQuizMobile.DataModel {
             return await App.Networking.Get<List<QuestionBlock>>("api/questionBlock/");
         }
 
-        public static async Task<QuestionBlock> GetById(int i) {
-            return await App.Networking.Get<QuestionBlock>($"api/questionBlock/{i}");
+        public static async Task<QuestionBlock> GetById(int id) {
+            return await App.Networking.Get<QuestionBlock>($"api/questionBlock/{id}");
         }
         #endregion
     }

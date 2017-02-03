@@ -9,87 +9,87 @@ using Device = Xamarin.Forms.Device;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class LiveResultViewModel {
-        private const string SendenText = "Absenden";
-        private const string BeendenText = "Umfrage beenden";
-        private const string GesendetText = "Bereits gesendet";
+    public class VotingResultLiveViewModel {
+        private const string TextSend = "Absenden";
+        private const string TextExit = "Umfrage beenden";
+        private const string TextAlreadySent = "Bereits gesendet";
         private readonly int _initialTime;
-        private bool _abstimmungFertig;
         private Timer _timer;
+        private bool _voteFinished;
 
-        public ObservableCollection<MenuItem> ResultCollection { get; set; }
+        public ObservableCollection<Item> ResultCollection { get; set; }
         public int TimeInSeconds { get; set; }
         public bool CanSend { get; set; }
         public bool CanEdit { get; set; }
         public SingleTopic CurrentSingleTopic { get; set; }
-        public bool IsPersonenbezogen { get; set; }
+        public bool IsPersonal { get; set; }
         public ObservableCollection<SingleTopic> SingleTopics { get; set; }
         public string ButtonText { get; set; }
 
-        public LiveResultViewModel(AbstimmungStartenViewModel asvm) {
+        public VotingResultLiveViewModel(VotingStartViewModel asvm) {
             CanSend = true;
             CanEdit = true;
-            ButtonText = SendenText;
+            ButtonText = TextSend;
             TimeInSeconds = asvm.TimeInSeconds;
             _initialTime = asvm.TimeInSeconds;
-            IsPersonenbezogen = asvm.IsPersonenbezogen;
+            IsPersonal = asvm.IsPersonal;
             // TODO: REPLACE WITH REMOTE RESULTS
-            ResultCollection = new ObservableCollection<MenuItem>();
-            if (IsPersonenbezogen) {
-                SingleTopics = ((Group)asvm.OptionCollection[0]).SingleTopics;
+            ResultCollection = new ObservableCollection<Item>();
+            if (IsPersonal) {
+                SingleTopics = ((Group)asvm.ItemCollection[0]).SingleTopics;
                 CurrentSingleTopic = SingleTopics.FirstOrDefault();
             }
         }
 
         public async void weiterButton_Clicked(object sender, EventArgs e) {
-            if (!_abstimmungFertig) {
+            if (!_voteFinished) {
                 CanSend = false;
                 CanEdit = false;
-                _timer = new Timer(TimerOnElapsed, null, 0, 1000);
+                _timer = new Timer(Timer_OnElapsed, null, 0, 1000);
                 // TODO: Open websocket connection here to start
             } else {
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync();
             }
         }
 
-        private void TimerOnElapsed(object sender) {
+        private void Timer_OnElapsed(object sender) {
             if (TimeInSeconds > 0) {
                 TimeInSeconds -= 1;
             } else {
                 _timer.Cancel();
                 CanSend = true;
                 CanEdit = true;
-                if (IsPersonenbezogen) {
-                    CurrentSingleTopic.UmfrageDone = true;
-                    if (SingleTopics.Any(singleTopic => !singleTopic.UmfrageDone)) {
+                if (IsPersonal) {
+                    CurrentSingleTopic.IsVotingDone = true;
+                    if (SingleTopics.Any(singleTopic => !singleTopic.IsVotingDone)) {
                         TimeInSeconds = _initialTime;
                         var index = SingleTopics.IndexOf(CurrentSingleTopic);
-                        if (index < SingleTopics.Count - 1 && !SingleTopics.ElementAt(index + 1).UmfrageDone) {
+                        if (index < SingleTopics.Count - 1 && !SingleTopics.ElementAt(index + 1).IsVotingDone) {
                             CurrentSingleTopic = SingleTopics.ElementAt(index + 1);
                         } else {
-                            CurrentSingleTopic = SingleTopics.FirstOrDefault(x => x.UmfrageDone == false);
+                            CurrentSingleTopic = SingleTopics.FirstOrDefault(x => x.IsVotingDone == false);
                         }
                     }
                 }
 
-                CheckIfAbstimmungFertig();
+                CheckIfVoteFinished();
             }
         }
 
-        private void CheckIfAbstimmungFertig() {
-            if (SingleTopics != null && SingleTopics.Any(singleTopic => !singleTopic.UmfrageDone)) {
-                _abstimmungFertig = false;
-                if (CurrentSingleTopic.UmfrageDone) {
+        private void CheckIfVoteFinished() {
+            if (SingleTopics != null && SingleTopics.Any(singleTopic => !singleTopic.IsVotingDone)) {
+                _voteFinished = false;
+                if (CurrentSingleTopic.IsVotingDone) {
                     CanSend = false;
-                    ButtonText = GesendetText;
+                    ButtonText = TextAlreadySent;
                 } else {
                     CanSend = true;
-                    ButtonText = SendenText;
+                    ButtonText = TextSend;
                 }
                 return;
             }
-            _abstimmungFertig = true;
-            ButtonText = BeendenText;
+            _voteFinished = true;
+            ButtonText = TextExit;
         }
 
         public void timeEntry_OnFocused(object sender, FocusEventArgs e) {
@@ -139,8 +139,6 @@ namespace MyQuizMobile {
             ((ListView)sender).SelectedItem = null;
         }
 
-        public void personPicker_ItemSelected(object sender, SelectedItemChangedEventArgs e) {
-            CheckIfAbstimmungFertig();
-        }
+        public void personPicker_ItemSelected(object sender, SelectedItemChangedEventArgs e) { CheckIfVoteFinished(); }
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 namespace MyQuizMobile.DataModel {
-    public class Device : MenuItem {
+    public class Device : Item {
         public override int Id { get; set; }
         public string PushUpToken { get; set; }
         public bool IsAdmin { get; set; }
@@ -10,14 +10,13 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType { get; set; }
 
         #region POST
-        public static async Task<Device> Post(Device g) {
-            var group = await App.Networking.Post("api/groups/", g);
-            return group;
+        public static async Task<Device> Post(Device device) {
+            return await App.Networking.Post("api/groups/", device);
         }
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int i) { await App.Networking.Delete($"api/groups/{i}"); }
+        public static async void DeleteById(int id) { await App.Networking.Delete($"api/groups/{id}"); }
         #endregion
 
         #region GET
@@ -25,7 +24,9 @@ namespace MyQuizMobile.DataModel {
             return await App.Networking.Get<List<Device>>("api/groups/");
         }
 
-        public static async Task<Device> GetById(int i) { return await App.Networking.Get<Device>($"api/groups/{i}"); }
+        public static async Task<Device> GetById(int id) {
+            return await App.Networking.Get<Device>($"api/groups/{id}");
+        }
         #endregion
     }
 }

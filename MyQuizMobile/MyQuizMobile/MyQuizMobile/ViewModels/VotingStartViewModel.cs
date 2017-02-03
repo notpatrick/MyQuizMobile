@@ -8,31 +8,31 @@ using Device = Xamarin.Forms.Device;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class AbstimmungStartenViewModel {
-        public ObservableCollection<MenuItem> OptionCollection { get; set; }
+    public class VotingStartViewModel {
+        public ObservableCollection<Item> ItemCollection { get; set; }
         public int TimeInSeconds { get; set; }
-        public bool IsPersonenbezogen { get; set; }
+        public bool IsPersonal { get; set; }
         public bool CanSend { get; set; }
-        public bool VeranstaltungHasPersons { get; set; }
+        public bool GroupHasSingleTopics { get; set; }
 
-        public AbstimmungStartenViewModel() {
+        public VotingStartViewModel() {
             TimeInSeconds = 30;
-            IsPersonenbezogen = false;
+            IsPersonal = false;
             CanSend = false;
-            VeranstaltungHasPersons = false;
-            OptionCollection = new ObservableCollection<MenuItem> {
+            GroupHasSingleTopics = false;
+            ItemCollection = new ObservableCollection<Item> {
                 new Group {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"},
                 new QuestionBlock {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}
             };
         }
 
         public async void OnMenuItemTapped(object sender, SelectedItemChangedEventArgs e) {
-            var item = e.SelectedItem as MenuItem;
+            var item = e.SelectedItem as Item;
             if (item == null) {
                 return;
             }
-            var nextPage = new AuswahlPage(item);
-            nextPage.AuswahlViewModel.PickDone += SetItemAfterPick;
+            var nextPage = new VotingSelectionPage(item);
+            nextPage.VotingSelectionViewModel.PickDone += SetItemAfterPick;
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
@@ -43,47 +43,47 @@ namespace MyQuizMobile {
             }
             switch (item.ItemType) {
             case ItemType.Group:
-                OptionCollection[0] = (Group)item;
+                ItemCollection[0] = (Group)item;
                 if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                    OptionCollection[0] = (Group)item;
+                    ItemCollection[0] = (Group)item;
                 }
-                if (((Group)OptionCollection[0]).SingleTopics != null
-                    && ((Group)OptionCollection[0]).SingleTopics.Any()) {
-                    VeranstaltungHasPersons = true;
-                    IsPersonenbezogen = true;
+                if (((Group)ItemCollection[0]).SingleTopics != null
+                    && ((Group)ItemCollection[0]).SingleTopics.Any()) {
+                    GroupHasSingleTopics = true;
+                    IsPersonal = true;
                 } else {
-                    VeranstaltungHasPersons = false;
-                    IsPersonenbezogen = false;
+                    GroupHasSingleTopics = false;
+                    IsPersonal = false;
                 }
                 break;
             case ItemType.QuestionBlock:
-                OptionCollection[1] = (QuestionBlock)item;
+                ItemCollection[1] = (QuestionBlock)item;
                 if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                    OptionCollection[1] = (QuestionBlock)item;
+                    ItemCollection[1] = (QuestionBlock)item;
                 }
                 if (item.Id == 0) {
-                    OptionCollection.Add(new Question {
+                    ItemCollection.Add(new Question {
                         Id = -1,
                         DisplayText = "Frage auswählen",
                         ItemType = ItemType.Question
                     });
-                } else if (OptionCollection.Any(x => x.ItemType == ItemType.Question)) {
-                    OptionCollection.Remove(OptionCollection.First(x => x.ItemType == ItemType.Question));
+                } else if (ItemCollection.Any(x => x.ItemType == ItemType.Question)) {
+                    ItemCollection.Remove(ItemCollection.First(x => x.ItemType == ItemType.Question));
                 }
                 break;
             case ItemType.Question:
-                OptionCollection[2] = (Question)item;
+                ItemCollection[2] = (Question)item;
                 if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                    OptionCollection[2] = (Question)item;
+                    ItemCollection[2] = (Question)item;
                 }
                 break;
             }
-            var veranstaltungPicked = OptionCollection[0].Id != -1;
-            var fragenlistePicked = OptionCollection[1].Id != -1;
-            var mustPickSingleQuestion = OptionCollection[1].Id == 0;
+            var veranstaltungPicked = ItemCollection[0].Id != -1;
+            var fragenlistePicked = ItemCollection[1].Id != -1;
+            var mustPickSingleQuestion = ItemCollection[1].Id == 0;
             if (veranstaltungPicked && fragenlistePicked) {
                 if (mustPickSingleQuestion) {
-                    var singleQuestionPicked = OptionCollection[2].Id != -1;
+                    var singleQuestionPicked = ItemCollection[2].Id != -1;
                     CanSend = singleQuestionPicked;
                 } else {
                     CanSend = true;
@@ -94,7 +94,7 @@ namespace MyQuizMobile {
 
             var previousPage =
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
-            ((AuswahlPage)previousPage).AuswahlViewModel.PickDone -= SetItemAfterPick;
+            ((VotingSelectionPage)previousPage).VotingSelectionViewModel.PickDone -= SetItemAfterPick;
         }
 
         public void timeEntry_OnFocused(object sender, FocusEventArgs e) {
@@ -124,10 +124,10 @@ namespace MyQuizMobile {
             }
         }
 
-        public void personenbezogenSwitch_Toggled(object sender, ToggledEventArgs e) { IsPersonenbezogen = e.Value; }
+        public void isPersonalSwitch_Toggled(object sender, ToggledEventArgs e) { IsPersonal = e.Value; }
 
-        public async void weiterButton_Clicked(object sender, EventArgs e) {
-            var nextPage = new LiveResultPage(this);
+        public async void continueButton_Clicked(object sender, EventArgs e) {
+            var nextPage = new VotingResultLivePage(this);
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
     }

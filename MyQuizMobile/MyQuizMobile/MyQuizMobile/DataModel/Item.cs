@@ -3,7 +3,7 @@ using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public abstract class MenuItem {
+    public abstract class Item {
         public abstract int Id { get; set; }
         [JsonIgnore]
         public virtual string DisplayText { get; set; }

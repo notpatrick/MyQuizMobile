@@ -3,18 +3,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
-             x:Class="MyQuizMobile.LiveResultPage"
+             x:Class="MyQuizMobile.VotingResultLivePage"
              Title="Ergebnisse"
-             Padding="5,5,5,5">
+             Padding="5">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <local:SendButtonColorConverter x:Key="SendButtonColorConverter" />
+            <local:ButtonEnabledToColorConverter x:Key="SendButtonColorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <ListView x:Name="listView" ItemsSource="{Binding ResultCollection}" VerticalOptions="FillAndExpand"
-                      HasUnevenRows="True" RowHeight="-1" CachingStrategy="RecycleElement">
+                      HasUnevenRows="True" RowHeight="-1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -50,12 +50,12 @@
 
                 <Label Text="Fragen zu" HorizontalTextAlignment="Start" VerticalTextAlignment="End"
                        HorizontalOptions="Start"
-                       Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsPersonenbezogen}"
-                       IsVisible="{Binding IsPersonenbezogen}" />
+                       Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsPersonal}"
+                       IsVisible="{Binding IsPersonal}" />
                 <local:BindablePicker x:Name="personPicker" ItemsSource="{Binding Path=SingleTopics}"
                                       DisplayMemberPath="DisplayText" Grid.Column="1" Grid.Row="2"
                                       SelectedItem="{Binding CurrentSingleTopic}" IsEnabled="{Binding CanEdit}"
-                                      IsVisible="{Binding IsPersonenbezogen}" />
+                                      IsVisible="{Binding IsPersonal}" />
 
                 <Button x:Name="weiterButton" Text="{Binding ButtonText}" HorizontalOptions="FillAndExpand"
                         IsEnabled="{Binding CanSend}"

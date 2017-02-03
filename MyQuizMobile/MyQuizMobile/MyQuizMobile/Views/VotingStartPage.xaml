@@ -1,17 +1,18 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
-             x:Class="MyQuizMobile.AbstimmungStartenPage"
-             Title="Abstimmung starten">
+             x:Class="MyQuizMobile.VotingStartPage"
+             Title="Abstimmung starten"
+             Padding="5">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <local:SendButtonColorConverter x:Key="SendButtonColorConverter" />
+            <local:ButtonEnabledToColorConverter x:Key="SendButtonColorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="listView" ItemsSource="{Binding OptionCollection}" VerticalOptions="Fill">
+            <ListView x:Name="listView" ItemsSource="{Binding ItemCollection}" VerticalOptions="Fill">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" TextColor="#212121"
@@ -19,7 +20,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand" Padding="10">
+            <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand">
 
                 <Grid HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
@@ -31,8 +32,8 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Switch x:Name="personenbezogenSwitch" HorizontalOptions="FillAndExpand"
-                            IsToggled="{Binding IsPersonenbezogen}" Grid.Column="0" Grid.Row="0"
-                            IsEnabled="{Binding VeranstaltungHasPersons}" />
+                            IsToggled="{Binding IsPersonal}" Grid.Column="0" Grid.Row="0"
+                            IsEnabled="{Binding GroupHasSingleTopics}" />
                     <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="Start"
                            VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="0" />
                     <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric"

@@ -1,7 +1,7 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
-             x:Class="MyQuizMobile.AuswahlPage"
+             x:Class="MyQuizMobile.VotingSelectionPage"
              Title="{Binding ItemType, StringFormat='{0} auswählen'}"
              Padding="5">
     <ContentPage.Resources>
@@ -15,7 +15,7 @@
                        HorizontalOptions="FillAndExpand" VerticalOptions="Start"
                        IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}" />
             <ListView x:Name="listAuswahl" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                      ItemsSource="{Binding AuswahlItemCollection}" IsPullToRefreshEnabled="True"
+                      ItemsSource="{Binding ItemCollection}" IsPullToRefreshEnabled="True"
                       IsRefreshing="{Binding IsLoading}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

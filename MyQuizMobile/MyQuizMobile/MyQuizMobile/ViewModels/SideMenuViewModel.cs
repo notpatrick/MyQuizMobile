@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using MyQuizMobile.Views;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
@@ -11,29 +12,29 @@ namespace MyQuizMobile {
         public SideMenuViewModel() {
             SideMenuItems = new ObservableCollection<SideMenuItem> {
                 new SideMenuItem("Abstimmung starten", "Hier können Abstimmungen gestartet werden",
-                                 typeof(AbstimmungStartenPage)),
+                                 typeof(VotingStartPage)),
                 new SideMenuItem("Veranstaltungen verwalten", "Hier können Veranstaltungen verwaltet werden",
-                                 typeof(VeranstaltungenVerwaltenPage)),
+                                 typeof(GroupManagePage)),
                 new SideMenuItem("Fragelisten verwalten", "Hier können Fragelisten verwaltet werden",
-                                 typeof(VeranstaltungenVerwaltenPage)),
+                                 typeof(QuestionBlockManagePage)),
                 new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden",
-                                 typeof(VeranstaltungenVerwaltenPage))
+                                 typeof(QuestionManagePage))
             };
         }
 
         public void OnItemSelected(object sender, SelectedItemChangedEventArgs e) {
             var item = e.SelectedItem as SideMenuItem;
-
             if (item == null) {
                 return;
             }
             ((MasterDetailPage)Application.Current.MainPage).Detail =
                 new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
 
-            ((ListView)sender).SelectedItem = null;
-            if (Device.OS != TargetPlatform.WinPhone && Device.OS != TargetPlatform.Windows) {
-                ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
+            if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
+                return;
             }
+            ((ListView)sender).SelectedItem = null;
+            ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
         }
     }
 

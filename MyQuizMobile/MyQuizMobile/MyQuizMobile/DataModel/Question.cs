@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace MyQuizMobile.DataModel {
-    public class Question : MenuItem {
+    public class Question : Item {
         public override int Id { get; set; }
         public string Text { get; set; }
         public QuestionCategory Category { get; set; }
@@ -14,14 +14,13 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType => ItemType.Question;
 
         #region POST
-        public static async Task<Question> Post(Question g) {
-            var question = await App.Networking.Post("api/questions/", g);
-            return question;
+        public static async Task<Question> Post(Question question) {
+            return await App.Networking.Post("api/questions/", question);
         }
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int i) { await App.Networking.Delete($"api/questions/{i}"); }
+        public static async void DeleteById(int id) { await App.Networking.Delete($"api/questions/{id}"); }
         #endregion
 
         #region GET
@@ -29,14 +28,14 @@ namespace MyQuizMobile.DataModel {
             return await App.Networking.Get<List<Question>>("api/questions/");
         }
 
-        public static async Task<Question> GetById(int i) {
-            return await App.Networking.Get<Question>($"api/questions/{i}");
+        public static async Task<Question> GetById(int id) {
+            return await App.Networking.Get<Question>($"api/questions/{id}");
         }
         #endregion
     }
 
     public enum QuestionCategory {
-        Umfrage,
+        Vote,
         Quiz
     }
 }

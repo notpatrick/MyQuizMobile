@@ -7,27 +7,27 @@ using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class VeranstaltungBearbeitenViewModel {
+    public class GroupEditViewModel {
         private readonly Networking _networking;
-        private List<SingleTopic> _allSingleTopics = new List<SingleTopic>();
+        private List<SingleTopic> _singleTopics = new List<SingleTopic>();
         public Group Group { get; set; }
 
-        public VeranstaltungBearbeitenViewModel(Group group) {
+        public GroupEditViewModel(Group group) {
             Group = group;
             _networking = App.Networking;
         }
 
         private async Task GetAllSingleTopics() {
             await Task.Run(async () => {
-                _allSingleTopics = await _networking.Get<List<SingleTopic>>($"api/groups/{Group.Id}/topics");
+                _singleTopics = await _networking.Get<List<SingleTopic>>($"api/groups/{Group.Id}/topics");
                 Group.SingleTopics.Clear();
-                foreach (var g in _allSingleTopics) {
+                foreach (var g in _singleTopics) {
                     Group.SingleTopics.Add(g);
                 }
             });
         }
 
-        public void abbrechenButton_Clicked(object sender, EventArgs e) {
+        public void cancelButton_Clicked(object sender, EventArgs e) {
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
 
@@ -37,7 +37,7 @@ namespace MyQuizMobile {
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
 
-        public async void löschenButton_Clicked(object sender, EventArgs e) {
+        public async void deleteButton_Clicked(object sender, EventArgs e) {
             await _networking.Delete($"api/groups/{Group.Id}");
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }

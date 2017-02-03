@@ -11,13 +11,15 @@ namespace MyQuizMobile {
 
         public App() {
             InitializeComponent();
-            MainPage = new RootView();
+            MainPage = new RootPage();
         }
 
         protected override void OnStart() {
             Networking = new Networking();
-            Task.Run(async () => { await Networking.Get<string>($"api/devices/{1}"); });
-            // TODO: Device authentication here
+            Task.Run(async () => {
+                // TODO: Device authentication here
+                await Networking.Get<string>($"api/devices/{1}");
+            });
         }
     }
 }

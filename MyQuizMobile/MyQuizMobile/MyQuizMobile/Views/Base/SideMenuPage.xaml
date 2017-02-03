@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.SideMenuPage"
-             Title="SideMenu">
+             Title="Hauptmenü">
 
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">

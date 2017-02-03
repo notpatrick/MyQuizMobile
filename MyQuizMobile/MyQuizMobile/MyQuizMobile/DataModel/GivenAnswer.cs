@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyQuizMobile.DataModel {
-    public class GivenAnswer : MenuItem {
+    public class GivenAnswer : Item {
         public DateTime TimeStamp { get; set; }
         public QuestionBlock QuestionBlock { get; set; }
         public Question Question { get; set; }
@@ -16,14 +16,13 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType => ItemType.GivenAnswer;
 
         #region POST
-        public static async Task<GivenAnswer> Post(GivenAnswer g) {
-            var group = await App.Networking.Post("api/groups/", g);
-            return group;
+        public static async Task<GivenAnswer> Post(GivenAnswer givenAnswer) {
+            return await App.Networking.Post("api/groups/", givenAnswer);
         }
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int i) { await App.Networking.Delete($"api/groups/{i}"); }
+        public static async void DeleteById(int id) { await App.Networking.Delete($"api/groups/{id}"); }
         #endregion
 
         #region GET
@@ -31,8 +30,8 @@ namespace MyQuizMobile.DataModel {
             return await App.Networking.Get<List<GivenAnswer>>("api/groups/");
         }
 
-        public static async Task<GivenAnswer> GetById(int i) {
-            return await App.Networking.Get<GivenAnswer>($"api/groups/{i}");
+        public static async Task<GivenAnswer> GetById(int id) {
+            return await App.Networking.Get<GivenAnswer>($"api/groups/{id}");
         }
         #endregion
     }
@@ -45,12 +44,5 @@ namespace MyQuizMobile.DataModel {
         public int? SingleTopicId { get; set; }
         public int GroupId { get; set; }
         public int? DeviceId { get; set; }
-
-        public IdGivenAnswer(GivenAnswer ga) {
-            GroupId = ga.Group.Id;
-            QuestionId = ga.Question.Id;
-            QuestionBlockId = ga.QuestionBlock?.Id;
-            SingleTopicId = ga.SingleTopic?.Id;
-        }
     }
 }

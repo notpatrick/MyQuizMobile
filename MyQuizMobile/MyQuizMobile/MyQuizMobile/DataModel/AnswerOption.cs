@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 namespace MyQuizMobile.DataModel {
-    public class AnswerOption : MenuItem {
+    public class AnswerOption : Item {
         public override int Id { get; set; }
         public string Text { get; set; }
         public bool IsCorrect { get; set; }
@@ -10,14 +10,13 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType => ItemType.AnswerOption;
 
         #region POST
-        public static async Task<AnswerOption> Post(AnswerOption g) {
-            var group = await App.Networking.Post("api/groups/", g);
-            return group;
+        public static async Task<AnswerOption> Post(AnswerOption answerOption) {
+            return await App.Networking.Post("api/groups/", answerOption);
         }
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int i) { await App.Networking.Delete($"api/groups/{i}"); }
+        public static async void DeleteById(int id) { await App.Networking.Delete($"api/groups/{id}"); }
         #endregion
 
         #region GET
@@ -25,8 +24,8 @@ namespace MyQuizMobile.DataModel {
             return await App.Networking.Get<List<AnswerOption>>("api/groups/");
         }
 
-        public static async Task<AnswerOption> GetById(int i) {
-            return await App.Networking.Get<AnswerOption>($"api/groups/{i}");
+        public static async Task<AnswerOption> GetById(int id) {
+            return await App.Networking.Get<AnswerOption>($"api/groups/{id}");
         }
         #endregion
     }

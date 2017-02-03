@@ -3,7 +3,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
-             x:Class="MyQuizMobile.VeranstaltungBearbeiten"
+             x:Class="MyQuizMobile.GroupEditPage"
              Title="Veranstaltung bearbeiten"
              Padding="5">
     <ContentPage.Resources>
@@ -39,9 +39,9 @@
                 </ListView.ItemTemplate>
             </ListView>
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                <Button x:Name="abbrechenButton" Text="Abbrechen" HorizontalOptions="FillAndExpand"
+                <Button x:Name="cancelButton" Text="Abbrechen" HorizontalOptions="FillAndExpand"
                         IsVisible="{Binding Id, Converter={StaticResource InvertIntToBoolConverter}}" />
-                <Button x:Name="löschenButton" Text="Löschen" HorizontalOptions="FillAndExpand"
+                <Button x:Name="deleteButton" Text="Löschen" HorizontalOptions="FillAndExpand"
                         IsVisible="{Binding Id, Converter={StaticResource IntToBoolConverter}}" />
                 <Button x:Name="saveButton" Text="Speichern" HorizontalOptions="FillAndExpand" />
             </StackLayout>

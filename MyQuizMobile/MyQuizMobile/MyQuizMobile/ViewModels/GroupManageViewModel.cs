@@ -10,14 +10,14 @@ using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class VeranstaltungenVerwaltenViewModel {
+    public class GroupManageViewModel {
         private readonly Networking _networking;
         private List<Group> _allGroups = new List<Group>();
         public bool IsLoading { get; set; }
         public string SearchString { get; set; }
         public ObservableCollection<Group> Groups { get; set; }
 
-        public VeranstaltungenVerwaltenViewModel() {
+        public GroupManageViewModel() {
             Groups = new ObservableCollection<Group>();
             SearchString = string.Empty;
             _networking = App.Networking;
@@ -33,14 +33,14 @@ namespace MyQuizMobile {
         }
 
         public async void addButton_Clicked(object sender, EventArgs e) {
-            var nextPage = new VeranstaltungBearbeiten(new Group());
-            nextPage.VeranstaltungBearbeitenViewModel.BearbeitenDone += BearbeitenDone;
+            var nextPage = new GroupEditPage(new Group());
+            nextPage.GroupEditViewModel.BearbeitenDone += EditFinished;
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
-        private async void BearbeitenDone(object sender, MenuItemPickedEventArgs e) {
+        private async void EditFinished(object sender, MenuItemPickedEventArgs e) {
             var previousPage = await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
-            ((VeranstaltungBearbeiten)previousPage).VeranstaltungBearbeitenViewModel.BearbeitenDone -= BearbeitenDone;
+            ((GroupEditPage)previousPage).GroupEditViewModel.BearbeitenDone -= EditFinished;
             await GetAllGroups();
         }
 
@@ -66,8 +66,8 @@ namespace MyQuizMobile {
             if (item == null) {
                 return;
             }
-            var nextPage = new VeranstaltungBearbeiten(item);
-            nextPage.VeranstaltungBearbeitenViewModel.BearbeitenDone += BearbeitenDone;
+            var nextPage = new GroupEditPage(item);
+            nextPage.GroupEditViewModel.BearbeitenDone += EditFinished;
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
             ((ListView)sender).SelectedItem = null;
         }
