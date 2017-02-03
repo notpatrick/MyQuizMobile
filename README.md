@@ -9,7 +9,7 @@ The application represents an alternative implementation to combine the [**MyQui
  
  For the time being, only **_Android_** is a target plattform until all functionality is implemented to avoid the necessity of creating custom, platformspecific renderers.
  
- ### Technologies
+### Technologies
  * C#
  * Xamarin.Forms
  * PostSharp
