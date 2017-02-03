@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MyQuizMobile.DataModel;
 using MyQuizMobile.Droid.Annotations;
 using MYQuizMobile;
@@ -18,10 +20,21 @@ namespace MyQuizMobile {
                 }
             }
         }
+        private List<SingleTopic> _allSingleTopics = new List<SingleTopic>();
 
         public VeranstaltungBearbeitenViewModel(Group group) {
             Group = group;
             _networking = App.Networking;
+        }
+
+        private async Task GetAllSingleTopics()
+        {
+            _allSingleTopics = await _networking.Get<List<SingleTopic>>($"api/groups/{Group.Id}/topics");
+            Group.SingleTopics.Clear();
+            foreach (var g in _allSingleTopics)
+            {
+                Group.SingleTopics.Add(g);
+            }
         }
 
         public void abbrechenButton_Clicked(object sender, EventArgs e) {
@@ -54,5 +67,7 @@ namespace MyQuizMobile {
 
         protected virtual void OnDone(MenuItemPickedEventArgs e) { BearbeitenDone?.Invoke(this, e); }
         #endregion
+
+        public async void OnAppearing(object sender, EventArgs e) { await GetAllSingleTopics(); }
     }
 }

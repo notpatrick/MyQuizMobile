@@ -31,6 +31,13 @@
                 <Entry Text="{Binding DisplayText}" Grid.Row="0" Grid.Column="1" />
                 <Entry Text="{Binding EnterGroupPin}" Grid.Row="1" Grid.Column="1" />
             </Grid>
+            <ListView Header="Personen" ItemsSource="{Binding SingleTopics}" >
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <TextCell Text="{Binding DisplayText}" TextColor="#212121" DetailColor="#616161" ></TextCell>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                 <Button x:Name="abbrechenButton" Text="Abbrechen" HorizontalOptions="FillAndExpand"
                         IsVisible="{Binding Id, Converter={StaticResource InvertIntToBoolConverter}}" />

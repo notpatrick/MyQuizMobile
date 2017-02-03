@@ -22,18 +22,23 @@ namespace MYQuizMobile {
         // path="api/groups/1"
         public async Task<T> Get<T>(string path) {
             var response = await _client.GetAsync(path);
-            if (response.IsSuccessStatusCode) {
-                var resultString = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<T>(resultString);
-                return result;
+            if (!response.IsSuccessStatusCode) {
+                return default(T);
             }
-            return default(T);
+            var resultString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<T>(resultString);
+            return result;
         }
 
-        public async Task<bool> Post<T>(string path, T value) {
+        public async Task<T> Post<T>(string path, T value) {
             var serializedT = JsonConvert.SerializeObject(value);
             var response = await _client.PostAsync(path, new StringContent(serializedT, Encoding.UTF8, ContentType));
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode) {
+                return default(T);
+            }
+            var resultString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<T>(resultString);
+            return result;
         }
 
         public async Task<bool> Delete(string path) {

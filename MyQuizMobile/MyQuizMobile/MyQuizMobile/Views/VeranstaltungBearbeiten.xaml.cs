@@ -12,6 +12,7 @@ namespace MyQuizMobile {
             abbrechenButton.Clicked += VeranstaltungBearbeitenViewModel.abbrechenButton_Clicked;
             saveButton.Clicked += VeranstaltungBearbeitenViewModel.saveButton_Clicked;
             löschenButton.Clicked += VeranstaltungBearbeitenViewModel.löschenButton_Clicked;
+            Appearing += VeranstaltungBearbeitenViewModel.OnAppearing;
         }
     }
 }

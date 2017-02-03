@@ -15,12 +15,19 @@ namespace MyQuizMobile.DataModel {
     }
 
     public class IdGivenAnswer {
-        public DateTime TimeStamp { get; set; }
+        public DateTime? TimeStamp { get; set; }
         public int? QuestionBlockId { get; set; }
         public int QuestionId { get; set; }
         public int? AnswerOptionId { get; set; }
         public int? SingleTopicId { get; set; }
         public int GroupId { get; set; }
         public int? DeviceId { get; set; }
+
+        public IdGivenAnswer(GivenAnswer ga) {
+            GroupId = ga.Group.Id;
+            QuestionId = ga.Question.Id;
+            QuestionBlockId = ga.QuestionBlock?.Id;
+            SingleTopicId = ga.SingleTopic?.Id;
+        }
     }
 }
