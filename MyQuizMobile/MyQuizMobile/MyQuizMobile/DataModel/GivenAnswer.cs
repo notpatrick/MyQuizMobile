@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyQuizMobile.DataModel {
     public class GivenAnswer : MenuItem {
@@ -12,6 +14,24 @@ namespace MyQuizMobile.DataModel {
         public override int Id { get; set; }
         public override string DisplayText => $"Given Answer {Id}";
         public override ItemType ItemType => ItemType.GivenAnswer;
+
+
+        #region POST
+        public static async Task<GivenAnswer> Post(GivenAnswer g)
+        {
+            var group = await App.Networking.Post("api/groups/", g);
+            return group;
+        }
+        #endregion
+
+        #region DELETE
+        public static async void DeleteById(int i) { await App.Networking.Delete($"api/groups/{i}"); }
+        #endregion
+
+        #region GET
+        public static async Task<List<GivenAnswer>> GetAll() { return await App.Networking.Get<List<GivenAnswer>>("api/groups/"); }
+        public static async Task<GivenAnswer> GetById(int i) { return await App.Networking.Get<GivenAnswer>($"api/groups/{i}"); }
+        #endregion
     }
 
     public class IdGivenAnswer {
