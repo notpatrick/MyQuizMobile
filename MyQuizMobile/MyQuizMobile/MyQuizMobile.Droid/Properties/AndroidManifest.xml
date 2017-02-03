@@ -4,5 +4,5 @@
           package="io.patrickmueller.projektarbeit.myquizmobile" android:versionCode="1">
   <uses-sdk android:minSdkVersion="15" />
   <uses-permission android:name="android.permission.INTERNET" />
-  <application android:label="MyQuizMobile"></application>
+  <application android:label="MyQuizMobile" android:icon="@drawable/icon"></application>
 </manifest>

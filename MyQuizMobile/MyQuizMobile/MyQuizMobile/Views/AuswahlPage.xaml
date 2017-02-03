@@ -2,14 +2,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.AuswahlPage"
-             Title="{Binding ItemType, StringFormat='{0} auswählen'}">
+             Title="{Binding ItemType, StringFormat='{0} auswählen'}"
+             Padding="5">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:InvertBoolConverter x:Key="InvertBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <SearchBar x:Name="searchBar" Text="{Binding SearchString}" Placeholder="Suche"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Start"
+                       IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}" />
             <ListView x:Name="listAuswahl" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                      ItemsSource="{Binding AuswahlItemCollection}" HasUnevenRows="True" IsPullToRefreshEnabled="True">
+                      ItemsSource="{Binding AuswahlItemCollection}" IsPullToRefreshEnabled="True"
+                      IsRefreshing="{Binding IsLoading}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding DisplayText}" TextColor="#212121" DetailColor="#616161" />
+                        <TextCell Text="{Binding DisplayText}" TextColor="#212121" Detail="{Binding DetailText}"
+                                  DetailColor="#616161" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

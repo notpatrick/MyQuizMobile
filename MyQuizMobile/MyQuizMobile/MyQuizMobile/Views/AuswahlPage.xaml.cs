@@ -10,6 +10,10 @@ namespace MyQuizMobile {
             BindingContext = AuswahlViewModel;
 
             listAuswahl.ItemSelected += AuswahlViewModel.OnItemSelected;
+
+            listAuswahl.Refreshing += AuswahlViewModel.listView_Refreshing;
+            searchBar.TextChanged += AuswahlViewModel.searchBar_TextChanged;
+            Appearing += AuswahlViewModel.OnAppearing;
         }
     }
 }

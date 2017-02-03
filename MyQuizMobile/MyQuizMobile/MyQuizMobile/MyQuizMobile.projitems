@@ -13,7 +13,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\BindablePicker.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBoolConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\InvertBoolConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SendButtonColorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\AnswerOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Device.cs" />
@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LiveResultViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SideMenuViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RootViewViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VeranstaltungBearbeitenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VeranstaltungenVerwaltenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AbstimmungStartenPage.xaml.cs">
       <DependentUpon>AbstimmungStartenPage.xaml</DependentUpon>
@@ -53,6 +54,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\SideMenuPage.xaml.cs">
       <DependentUpon>SideMenuPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\VeranstaltungBearbeiten.xaml.cs">
+      <DependentUpon>VeranstaltungBearbeiten.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\VeranstaltungenVerwaltenPage.xaml.cs">
@@ -117,5 +122,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\VeranstaltungBearbeiten.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

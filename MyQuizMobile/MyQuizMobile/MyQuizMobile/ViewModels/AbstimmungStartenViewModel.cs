@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using MyQuizMobile.DataModel;
 using Xamarin.Forms;
@@ -12,45 +13,45 @@ namespace MyQuizMobile {
         private int _timeInSeconds;
         private bool _veranstaltungHasPersons;
 
-        public AbstimmungStartenViewModel() {
-            TimeInSeconds = 30;
-            IsPersonenbezogen = false;
-            CanSend = false;
-            VeranstaltungHasPersons = false;
-            OptionCollection = new ObservableCollection<MenuItem> {
-                new SelectMenuItem {Id = -1, ItemType = ItemType.Veranstaltung},
-                new SelectMenuItem {Id = -1, ItemType = ItemType.Frageliste}
-            };
-        }
-
         public ObservableCollection<MenuItem> OptionCollection { get; set; }
         public int TimeInSeconds {
             get { return _timeInSeconds; }
             set {
                 _timeInSeconds = value;
-                OnPropertyChanged("TimeInSeconds");
+                OnPropertyChanged();
             }
         }
         public bool IsPersonenbezogen {
             get { return _isPersonenbezogen; }
             set {
                 _isPersonenbezogen = value;
-                OnPropertyChanged("IsPersonenbezogen");
+                OnPropertyChanged();
             }
         }
         public bool CanSend {
             get { return _canSend; }
             set {
                 _canSend = value;
-                OnPropertyChanged("CanSend");
+                OnPropertyChanged();
             }
         }
         public bool VeranstaltungHasPersons {
             get { return _veranstaltungHasPersons; }
             set {
                 _veranstaltungHasPersons = value;
-                OnPropertyChanged("VeranstaltungHasPersons");
+                OnPropertyChanged();
             }
+        }
+
+        public AbstimmungStartenViewModel() {
+            TimeInSeconds = 30;
+            IsPersonenbezogen = false;
+            CanSend = false;
+            VeranstaltungHasPersons = false;
+            OptionCollection = new ObservableCollection<MenuItem> {
+                new Group {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"},
+                new QuestionBlock {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}
+            };
         }
 
         public async void OnMenuItemTapped(object sender, SelectedItemChangedEventArgs e) {
@@ -71,9 +72,10 @@ namespace MyQuizMobile {
                 return;
             }
             switch (item.ItemType) {
-            case ItemType.Veranstaltung:
-                OptionCollection[0] = item;
-                if ((item as Group)?.SingleTopics != null) {
+            case ItemType.Group:
+                var newGroup = (Group)item;
+                OptionCollection[0] = newGroup;
+                if (newGroup.SingleTopics != null) {
                     VeranstaltungHasPersons = true;
                     IsPersonenbezogen = true;
                 } else {
@@ -81,20 +83,20 @@ namespace MyQuizMobile {
                     IsPersonenbezogen = false;
                 }
                 break;
-            case ItemType.Frageliste:
-                OptionCollection[1] = item;
+            case ItemType.QuestionBlock:
+                OptionCollection[1] = (QuestionBlock)item;
                 if (item.Id == 0) {
-                    OptionCollection.Add(new SelectMenuItem {
+                    OptionCollection.Add(new Question {
                         Id = -1,
                         DisplayText = "Frage auswählen",
-                        ItemType = ItemType.Frage
+                        ItemType = ItemType.Question
                     });
-                } else if (OptionCollection.Count > 2) {
-                    OptionCollection.RemoveAt(2);
+                } else if (OptionCollection.Any(x => x.ItemType == ItemType.Question)) {
+                    OptionCollection.Remove(OptionCollection.First(x => x.ItemType == ItemType.Question));
                 }
                 break;
-            case ItemType.Frage:
-                OptionCollection[2] = item;
+            case ItemType.Question:
+                OptionCollection[2] = (Question)item;
                 break;
             }
             var veranstaltungPicked = OptionCollection[0].Id != -1;
@@ -111,7 +113,7 @@ namespace MyQuizMobile {
                 CanSend = false;
             }
             var previousPage = await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
-            (previousPage as AuswahlPage).AuswahlViewModel.PickDone -= SetItemAfterPick;
+            ((AuswahlPage)previousPage).AuswahlViewModel.PickDone -= SetItemAfterPick;
         }
 
         public void timeEntry_OnFocused(object sender, FocusEventArgs e) {
@@ -155,11 +157,5 @@ namespace MyQuizMobile {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-    }
-
-    public class SelectMenuItem : MenuItem {
-        public override int Id { get; set; }
-        public override string DisplayText { get; set; }
-        public override ItemType ItemType { get; set; }
     }
 }

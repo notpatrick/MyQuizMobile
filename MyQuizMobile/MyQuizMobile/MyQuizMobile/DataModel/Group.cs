@@ -6,9 +6,8 @@ namespace MyQuizMobile.DataModel {
         public string Title { get; set; }
         public string EnterGroupPin { get; set; }
         public ObservableCollection<SingleTopic> SingleTopics { get; set; }
-        public override string DisplayText { get; set; }
-        public override ItemType ItemType { get; set; }
-
-        public void SetDisplayText() { DisplayText = $"{Title}"; }
+        public override string DisplayText { get { return Title; } set { Title = value; } }
+        public override ItemType ItemType => ItemType.Group;
+        public override string DetailText { get { return EnterGroupPin; } set { EnterGroupPin = value; } }
     }
 }

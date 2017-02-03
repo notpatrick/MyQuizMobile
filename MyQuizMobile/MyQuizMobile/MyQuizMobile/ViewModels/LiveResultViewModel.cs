@@ -24,20 +24,6 @@ namespace MyQuizMobile {
 
         private Timer _timer;
 
-        public LiveResultViewModel(AbstimmungStartenViewModel asvm) {
-            CanSend = true;
-            CanEdit = true;
-            ButtonText = SendenText;
-            TimeInSeconds = asvm.TimeInSeconds;
-            _initialTime = asvm.TimeInSeconds;
-            IsPersonenbezogen = asvm.IsPersonenbezogen;
-            ResultCollection = ResultItem.ResultsDummy;
-            if (IsPersonenbezogen) {
-                SingleTopics = ((Group)asvm.OptionCollection[0]).SingleTopics;
-                CurrentSingleTopic = SingleTopics.FirstOrDefault();
-            }
-        }
-
         public ObservableCollection<MenuItem> ResultCollection { get; set; }
         public int TimeInSeconds {
             get { return _timeInSeconds; }
@@ -83,6 +69,20 @@ namespace MyQuizMobile {
             }
         }
 
+        public LiveResultViewModel(AbstimmungStartenViewModel asvm) {
+            CanSend = true;
+            CanEdit = true;
+            ButtonText = SendenText;
+            TimeInSeconds = asvm.TimeInSeconds;
+            _initialTime = asvm.TimeInSeconds;
+            IsPersonenbezogen = asvm.IsPersonenbezogen;
+            ResultCollection = ResultItem.ResultsDummy;
+            if (IsPersonenbezogen) {
+                SingleTopics = ((Group)asvm.OptionCollection[0]).SingleTopics;
+                CurrentSingleTopic = SingleTopics.FirstOrDefault();
+            }
+        }
+
         public async void weiterButton_Clicked(object sender, EventArgs e) {
             if (!_abstimmungFertig) {
                 CanSend = false;
@@ -119,7 +119,7 @@ namespace MyQuizMobile {
         }
 
         private void CheckIfAbstimmungFertig() {
-            if (SingleTopics.Any(singleTopic => !singleTopic.UmfrageDone)) {
+            if (SingleTopics != null && SingleTopics.Any(singleTopic => !singleTopic.UmfrageDone)) {
                 _abstimmungFertig = false;
                 if (CurrentSingleTopic.UmfrageDone) {
                     CanSend = false;
@@ -199,31 +199,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie fandest du die Vorlesung?",
                 Id = 0,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -231,31 +231,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "An welchem Tag soll die Prüfung stattfinden?",
                 Id = 1,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 7,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -264,31 +264,31 @@ namespace MyQuizMobile {
                 DisplayText =
                     "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!",
                 Id = 2,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 15,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -296,31 +296,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wo geht morgens die Sonne auf?",
                 Id = 3,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 21,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -328,31 +328,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie geht es dir heute?",
                 Id = 4,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -360,31 +360,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Brauchst du eine Pause?",
                 Id = 5,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 4,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -392,31 +392,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie fandest du die Vorlesung?",
                 Id = 0,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -424,31 +424,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "An welchem Tag soll die Prüfung stattfinden?",
                 Id = 1,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 7,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -457,31 +457,31 @@ namespace MyQuizMobile {
                 DisplayText =
                     "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!",
                 Id = 2,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 15,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -489,31 +489,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wo geht morgens die Sonne auf?",
                 Id = 3,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 21,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -521,31 +521,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie geht es dir heute?",
                 Id = 4,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -553,31 +553,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Brauchst du eine Pause?",
                 Id = 5,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 4,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -585,31 +585,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie fandest du die Vorlesung?",
                 Id = 0,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -617,31 +617,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "An welchem Tag soll die Prüfung stattfinden?",
                 Id = 1,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 7,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -650,31 +650,31 @@ namespace MyQuizMobile {
                 DisplayText =
                     "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!",
                 Id = 2,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 15,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -682,31 +682,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wo geht morgens die Sonne auf?",
                 Id = 3,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 21,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -714,31 +714,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie geht es dir heute?",
                 Id = 4,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -746,31 +746,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Brauchst du eine Pause?",
                 Id = 5,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 4,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -778,31 +778,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie fandest du die Vorlesung?",
                 Id = 0,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -810,31 +810,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "An welchem Tag soll die Prüfung stattfinden?",
                 Id = 1,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 7,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -843,31 +843,31 @@ namespace MyQuizMobile {
                 DisplayText =
                     "Ein extra langer Fragetext der nur dazu da ist um zu schauen ob in der App trotzdem alles Ordnungsgenäß angezeigt wird, haha!",
                 Id = 2,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 15,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -875,31 +875,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wo geht morgens die Sonne auf?",
                 Id = 3,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 21,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -907,31 +907,31 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Wie geht es dir heute?",
                 Id = 4,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 11,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
@@ -939,43 +939,43 @@ namespace MyQuizMobile {
             new ResultItem {
                 DisplayText = "Brauchst du eine Pause?",
                 Id = 5,
-                ItemType = ItemType.Frage,
+                ItemType = ItemType.Question,
                 AnswerCount = 4,
                 Antworten = new ObservableCollection<AnswerOption> {
                     new AnswerOption {
                         DisplayText = "AnswerOption a",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Vielleicht b",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Es ist doch c",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     },
                     new AnswerOption {
                         DisplayText = "Aber d ist immer richtig",
                         Id = 0,
-                        ItemType = ItemType.Antwort,
+                        ItemType = ItemType.AnswerOption,
                         IsCorrect = false
                     }
                 }
             }
         };
 
-        public ResultItem() { ItemType = ItemType.Frage; }
-
         public override int Id { get; set; }
         public override string DisplayText { get; set; }
         public override ItemType ItemType { get; set; }
         public ObservableCollection<AnswerOption> Antworten { get; set; }
         public int AnswerCount { get; set; }
+
+        public ResultItem() { ItemType = ItemType.Question; }
     }
 }

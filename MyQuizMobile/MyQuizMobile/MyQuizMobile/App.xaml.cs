@@ -6,14 +6,14 @@ using Xamarin.Forms.Xaml;
 
 namespace MyQuizMobile {
     public partial class App : Application {
+        public static Networking Networking;
+
         public App() {
             InitializeComponent();
             MainPage = new RootView();
         }
 
-        protected override void OnStart() {
-            var x = DependencyService.Get<Networking>();
-        }
+        protected override void OnStart() { Networking = new Networking(); }
 
         protected override void OnSleep() {
             // Handle when your app sleeps

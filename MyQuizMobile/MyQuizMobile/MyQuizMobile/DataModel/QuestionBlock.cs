@@ -5,7 +5,8 @@ namespace MyQuizMobile.DataModel {
         public override int Id { get; set; }
         public string Title { get; set; }
         public List<Question> Questions { get; set; }
-        public override string DisplayText { get; set; }
-        public override ItemType ItemType { get; set; }
+        public override string DisplayText { get { return Title; } set { Title = value; } }
+        public override ItemType ItemType => ItemType.QuestionBlock;
+        public override string DetailText => Questions != null ? $"{Questions.Count} Fragen" : string.Empty;
     }
 }

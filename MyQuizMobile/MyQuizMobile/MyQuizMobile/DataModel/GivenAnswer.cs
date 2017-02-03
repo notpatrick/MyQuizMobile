@@ -10,8 +10,8 @@ namespace MyQuizMobile.DataModel {
         public Group Group { get; set; }
         public Device Device { get; set; }
         public override int Id { get; set; }
-        public override string DisplayText { get; set; }
-        public override ItemType ItemType { get; set; }
+        public override string DisplayText => $"Given Answer {Id}";
+        public override ItemType ItemType => ItemType.GivenAnswer;
     }
 
     public class IdGivenAnswer {

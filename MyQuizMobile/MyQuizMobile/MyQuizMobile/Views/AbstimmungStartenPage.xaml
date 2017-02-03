@@ -14,7 +14,7 @@
             <ListView x:Name="listView" ItemsSource="{Binding OptionCollection}" VerticalOptions="Fill">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding ItemType}" Detail="{Binding DisplayText}" TextColor="#212121"
+                        <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" TextColor="#212121"
                                   DetailColor="#616161" />
                     </DataTemplate>
                 </ListView.ItemTemplate>

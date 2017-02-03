@@ -20,8 +20,6 @@ namespace MyQuizMobile {
 
         private bool _disableNestedCalls;
 
-        public BindablePicker() { SelectedIndexChanged += OnSelectedIndexChanged; }
-
         public string DisplayMemberPath { get; set; }
 
         public IEnumerable ItemsSource {
@@ -48,6 +46,8 @@ namespace MyQuizMobile {
         }
 
         public string SelectedValuePath { get; set; }
+
+        public BindablePicker() { SelectedIndexChanged += OnSelectedIndexChanged; }
 
         public event EventHandler<SelectedItemChangedEventArgs> ItemSelected;
 

@@ -2,11 +2,12 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MyQuizMobile {
     public class SideMenuViewModel : INotifyPropertyChanged {
+        public ObservableCollection<SideMenuItem> SideMenuItems { get; set; }
+
         public SideMenuViewModel() {
             SideMenuItems = new ObservableCollection<SideMenuItem> {
                 new SideMenuItem("Abstimmung starten", "Hier können Abstimmungen gestartet werden",
@@ -20,9 +21,7 @@ namespace MyQuizMobile {
             };
         }
 
-        public ObservableCollection<SideMenuItem> SideMenuItems { get; set; }
-
-        public async void OnItemSelected(object sender, SelectedItemChangedEventArgs e) {
+        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e) {
             var item = e.SelectedItem as SideMenuItem;
 
             if (item == null) {
@@ -31,11 +30,7 @@ namespace MyQuizMobile {
             ((MasterDetailPage)Application.Current.MainPage).Detail =
                 new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
 
-            if (Device.Idiom == TargetIdiom.Desktop) {
-                return;
-            }
-            await Task.Delay(150);
-            (sender as ListView).SelectedItem = null;
+            ((ListView)sender).SelectedItem = null;
             ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
         }
 
@@ -49,14 +44,14 @@ namespace MyQuizMobile {
     }
 
     public class SideMenuItem {
+        public string Title { get; set; }
+        public string Detail { get; set; }
+        public Type TargetType { get; set; }
+
         public SideMenuItem(string title, string detail, Type target) {
             Title = title;
             Detail = detail;
             TargetType = target;
         }
-
-        public string Title { get; set; }
-        public string Detail { get; set; }
-        public Type TargetType { get; set; }
     }
 }

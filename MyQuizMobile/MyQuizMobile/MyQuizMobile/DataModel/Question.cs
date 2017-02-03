@@ -6,10 +6,9 @@ namespace MyQuizMobile.DataModel {
         public string Text { get; set; }
         public QuestionCategory Category { get; set; }
         public bool MultipleChoice { get; set; }
-
         public virtual List<AnswerOption> AnswerOptions { get; set; }
-        public override string DisplayText { get; set; }
-        public override ItemType ItemType { get; set; }
+        public override string DisplayText { get { return Text; } set { Text = value; } }
+        public override ItemType ItemType => ItemType.Question;
     }
 
     public enum QuestionCategory {

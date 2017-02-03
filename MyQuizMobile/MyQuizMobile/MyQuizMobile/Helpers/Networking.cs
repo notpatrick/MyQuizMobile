@@ -3,11 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using MYQuizMobile;
 using Newtonsoft.Json;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(Networking))]
 
 namespace MYQuizMobile {
     public class Networking {
@@ -34,16 +30,15 @@ namespace MYQuizMobile {
             return default(T);
         }
 
-        public async Task<T> Post<T>(string path, T value) {
+        public async Task<bool> Post<T>(string path, T value) {
             var serializedT = JsonConvert.SerializeObject(value);
             var response = await _client.PostAsync(path, new StringContent(serializedT, Encoding.UTF8, ContentType));
+            return response.IsSuccessStatusCode;
+        }
 
-            if (response.IsSuccessStatusCode) {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<T>(content);
-                return result;
-            }
-            return default(T);
+        public async Task<bool> Delete(string path) {
+            var response = await _client.DeleteAsync(path);
+            return response.IsSuccessStatusCode;
         }
     }
 }

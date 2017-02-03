@@ -4,16 +4,21 @@ namespace MyQuizMobile {
     public abstract class MenuItem {
         public abstract int Id { get; set; }
         [JsonIgnore]
-        public abstract string DisplayText { get; set; }
+        public virtual string DisplayText { get; set; }
         [JsonIgnore]
-        public abstract ItemType ItemType { get; set; }
+        public virtual ItemType ItemType { get; set; }
+        [JsonIgnore]
+        public virtual string DetailText { get; set; }
     }
 
     public enum ItemType {
-        Veranstaltung,
-        Frageliste,
-        Frage,
-        Antwort,
-        Person
+        None,
+        Group,
+        QuestionBlock,
+        Question,
+        AnswerOption,
+        SingleTopic,
+        Device,
+        GivenAnswer
     }
 }
