@@ -6,11 +6,6 @@
              xmlns:local="clr-namespace:MyQuizMobile"
              Title="Veranstaltungen verwalten"
              Padding="5">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:InvertBoolConverter x:Key="InvertBoolConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <SearchBar x:Name="searchBar" Text="{Binding SearchString}" Placeholder="Suche"

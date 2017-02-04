@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MyQuizMobile.DataModel;
-using MYQuizMobile;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 

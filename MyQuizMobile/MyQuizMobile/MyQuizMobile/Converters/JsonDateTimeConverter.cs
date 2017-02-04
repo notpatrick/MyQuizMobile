@@ -53,4 +53,19 @@ namespace MyQuizMobile.Converters {
 
         public override bool CanConvert(Type objectType) { return false; }
     }
+
+    public class JsonIsAdminConverter : JsonConverter {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+            var text = (bool)value ? 1 : 0;
+
+            writer.WritePropertyName("IsAdmin");
+            writer.WriteValue(text);
+            writer.Flush();
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                                        JsonSerializer serializer) { return (int)reader.Value == 1; }
+
+        public override bool CanConvert(Type objectType) { return false; }
+    }
 }

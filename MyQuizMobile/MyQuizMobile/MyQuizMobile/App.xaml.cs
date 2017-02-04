@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using MYQuizMobile;
+﻿using MYQuizMobile;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,12 +13,22 @@ namespace MyQuizMobile {
             MainPage = new RootPage();
         }
 
-        protected override void OnStart() {
-            Networking = new Networking();
-            Task.Run(async () => {
-                // TODO: Device authentication here
-                await Networking.Get<string>($"api/devices/{1}");
-            });
+        protected override async void OnStart() {
+            Current.Properties.Remove("DeviceID");
+            // TODO: Device authentication here
+            if (!Current.Properties.ContainsKey("DeviceID")) {
+                var n = new Networking("");
+                var regDevice = await n.Post("api/devices/", new {
+                    Password = "1337",
+                    DeviceId = 0,
+                    Id = 0
+                });
+                Current.Properties["DeviceID"] = regDevice.Id;
+                await Current.SavePropertiesAsync();
+                Networking = new Networking(Current.Properties["DeviceID"].ToString());
+            } else {
+                Networking = new Networking(Current.Properties["DeviceID"].ToString());
+            }
         }
     }
 }

@@ -2,8 +2,6 @@
 
 namespace MyQuizMobile {
     public partial class RootPage : MasterDetailPage {
-        public RootPage() {
-            InitializeComponent();
-        }
+        public RootPage() { InitializeComponent(); }
     }
 }

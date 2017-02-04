@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MyQuizMobile.DataModel;
-using MYQuizMobile;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
@@ -18,9 +17,7 @@ namespace MyQuizMobile {
             ;
         public ItemType ItemType { get; set; }
 
-        public VotingSelectionViewModel(Item item) {
-            ItemType = item.ItemType;
-        }
+        public VotingSelectionViewModel(Item item) { ItemType = item.ItemType; }
 
         public async Task GetAll() {
             IsLoading = true;

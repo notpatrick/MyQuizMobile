@@ -6,11 +6,6 @@
              x:Class="MyQuizMobile.VotingResultLivePage"
              Title="Ergebnisse"
              Padding="5">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:ButtonEnabledToColorConverter x:Key="SendButtonColorConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <ListView x:Name="listView" ItemsSource="{Binding ResultCollection}" VerticalOptions="FillAndExpand"
@@ -37,10 +32,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-
                 <BoxView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Column="0"
                          Grid.ColumnSpan="2" Grid.Row="0" BackgroundColor="#616161" />
-
                 <Label Text="Sekundentimer" HorizontalTextAlignment="Start" VerticalTextAlignment="End"
                        HorizontalOptions="Start"
                        Grid.Column="0" Grid.Row="1" />
@@ -62,7 +55,6 @@
                         BackgroundColor="{Binding CanSend, Converter={StaticResource SendButtonColorConverter}}"
                         Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" />
             </Grid>
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

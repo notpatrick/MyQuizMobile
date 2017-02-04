@@ -1,6 +1,5 @@
 ﻿using System;
 using MyQuizMobile.DataModel;
-using MYQuizMobile;
 using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile {
@@ -8,9 +7,7 @@ namespace MyQuizMobile {
     public class GroupEditViewModel {
         public Group Group { get; set; }
 
-        public GroupEditViewModel(Group group) {
-            Group = group;
-        }
+        public GroupEditViewModel(Group group) { Group = group; }
 
         public void cancelButton_Clicked(object sender, EventArgs e) {
             OnDone(new MenuItemPickedEventArgs {Item = Group});

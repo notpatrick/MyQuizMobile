@@ -2,13 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.VotingSelectionPage"
-             Title="{Binding ItemType, StringFormat='{0} auswählen'}"
+             Title="{Binding ItemType, Converter={StaticResource ItemTypeToStringConverter}}"
              Padding="5">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:InvertBoolConverter x:Key="InvertBoolConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <SearchBar x:Name="searchBar" Text="{Binding SearchString}" Placeholder="Suche"

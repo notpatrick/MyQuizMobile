@@ -7,7 +7,7 @@ namespace MyQuizMobile.DataModel {
         public ObservableCollection<Question> questionList { get; set; } = new ObservableCollection<Question>();
         public override string DisplayText { get { return Title; } set { Title = value; } }
         public override ItemType ItemType => ItemType.QuestionBlock;
-        public override string DetailText => $"{questionList.Count} Fragen";
+        public override string DetailText => questionList.Count > 0 ? $"{questionList.Count} Fragen" : string.Empty;
 
         #region POST
         public static async Task<QuestionBlock> Post(QuestionBlock questionBlock) {
