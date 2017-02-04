@@ -96,7 +96,7 @@ namespace MyQuizMobile {
                 return;
             }
             // TODO: not mvvm style
-            entry.Text = "";
+            entry.Text = string.Empty;
         }
 
         public void timeEntry_OnUnfocused(object sender, FocusEventArgs e) {

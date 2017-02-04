@@ -11,7 +11,6 @@ using Xamarin.Forms;
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class GroupManageViewModel {
-        private readonly Networking _networking;
         private List<Group> _allGroups = new List<Group>();
         public bool IsLoading { get; set; }
         public string SearchString { get; set; }
@@ -20,13 +19,12 @@ namespace MyQuizMobile {
         public GroupManageViewModel() {
             Groups = new ObservableCollection<Group>();
             SearchString = string.Empty;
-            _networking = App.Networking;
         }
 
         private async Task GetAllGroups() {
             IsLoading = true;
             await Task.Run(async () => {
-                _allGroups = await _networking.Get<List<Group>>("api/groups/");
+                _allGroups = await Group.GetAll();
                 await Filter();
             });
             IsLoading = false;

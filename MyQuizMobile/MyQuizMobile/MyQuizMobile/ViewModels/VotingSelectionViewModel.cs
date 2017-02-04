@@ -12,7 +12,6 @@ namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class VotingSelectionViewModel {
         private readonly List<Item> _items = new List<Item>();
-        private readonly Networking _networking;
         public bool IsLoading { get; set; }
         public string SearchString { get; set; }
         public ObservableCollection<Item> ItemCollection { get; set; } = new ObservableCollection<Item>()
@@ -20,7 +19,6 @@ namespace MyQuizMobile {
         public ItemType ItemType { get; set; }
 
         public VotingSelectionViewModel(Item item) {
-            _networking = App.Networking;
             ItemType = item.ItemType;
         }
 
@@ -29,7 +27,7 @@ namespace MyQuizMobile {
             await Task.Run(async () => {
                 switch (ItemType) {
                 case ItemType.Group:
-                    var resultGroups = await _networking.Get<List<Group>>("api/groups/");
+                    var resultGroups = await Group.GetAll();
                     _items.Clear();
                     ItemCollection.Clear();
                     foreach (var g in resultGroups) {
@@ -38,7 +36,7 @@ namespace MyQuizMobile {
                     }
                     break;
                 case ItemType.QuestionBlock:
-                    var resultQuestionBlock = await _networking.Get<List<QuestionBlock>>("api/questionBlock/");
+                    var resultQuestionBlock = await QuestionBlock.GetAll();
                     _items.Clear();
                     ItemCollection.Clear();
                     foreach (var g in resultQuestionBlock) {
@@ -47,7 +45,7 @@ namespace MyQuizMobile {
                     }
                     break;
                 case ItemType.Question:
-                    var resultQuestion = await _networking.Get<List<Question>>("api/questions/");
+                    var resultQuestion = await Question.GetAll();
                     _items.Clear();
                     ItemCollection.Clear();
                     foreach (var g in resultQuestion) {
@@ -58,25 +56,6 @@ namespace MyQuizMobile {
                 }
             });
             IsLoading = false;
-        }
-
-        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e) {
-            Item res = null;
-            switch (ItemType) {
-            case ItemType.Group:
-                res = e.SelectedItem as Group;
-                break;
-            case ItemType.QuestionBlock:
-                res = e.SelectedItem as QuestionBlock;
-                break;
-            case ItemType.Question:
-                res = e.SelectedItem as Question;
-                break;
-            }
-            if (res == null) {
-                return;
-            }
-            OnPicked(new MenuItemPickedEventArgs {Item = res});
         }
 
         public async Task Filter() {
@@ -96,6 +75,25 @@ namespace MyQuizMobile {
                     ItemCollection.Add(g);
                 }
             });
+        }
+
+        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e) {
+            Item result = null;
+            switch (ItemType) {
+            case ItemType.Group:
+                result = e.SelectedItem as Group;
+                break;
+            case ItemType.QuestionBlock:
+                result = e.SelectedItem as QuestionBlock;
+                break;
+            case ItemType.Question:
+                result = e.SelectedItem as Question;
+                break;
+            }
+            if (result == null) {
+                return;
+            }
+            OnPicked(new MenuItemPickedEventArgs {Item = result});
         }
 
         public async void listView_Refreshing(object sender, EventArgs e) { await GetAll(); }

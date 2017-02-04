@@ -6,12 +6,10 @@ using PostSharp.Patterns.Model;
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class GroupEditViewModel {
-        private readonly Networking _networking;
         public Group Group { get; set; }
 
         public GroupEditViewModel(Group group) {
             Group = group;
-            _networking = App.Networking;
         }
 
         public void cancelButton_Clicked(object sender, EventArgs e) {
