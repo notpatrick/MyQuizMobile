@@ -12,7 +12,6 @@ namespace MyQuizMobile {
             cancelButton.Clicked += GroupEditViewModel.cancelButton_Clicked;
             saveButton.Clicked += GroupEditViewModel.saveButton_Clicked;
             deleteButton.Clicked += GroupEditViewModel.deleteButton_Clicked;
-            Appearing += GroupEditViewModel.OnAppearing;
         }
     }
 }

@@ -31,7 +31,7 @@
                 <Entry Text="{Binding DisplayText}" Grid.Row="0" Grid.Column="1" />
                 <Entry Text="{Binding EnterGroupPin}" Grid.Row="1" Grid.Column="1" />
             </Grid>
-            <ListView Header="Personen" ItemsSource="{Binding SingleTopics}">
+            <ListView Header="Personen" ItemsSource="{Binding topicList}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <EntryCell Text="{Binding DisplayText}" Placeholder="Name" />
