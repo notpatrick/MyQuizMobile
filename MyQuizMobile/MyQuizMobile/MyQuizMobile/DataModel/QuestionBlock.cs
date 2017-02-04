@@ -6,11 +6,10 @@ namespace MyQuizMobile.DataModel {
     public class QuestionBlock : Item {
         public override int Id { get; set; }
         public string Title { get; set; }
-        [JsonIgnore]
-        public List<Question> Questions { get; set; }
+        public List<Question> questionList { get; set; }
         public override string DisplayText { get { return Title; } set { Title = value; } }
         public override ItemType ItemType => ItemType.QuestionBlock;
-        public override string DetailText => Questions != null ? $"{Questions.Count} Fragen" : string.Empty;
+        public override string DetailText => questionList != null ? $"{questionList.Count} Fragen" : string.Empty;
 
         #region POST
         public static async Task<QuestionBlock> Post(QuestionBlock questionBlock) {

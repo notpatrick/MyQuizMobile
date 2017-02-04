@@ -20,9 +20,9 @@ namespace MyQuizMobile {
         private async Task GetAllSingleTopics() {
             await Task.Run(async () => {
                 _singleTopics = await _networking.Get<List<SingleTopic>>($"api/groups/{Group.Id}/topics");
-                Group.SingleTopics.Clear();
+                Group.topicList.Clear();
                 foreach (var g in _singleTopics) {
-                    Group.SingleTopics.Add(g);
+                    Group.topicList.Add(g);
                 }
             });
         }
@@ -33,7 +33,7 @@ namespace MyQuizMobile {
 
         public async void saveButton_Clicked(object sender, EventArgs e) {
             var res = await _networking.Post("api/groups/", Group);
-            await _networking.Post($"api/groups/{res}/topics/", Group.SingleTopics);
+            await _networking.Post($"api/groups/{res}/topics/", Group.topicList);
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
 

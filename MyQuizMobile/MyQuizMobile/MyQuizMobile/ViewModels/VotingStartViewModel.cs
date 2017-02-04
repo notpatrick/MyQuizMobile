@@ -47,8 +47,8 @@ namespace MyQuizMobile {
                 if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
                     ItemCollection[0] = (Group)item;
                 }
-                if (((Group)ItemCollection[0]).SingleTopics != null
-                    && ((Group)ItemCollection[0]).SingleTopics.Any()) {
+                if (((Group)item).topicList != null
+                    && ((Group)item).topicList.Any()) {
                     GroupHasSingleTopics = true;
                     IsPersonal = true;
                 } else {
