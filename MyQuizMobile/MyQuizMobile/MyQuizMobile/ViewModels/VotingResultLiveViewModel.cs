@@ -36,7 +36,7 @@ namespace MyQuizMobile {
             // TODO: REPLACE WITH REMOTE RESULTS
             ResultCollection = new ObservableCollection<Item>();
             if (IsPersonal) {
-                SingleTopics = ((Group)asvm.ItemCollection[0]).SingleTopics;
+                SingleTopics = ((Group)asvm.ItemCollection[0]).topicList;
                 CurrentSingleTopic = SingleTopics.FirstOrDefault();
             }
         }

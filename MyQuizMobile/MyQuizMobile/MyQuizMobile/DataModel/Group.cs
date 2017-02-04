@@ -8,8 +8,8 @@ namespace MyQuizMobile.DataModel {
         public override int Id { get; set; }
         public string Title { get; set; }
         public string EnterGroupPin { get; set; }
-        [JsonIgnore]
-        public ObservableCollection<SingleTopic> SingleTopics { get; set; } = new ObservableCollection<SingleTopic>();
+
+        public ObservableCollection<SingleTopic> topicList { get; set; } = new ObservableCollection<SingleTopic>();
         public override string DisplayText { get { return Title; } set { Title = value; } }
         public override ItemType ItemType => ItemType.Group;
         public override string DetailText { get { return EnterGroupPin; } set { EnterGroupPin = value; } }
@@ -18,8 +18,8 @@ namespace MyQuizMobile.DataModel {
         public static async Task<Group> Post(Group grou) {
             // TODO: Merge these when backend can write children recursively
             var resultGroup = await App.Networking.Post("api/groups/", grou);
-            var resultSingleTopics = await App.Networking.Post($"api/groups/{resultGroup.Id}/topics", grou.SingleTopics);
-            resultGroup.SingleTopics = resultSingleTopics;
+            var resultSingleTopics = await App.Networking.Post($"api/groups/{resultGroup.Id}/topics", grou.topicList);
+            resultGroup.topicList = resultSingleTopics;
             return resultGroup;
         }
         #endregion
