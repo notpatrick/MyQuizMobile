@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using MyQuizMobile.DataModel;
-using MyQuizMobile.Helpers;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
@@ -14,7 +13,6 @@ namespace MyQuizMobile {
         private const string TextExit = "Umfrage beenden";
         private const string TextAlreadySent = "Bereits gesendet";
         private readonly int _initialTime;
-        private Timer _timer;
         private bool _voteFinished;
 
         public ObservableCollection<Item> ResultCollection { get; set; }
@@ -45,35 +43,35 @@ namespace MyQuizMobile {
             if (!_voteFinished) {
                 CanSend = false;
                 CanEdit = false;
-                _timer = new Timer(Timer_OnElapsed, null, 0, 1000);
+                Device.StartTimer(TimeSpan.FromSeconds(1), Timer_OnElapsed);
                 // TODO: Open websocket connection here to start
             } else {
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync();
             }
         }
 
-        private void Timer_OnElapsed(object sender) {
+        private bool Timer_OnElapsed() {
             if (TimeInSeconds > 0) {
                 TimeInSeconds -= 1;
-            } else {
-                _timer.Cancel();
-                CanSend = true;
-                CanEdit = true;
-                if (IsPersonal) {
-                    CurrentSingleTopic.IsVotingDone = true;
-                    if (SingleTopics.Any(singleTopic => !singleTopic.IsVotingDone)) {
-                        TimeInSeconds = _initialTime;
-                        var index = SingleTopics.IndexOf(CurrentSingleTopic);
-                        if (index < SingleTopics.Count - 1 && !SingleTopics.ElementAt(index + 1).IsVotingDone) {
-                            CurrentSingleTopic = SingleTopics.ElementAt(index + 1);
-                        } else {
-                            CurrentSingleTopic = SingleTopics.FirstOrDefault(x => x.IsVotingDone == false);
-                        }
+                return true;
+            }
+            CanSend = true;
+            CanEdit = true;
+            if (IsPersonal) {
+                CurrentSingleTopic.IsVotingDone = true;
+                if (SingleTopics.Any(singleTopic => !singleTopic.IsVotingDone)) {
+                    TimeInSeconds = _initialTime;
+                    // Look if next SingleTopic in list still needs to vote and make it current, else look for first unvoted singletopic
+                    var index = SingleTopics.IndexOf(CurrentSingleTopic);
+                    if (index < SingleTopics.Count - 1 && !SingleTopics.ElementAt(index + 1).IsVotingDone) {
+                        CurrentSingleTopic = SingleTopics.ElementAt(index + 1);
+                    } else {
+                        CurrentSingleTopic = SingleTopics.FirstOrDefault(x => x.IsVotingDone == false);
                     }
                 }
-
-                CheckIfVoteFinished();
             }
+            CheckIfVoteFinished();
+            return false;
         }
 
         private void CheckIfVoteFinished() {
