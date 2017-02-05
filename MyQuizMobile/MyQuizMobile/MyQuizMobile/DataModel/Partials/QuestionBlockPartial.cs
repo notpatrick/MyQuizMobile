@@ -16,7 +16,7 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int id) { await App.Networking.Delete($"api/questionBlock/{id}"); }
+        public static async Task DeleteById(int id) { await App.Networking.Delete($"api/questionBlock/{id}"); }
         #endregion
 
         #region GET

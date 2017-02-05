@@ -76,4 +76,47 @@ namespace MyQuizMobile {
             //base.OnTapped();
         }
     }
+
+    public class QuestionCell : CustomCell {
+        public QuestionCell()
+        {
+            var stack = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Padding = new Thickness(10, 0, 10, 0)
+            };
+            View = stack;
+
+            var editor = new CustomEditor() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.StartAndExpand};
+            var editorBinding = new Binding("DisplayText", BindingMode.TwoWay);
+            editor.SetBinding(Editor.TextProperty, editorBinding);
+
+            var image = new Image { Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit };
+
+            var tapper = new TapGestureRecognizer();
+            tapper.Tapped += (sender, args) => {
+                if (Command == null)
+                {
+                    return;
+                }
+                if (Command.CanExecute(this))
+                {
+                    Command.Execute(BindingContext);
+                }
+            };
+
+            image.GestureRecognizers.Add(tapper);
+            //TODO use grid instead of stackpanel
+            //Grid.SetRow(image,1);
+
+            stack.Children.Add(editor);
+            stack.Children.Add(image);
+        }
+
+        protected override void OnTapped()
+        {
+            //base.OnTapped();
+        }
+    }
 }
