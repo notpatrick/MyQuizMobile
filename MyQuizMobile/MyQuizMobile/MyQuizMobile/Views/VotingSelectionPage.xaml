@@ -2,25 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.VotingSelectionPage"
-             Title="{Binding ItemType, StringFormat='{0} auswählen'}"
+             Title="{Binding ItemType, Converter={StaticResource ItemTypeToStringConverter}}"
              Padding="5">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:InvertBoolConverter x:Key="InvertBoolConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <SearchBar x:Name="searchBar" Text="{Binding SearchString}" Placeholder="Suche"
-                       HorizontalOptions="FillAndExpand" VerticalOptions="Start"
-                       IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}" />
-            <ListView x:Name="listAuswahl" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+            <SearchBar Text="{Binding SearchString}" Placeholder="Suche"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Start" />
+            <ListView x:Name="listView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                       ItemsSource="{Binding ItemCollection}" IsPullToRefreshEnabled="True"
-                      IsRefreshing="{Binding IsLoading}">
+                      IsRefreshing="{Binding IsLoading, Mode=OneWay}" SelectedItem="{Binding SelectedItem}"
+                      RefreshCommand="{Binding RefreshCommand}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding DisplayText}" TextColor="#212121" Detail="{Binding DetailText}"
-                                  DetailColor="#616161" />
+                        <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

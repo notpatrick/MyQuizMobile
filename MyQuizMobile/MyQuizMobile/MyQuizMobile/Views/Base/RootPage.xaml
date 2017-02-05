@@ -5,7 +5,7 @@
                   Title="RootPage">
 
     <MasterDetailPage.Master>
-        <local:SideMenuPage/>
+        <local:SideMenuPage />
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
         <NavigationPage>

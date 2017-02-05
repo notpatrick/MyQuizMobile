@@ -1,0 +1,25 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MyQuizMobile"
+             x:Class="MyQuizMobile.LoginPage"
+             Padding="5"
+             Title="MyQuizMobile">
+    <ContentPage.Content>
+        <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <Entry x:Name="passwordEntry" Text="{Binding InputText}" Placeholder="Passwort" IsPassword="True"
+                   HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0" />
+            <Button x:Name="loginButton" Text="Login" HorizontalOptions="FillAndExpand"
+                    Command="{Binding ButtonClickCommand}" Grid.Column="1" Grid.Row="1" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

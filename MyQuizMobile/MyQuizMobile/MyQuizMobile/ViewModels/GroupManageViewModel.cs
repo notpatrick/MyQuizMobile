@@ -1,77 +1,119 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MyQuizMobile.DataModel;
-using MYQuizMobile;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class GroupManageViewModel {
-        private readonly Networking _networking;
         private List<Group> _allGroups = new List<Group>();
+        private bool _isSearching;
+        private string _searchString = string.Empty;
+        private Item _selectedItem;
         public bool IsLoading { get; set; }
-        public string SearchString { get; set; }
-        public ObservableCollection<Group> Groups { get; set; }
+        public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
+        public string SearchString {
+            get { return _searchString; }
+            set {
+                _searchString = value;
+                SearchCommand.Execute(null);
+            }
+        }
+        public Item SelectedItem {
+            get { return _selectedItem; }
+            set {
+                _selectedItem = value;
 
-        public GroupManageViewModel() {
-            Groups = new ObservableCollection<Group>();
-            SearchString = string.Empty;
-            _networking = App.Networking;
+                if (_selectedItem == null) {
+                    return;
+                }
+                ItemSelectedCommand.Execute(_selectedItem);
+                SelectedItem = null;
+            }
         }
 
-        private async Task GetAllGroups() {
-            IsLoading = true;
-            await Task.Run(async () => {
-                _allGroups = await _networking.Get<List<Group>>("api/groups/");
-                await Filter();
-            });
-            IsLoading = false;
-        }
+        public ICommand AddCommand { get; private set; }
+        public ICommand ItemSelectedCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
+        public ICommand SearchCommand { get; private set; }
 
-        public async void addButton_Clicked(object sender, EventArgs e) {
-            var nextPage = new GroupEditPage(new Group());
-            nextPage.GroupEditViewModel.BearbeitenDone += EditFinished;
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
-        }
+        public GroupManageViewModel() { Init(); }
 
-        private async void EditFinished(object sender, MenuItemPickedEventArgs e) {
-            var previousPage = await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
-            ((GroupEditPage)previousPage).GroupEditViewModel.BearbeitenDone -= EditFinished;
+        private async void Init() {
+            SubscribeEvents();
+            RegisterCommands();
             await GetAllGroups();
         }
 
-        public async void listView_Refreshing(object sender, EventArgs e) { await GetAllGroups(); }
-
-        public async void searchBar_TextChanged(object sender, TextChangedEventArgs e) { await Filter(); }
-
-        public async Task Filter() {
-            await Task.Run(() => {
-                var filtered = SearchString == string.Empty
-                                   ? _allGroups
-                                   : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
-                Groups.Clear();
-                foreach (var g in filtered) {
-                    Groups.Add(g);
-                }
-            });
+        private void SubscribeEvents() {
+            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Done");
+            MessagingCenter.Subscribe<GroupEditViewModel, Group>(this, "Done",
+                                                                 async (sender, arg) => { await Finished(); });
+            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Canceled");
+            MessagingCenter.Subscribe<GroupEditViewModel>(this, "Canceled",
+                                                          async sender => {
+                                                              await ((MasterDetailPage)Application.Current.MainPage)
+                                                                  .Detail.Navigation.PopAsync(true);
+                                                          });
         }
 
-        public async void OnMenuItemTapped(object sender, SelectedItemChangedEventArgs e) {
-            var item = e.SelectedItem as Group;
+        private void RegisterCommands() {
+            AddCommand = new Command(Add);
+            ItemSelectedCommand = new Command<Item>(async item => { await ItemSelected(item); });
+            RefreshCommand = new Command(async () => { await GetAllGroups(); });
+            SearchCommand = new Command(Filter, () => !_isSearching && !IsLoading);
+        }
 
-            if (item == null) {
+        private async Task GetAllGroups() {
+            if (IsLoading) {
                 return;
             }
-            var nextPage = new GroupEditPage(item);
-            nextPage.GroupEditViewModel.BearbeitenDone += EditFinished;
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
-            ((ListView)sender).SelectedItem = null;
+            IsLoading = true;
+            ((Command)RefreshCommand).ChangeCanExecute();
+            await Task.Run(async () => { _allGroups = await Group.GetAll(); });
+            IsLoading = false;
+            ((Command)RefreshCommand).ChangeCanExecute();
+            SearchCommand.Execute(null);
         }
 
-        public async void OnAppearing(object sender, EventArgs e) { await GetAllGroups(); }
+        private async void Add() {
+            var nextPage = new GroupEditPage(new Group());
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
+                                                                                                    new NavigationPage(
+                                                                                                                       nextPage),
+                                                                                                    true);
+        }
+
+        private async Task Finished() {
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
+            RefreshCommand.Execute(null);
+        }
+
+        private void Filter() {
+            _isSearching = true;
+            ((Command)SearchCommand).ChangeCanExecute();
+            var filtered = SearchString == string.Empty
+                               ? _allGroups
+                               : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            Groups.Clear();
+            foreach (var g in filtered) {
+                Groups.Add(g);
+            }
+            _isSearching = false;
+            ((Command)SearchCommand).ChangeCanExecute();
+        }
+
+        private async Task ItemSelected(Item item) {
+            var nextPage = new GroupEditPage((Group)item);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
+                                                                                                    new NavigationPage(
+                                                                                                                       nextPage),
+                                                                                                    true);
+            MessagingCenter.Send(this, "Selected");
+        }
     }
 }

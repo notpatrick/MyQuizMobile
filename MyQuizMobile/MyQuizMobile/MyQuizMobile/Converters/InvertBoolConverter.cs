@@ -32,8 +32,7 @@ namespace MyQuizMobile {
                                   (current, converter) => converter.Convert(current, targetType, parameter, culture));
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter,
-                                  CultureInfo culture) {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotImplementedException();
         }
         #endregion

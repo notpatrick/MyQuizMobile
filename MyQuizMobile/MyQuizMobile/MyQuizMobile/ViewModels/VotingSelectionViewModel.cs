@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MyQuizMobile.DataModel;
-using MYQuizMobile;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
@@ -12,106 +11,117 @@ namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class VotingSelectionViewModel {
         private readonly List<Item> _items = new List<Item>();
-        private readonly Networking _networking;
+        private bool _isSearching;
+        private string _searchString = string.Empty;
+        private Item _selectedItem;
+        public ObservableCollection<Item> ItemCollection { get; set; } = new ObservableCollection<Item>();
         public bool IsLoading { get; set; }
-        public string SearchString { get; set; }
-        public ObservableCollection<Item> ItemCollection { get; set; } = new ObservableCollection<Item>()
-            ;
+        public string SearchString {
+            get { return _searchString; }
+            set {
+                _searchString = value;
+                SearchCommand.Execute(null);
+            }
+        }
+        public Item SelectedItem {
+            get { return _selectedItem; }
+            set {
+                _selectedItem = value;
+                if (_selectedItem == null) {
+                    return;
+                }
+                ItemSelectedCommand.Execute(_selectedItem);
+                SelectedItem = null;
+            }
+        }
         public ItemType ItemType { get; set; }
 
+        public ICommand SearchCommand { get; private set; }
+        public ICommand ItemSelectedCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
+
         public VotingSelectionViewModel(Item item) {
-            _networking = App.Networking;
             ItemType = item.ItemType;
+            Init();
         }
 
-        public async Task GetAll() {
+        private void Init() {
+            RegisterCommands();
+            RefreshCommand.Execute(null);
+        }
+
+        private void RegisterCommands() {
+            SearchCommand = new Command(Filter, () => !_isSearching && !IsLoading);
+            ItemSelectedCommand = new Command<Item>(ItemSelected);
+            RefreshCommand = new Command(async () => { await GetAll(); }, () => !IsLoading);
+        }
+
+        private async Task GetAll() {
+            if (IsLoading) {
+                return;
+            }
             IsLoading = true;
+            ((Command)RefreshCommand).ChangeCanExecute();
             await Task.Run(async () => {
                 switch (ItemType) {
                 case ItemType.Group:
-                    var resultGroups = await _networking.Get<List<Group>>("api/groups/");
+                    var resultGroups = await Group.GetAll();
                     _items.Clear();
-                    ItemCollection.Clear();
                     foreach (var g in resultGroups) {
                         _items.Add(g);
-                        ItemCollection.Add(g);
                     }
                     break;
                 case ItemType.QuestionBlock:
-                    var resultQuestionBlock = await _networking.Get<List<QuestionBlock>>("api/questionBlock/");
+                    var resultQuestionBlock = await QuestionBlock.GetAll();
                     _items.Clear();
-                    ItemCollection.Clear();
                     foreach (var g in resultQuestionBlock) {
                         _items.Add(g);
-                        ItemCollection.Add(g);
                     }
                     break;
                 case ItemType.Question:
-                    var resultQuestion = await _networking.Get<List<Question>>("api/questions/");
+                    var resultQuestion = await Question.GetAll();
                     _items.Clear();
-                    ItemCollection.Clear();
+
                     foreach (var g in resultQuestion) {
                         _items.Add(g);
-                        ItemCollection.Add(g);
                     }
                     break;
                 }
             });
             IsLoading = false;
+            ((Command)RefreshCommand).ChangeCanExecute();
+            SearchCommand.Execute(null);
         }
 
-        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e) {
-            Item res = null;
+        private void Filter() {
+            _isSearching = true;
+            ((Command)SearchCommand).ChangeCanExecute();
+            var filtered = SearchString == string.Empty
+                               ? _items
+                               : _items.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            ItemCollection.Clear();
+            foreach (var g in filtered) {
+                ItemCollection.Add(g);
+            }
+            _isSearching = false;
+            ((Command)SearchCommand).ChangeCanExecute();
+        }
+
+        private void ItemSelected(Item item) {
+            Item result = null;
             switch (ItemType) {
             case ItemType.Group:
-                res = e.SelectedItem as Group;
+                result = item as Group;
                 break;
             case ItemType.QuestionBlock:
-                res = e.SelectedItem as QuestionBlock;
+                result = item as QuestionBlock;
                 break;
             case ItemType.Question:
-                res = e.SelectedItem as Question;
+                result = item as Question;
                 break;
             }
-            if (res == null) {
-                return;
-            }
-            OnPicked(new MenuItemPickedEventArgs {Item = res});
+            MessagingCenter.Send(this, "Selected");
+            MessagingCenter.Send(this, "PickDone", result);
         }
-
-        public async Task Filter() {
-            await Task.Run(() => {
-                IEnumerable<Item> filtered;
-                if (SearchString == string.Empty) {
-                    filtered = _items;
-                    ItemCollection.Clear();
-                    foreach (var g in filtered) {
-                        ItemCollection.Add(g);
-                    }
-                    return;
-                }
-                filtered = _items.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
-                ItemCollection.Clear();
-                foreach (var g in filtered) {
-                    ItemCollection.Add(g);
-                }
-            });
-        }
-
-        public async void listView_Refreshing(object sender, EventArgs e) { await GetAll(); }
-        public async void searchBar_TextChanged(object sender, TextChangedEventArgs e) { await Filter(); }
-        public async void OnAppearing(object sender, EventArgs e) { await GetAll(); }
-
-        #region event
-        public event MenuItemPickedHanler PickDone;
-
-        public delegate void MenuItemPickedHanler(object sender, MenuItemPickedEventArgs e);
-
-        protected virtual void OnPicked(MenuItemPickedEventArgs e) { PickDone?.Invoke(this, e); }
-        #endregion
-    }
-
-    public class MenuItemPickedEventArgs : EventArgs {
-        public Item Item { get; set; }
     }
 }

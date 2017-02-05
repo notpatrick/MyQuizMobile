@@ -8,16 +8,17 @@ namespace MyQuizMobile {
             InitializeComponent();
             VotingStartViewModel = new VotingStartViewModel();
             BindingContext = VotingStartViewModel;
+        }
 
-            listView.ItemSelected += VotingStartViewModel.OnMenuItemTapped;
-            timeEntry.Focused += VotingStartViewModel.timeEntry_OnFocused;
-            timeEntry.Unfocused += VotingStartViewModel.timeEntry_OnUnfocused;
-            weiterButton.Clicked += VotingStartViewModel.continueButton_Clicked;
-            personenbezogenSwitch.Toggled += VotingStartViewModel.isPersonalSwitch_Toggled;
+        protected override void OnAppearing() {
+            MessagingCenter.Unsubscribe<VotingStartViewModel>(this, "Selected");
+            MessagingCenter.Subscribe<VotingStartViewModel>(this, "Selected",
+                                                            sender => { listView.SelectedItem = null; });
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing() {
-            listView.SelectedItem = null;
+            MessagingCenter.Unsubscribe<VotingStartViewModel>(this, "Selected");
             base.OnDisappearing();
         }
     }

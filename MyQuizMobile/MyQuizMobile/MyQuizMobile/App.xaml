@@ -2,9 +2,18 @@
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:themes="clr-namespace:Xamarin.Forms.Themes;assembly=Xamarin.Forms.Theme.Light"
+             xmlns:myQuizMobile="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.App">
     <Application.Resources>
-        <ResourceDictionary MergedWith="themes:LightThemeResources" />
+        <ResourceDictionary>
+            <myQuizMobile:InvertBoolConverter x:Key="InvertBoolConverter" />
+            <myQuizMobile:IntStringConverter x:Key="IntStringConverter" />
+            <myQuizMobile:ItemTypeToStringConverter x:Key="ItemTypeToStringConverter" />
+            <myQuizMobile:IntToBoolConverter x:Key="IntToBoolConverter" />
+            <myQuizMobile:ValueConverterGroup x:Key="InvertIntToBoolConverter">
+                <myQuizMobile:IntToBoolConverter />
+                <myQuizMobile:InvertBoolConverter />
+            </myQuizMobile:ValueConverterGroup>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

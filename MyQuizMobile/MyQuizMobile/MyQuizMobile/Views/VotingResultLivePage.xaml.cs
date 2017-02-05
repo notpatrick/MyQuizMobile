@@ -8,12 +8,8 @@ namespace MyQuizMobile {
             InitializeComponent();
             VotingResultLiveViewModel = new VotingResultLiveViewModel(asvm);
             BindingContext = VotingResultLiveViewModel;
-
-            weiterButton.Clicked += VotingResultLiveViewModel.weiterButton_Clicked;
-            timeEntry.Focused += VotingResultLiveViewModel.timeEntry_OnFocused;
-            timeEntry.Unfocused += VotingResultLiveViewModel.timeEntry_OnUnfocused;
-            listView.ItemTapped += VotingResultLiveViewModel.listView_ItemTapped;
-            personPicker.ItemSelected += VotingResultLiveViewModel.personPicker_ItemSelected;
+            NavigationPage.SetHasBackButton(this, false);
+            resultListView.ItemSelected += (sender, args) => { ((ListView)sender).SelectedItem = null; };
         }
 
         protected override bool OnBackButtonPressed() { return VotingResultLiveViewModel.OnBackButtonPressed(this); }

@@ -1,55 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Windows.Input;
 using MyQuizMobile.DataModel;
-using MYQuizMobile;
 using PostSharp.Patterns.Model;
+using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class GroupEditViewModel {
-        private readonly Networking _networking;
-        private List<SingleTopic> _singleTopics = new List<SingleTopic>();
         public Group Group { get; set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+        public ICommand ItemSelectedCommand { get; set; }
 
         public GroupEditViewModel(Group group) {
             Group = group;
-            _networking = App.Networking;
+            DeleteCommand = new Command(Delete);
+            SaveCommand = new Command(Save);
+            CancelCommand = new Command(Cancel);
+            ItemSelectedCommand = new Command(ItemSelected);
         }
 
-        private async Task GetAllSingleTopics() {
-            await Task.Run(async () => {
-                _singleTopics = await _networking.Get<List<SingleTopic>>($"api/groups/{Group.Id}/topics");
-                Group.SingleTopics.Clear();
-                foreach (var g in _singleTopics) {
-                    Group.SingleTopics.Add(g);
-                }
-            });
+        private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
+
+        private async void Save() {
+            await Group.Post(Group);
+            MessagingCenter.Send(this, "Done", Group);
         }
 
-        public void cancelButton_Clicked(object sender, EventArgs e) {
-            OnDone(new MenuItemPickedEventArgs {Item = Group});
+        private async void Delete() {
+            await Group.DeleteById(Group.Id);
+            MessagingCenter.Send(this, "Done", Group);
         }
 
-        public async void saveButton_Clicked(object sender, EventArgs e) {
-            var res = await _networking.Post("api/groups/", Group);
-            await _networking.Post($"api/groups/{res}/topics/", Group.SingleTopics);
-            OnDone(new MenuItemPickedEventArgs {Item = Group});
+        private void ItemSelected() {
+            // todo: singletopic changes...
         }
-
-        public async void deleteButton_Clicked(object sender, EventArgs e) {
-            await _networking.Delete($"api/groups/{Group.Id}");
-            OnDone(new MenuItemPickedEventArgs {Item = Group});
-        }
-
-        public async void OnAppearing(object sender, EventArgs e) { await GetAllSingleTopics(); }
-
-        #region event
-        public event BearbeitenDoneHanler BearbeitenDone;
-
-        public delegate void BearbeitenDoneHanler(object sender, MenuItemPickedEventArgs e);
-
-        protected virtual void OnDone(MenuItemPickedEventArgs e) { BearbeitenDone?.Invoke(this, e); }
-        #endregion
     }
 }

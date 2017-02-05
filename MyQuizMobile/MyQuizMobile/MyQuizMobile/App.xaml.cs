@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using MYQuizMobile;
+﻿using MYQuizMobile;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,19 +6,20 @@ using Xamarin.Forms.Xaml;
 
 namespace MyQuizMobile {
     public partial class App : Application {
-        public static Networking Networking;
+        public static Networking Networking = new Networking("");
 
         public App() {
             InitializeComponent();
             MainPage = new RootPage();
         }
 
-        protected override void OnStart() {
-            Networking = new Networking();
-            Task.Run(async () => {
-                // TODO: Device authentication here
-                await Networking.Get<string>($"api/devices/{1}");
-            });
+        protected override async void OnStart() {
+#if DEBUG
+            await MainPage.Navigation.PushModalAsync(new NavigationPage(new LoginPage()), false);
+#endif
+            if (!Current.Properties.ContainsKey("DeviceID")) {
+                Current.Properties["DeviceID"] = 0;
+            }
         }
     }
 }
