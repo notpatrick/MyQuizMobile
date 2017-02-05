@@ -25,7 +25,8 @@
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <local:SingleTopicCell Command="{Binding Path=BindingContext.RemoveSingleTopicCommand, Source={x:Reference ContentPage}}"/>
+                        <local:SingleTopicCell
+                            Command="{Binding Path=BindingContext.RemoveSingleTopicCommand, Source={x:Reference ContentPage}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

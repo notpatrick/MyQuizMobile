@@ -28,6 +28,7 @@ namespace MyQuizMobile {
         private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
 
         private async void Save() {
+            Group.topicList.Remove(x => string.IsNullOrWhiteSpace(x.Name));
             await Group.Post(Group);
             MessagingCenter.Send(this, "Done", Group);
         }
@@ -37,17 +38,11 @@ namespace MyQuizMobile {
             MessagingCenter.Send(this, "Done", Group);
         }
 
-        private void Add() {
-            this.Group.topicList.Add(new SingleTopic());
-        }
+        private void Add() { Group.topicList.Add(new SingleTopic()); }
 
         private void RemoveSingleTopic(SingleTopic st) {
-
-            if (Group.topicList.Contains(st))
-            {
+            if (Group.topicList.Contains(st)) {
                 Group.topicList.Remove(st);
-                //if (!Group.topicList.Any())
-                   // Add();
             }
         }
     }

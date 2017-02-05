@@ -38,9 +38,9 @@ namespace MyQuizMobile {
                 }
             }
         }
-        public bool IsPersonal { get; set; } = false;
+        public bool IsPersonal { get; set; }
         public bool CanSend { get; set; } = true;
-        public bool GroupHasSingleTopics { get; set; } = false;
+        public bool GroupHasSingleTopics { get; set; }
 
         public ICommand ContinueButtonClickedCommand { get; private set; }
         public ICommand ItemTappedCommand { get; private set; }
@@ -65,6 +65,7 @@ namespace MyQuizMobile {
                                                                           await SetItemAfterPick(arg);
                                                                       });
         }
+
         private void RegisterCommands() {
             ContinueButtonClickedCommand = new Command(async () => { await ContinueButtonClicked(); }, () => CanSend);
             ItemTappedCommand = new Command<Item>(async item => { await MenuItemTapped(item); });
@@ -144,7 +145,6 @@ namespace MyQuizMobile {
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
                                                                                                     true);
-
         }
     }
 }

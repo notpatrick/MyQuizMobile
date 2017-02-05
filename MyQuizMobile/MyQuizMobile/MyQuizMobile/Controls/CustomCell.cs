@@ -18,7 +18,7 @@ namespace MyQuizMobile {
         public static readonly BindableProperty CommandProperty =
             BindableProperty.Create<CustomCell, ICommand>(p => p.Command, default(ICommand), BindingMode.OneWay, null,
                                                           OnCommandPropertyChanged);
-        
+
         private static void OnCommandPropertyChanged(BindableObject bindable, ICommand oldValue, ICommand newValue) {
             var source = bindable as CustomCell;
             if (source == null) {

@@ -114,7 +114,6 @@ namespace MyQuizMobile {
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
                                                                                                     true);
-            
         }
     }
 }

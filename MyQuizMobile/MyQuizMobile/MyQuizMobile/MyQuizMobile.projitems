@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Question.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\QuestionBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingStartViewModel.cs" />
