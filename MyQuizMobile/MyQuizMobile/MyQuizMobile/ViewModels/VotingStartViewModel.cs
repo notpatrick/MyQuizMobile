@@ -38,9 +38,9 @@ namespace MyQuizMobile {
                 }
             }
         }
-        public bool IsPersonal { get; set; }
-        public bool CanSend { get; set; }
-        public bool GroupHasSingleTopics { get; set; }
+        public bool IsPersonal { get; set; } = false;
+        public bool CanSend { get; set; } = true;
+        public bool GroupHasSingleTopics { get; set; } = false;
 
         public ICommand ContinueButtonClickedCommand { get; private set; }
         public ICommand ItemTappedCommand { get; private set; }
@@ -51,9 +51,7 @@ namespace MyQuizMobile {
             SubscribeEvents();
             RegisterCommands();
             TimeInSeconds = 30;
-            IsPersonal = false;
             CanSend = false;
-            GroupHasSingleTopics = false;
             ItemCollection = new ObservableCollection<Item> {
                 new Group {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"},
                 new QuestionBlock {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}
@@ -67,9 +65,8 @@ namespace MyQuizMobile {
                                                                           await SetItemAfterPick(arg);
                                                                       });
         }
-
         private void RegisterCommands() {
-            ContinueButtonClickedCommand = new Command(async () => { await ContinueButtonClicked(); });
+            ContinueButtonClickedCommand = new Command(async () => { await ContinueButtonClicked(); }, () => CanSend);
             ItemTappedCommand = new Command<Item>(async item => { await MenuItemTapped(item); });
         }
 
@@ -129,22 +126,24 @@ namespace MyQuizMobile {
         }
 
         private async Task ContinueButtonClicked() {
+            CanSend = false;
+            ((Command)ContinueButtonClickedCommand).ChangeCanExecute();
             var nextPage = new VotingResultLivePage(this);
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
                                                                                                     true);
+            CanSend = true;
+            ((Command)ContinueButtonClickedCommand).ChangeCanExecute();
         }
 
         private async Task MenuItemTapped(Item item) {
-            SelectedItem = null;
             var nextPage = new VotingSelectionPage(item);
-
-            MessagingCenter.Send(this, "Selected");
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
                                                                                                     true);
+            MessagingCenter.Send(this, "Selected");
         }
     }
 }

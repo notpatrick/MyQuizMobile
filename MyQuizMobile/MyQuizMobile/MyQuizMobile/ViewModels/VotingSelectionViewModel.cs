@@ -120,7 +120,6 @@ namespace MyQuizMobile {
                 result = item as Question;
                 break;
             }
-            MessagingCenter.Send(this, "Selected");
             MessagingCenter.Send(this, "PickDone", result);
         }
     }

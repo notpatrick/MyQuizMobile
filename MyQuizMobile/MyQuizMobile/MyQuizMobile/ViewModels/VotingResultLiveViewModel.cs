@@ -17,7 +17,7 @@ namespace MyQuizMobile {
         private SingleTopic _currentSingleTopic;
         private int _initialTime;
         private int _timeInSeconds;
-        private bool _voteFinished;
+        private bool _voteFinished = false;
 
         public ObservableCollection<Item> ResultCollection { get; set; } = new ObservableCollection<Item>();
         public int TimeInSeconds {
