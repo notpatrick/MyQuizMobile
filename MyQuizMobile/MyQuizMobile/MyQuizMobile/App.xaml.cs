@@ -10,8 +10,11 @@ namespace MyQuizMobile {
 
         public App() {
             InitializeComponent();
+#if DEBUG
             MainPage = new RootPage();
+#else
             MainPage.Navigation.PushModalAsync(new NavigationPage(new LoginPage()), false);
+#endif
         }
 
         protected override async void OnStart() {
