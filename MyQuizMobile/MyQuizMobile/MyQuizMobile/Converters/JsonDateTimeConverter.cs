@@ -15,7 +15,8 @@ namespace MyQuizMobile.Converters {
                                         JsonSerializer serializer) {
             var dataString = (string)reader.Value;
             if (dataString != null) {
-                return DateTime.ParseExact(dataString, "G", null);
+                var datetime = DateTime.ParseExact(dataString, "HH:mm", null);
+                return datetime;
             }
 
             return null;

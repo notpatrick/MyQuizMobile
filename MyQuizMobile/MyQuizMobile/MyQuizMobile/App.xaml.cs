@@ -14,7 +14,7 @@ namespace MyQuizMobile {
         }
 
         protected override async void OnStart() {
-#if DEBUG
+#if !DEBUG
             await MainPage.Navigation.PushModalAsync(new NavigationPage(new LoginPage()), false);
 #endif
             if (!Current.Properties.ContainsKey("DeviceID")) {

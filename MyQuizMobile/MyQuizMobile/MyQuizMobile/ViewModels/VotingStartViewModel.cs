@@ -139,11 +139,12 @@ namespace MyQuizMobile {
 
         private async Task MenuItemTapped(Item item) {
             var nextPage = new VotingSelectionPage(item);
+            MessagingCenter.Send(this, "Selected");
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
                                                                                                     true);
-            MessagingCenter.Send(this, "Selected");
+
         }
     }
 }
