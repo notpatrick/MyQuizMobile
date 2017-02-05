@@ -8,8 +8,17 @@ namespace MyQuizMobile {
             InitializeComponent();
             SideMenuViewModel = new SideMenuViewModel();
             BindingContext = SideMenuViewModel;
+        }
 
-            listView.ItemSelected += SideMenuViewModel.OnItemSelected;
+        protected override void OnAppearing() {
+            MessagingCenter.Unsubscribe<SideMenuViewModel>(this, "Selected");
+            MessagingCenter.Subscribe<SideMenuViewModel>(this, "Selected", sender => { listView.SelectedItem = null; });
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing() {
+            MessagingCenter.Unsubscribe<SideMenuViewModel>(this, "Selected");
+            base.OnDisappearing();
         }
     }
 }

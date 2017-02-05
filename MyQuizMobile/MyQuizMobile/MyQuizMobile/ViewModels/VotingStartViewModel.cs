@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
@@ -9,13 +10,46 @@ using Device = Xamarin.Forms.Device;
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class VotingStartViewModel {
+        private Item _selectedItem;
+        private int _timeInSeconds;
         public ObservableCollection<Item> ItemCollection { get; set; }
-        public int TimeInSeconds { get; set; }
+        public Item SelectedItem {
+            get { return _selectedItem; }
+            set {
+                _selectedItem = value;
+
+                if (_selectedItem == null) {
+                    return;
+                }
+
+                ItemTappedCommand.Execute(_selectedItem);
+                SelectedItem = null;
+            }
+        }
+        public int TimeInSeconds {
+            get { return _timeInSeconds; }
+            set {
+                if (value < 1) {
+                    _timeInSeconds = 1;
+                } else if (TimeInSeconds > 999) {
+                    _timeInSeconds = 999;
+                } else {
+                    _timeInSeconds = value;
+                }
+            }
+        }
         public bool IsPersonal { get; set; }
         public bool CanSend { get; set; }
         public bool GroupHasSingleTopics { get; set; }
 
-        public VotingStartViewModel() {
+        public ICommand ContinueButtonClickedCommand { get; private set; }
+        public ICommand ItemTappedCommand { get; private set; }
+
+        public VotingStartViewModel() { Init(); }
+
+        private void Init() {
+            SubscribeEvents();
+            RegisterCommands();
             TimeInSeconds = 30;
             IsPersonal = false;
             CanSend = false;
@@ -26,111 +60,87 @@ namespace MyQuizMobile {
             };
         }
 
-        public async void OnMenuItemTapped(object sender, SelectedItemChangedEventArgs e) {
-            var item = e.SelectedItem as Item;
-            if (item == null) {
-                return;
+        private void SubscribeEvents() {
+            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "PickDone");
+            MessagingCenter.Subscribe<VotingSelectionViewModel, Item>(this, "PickDone",
+                                                                      async (sender, arg) => {
+                                                                          await SetItemAfterPick(arg);
+                                                                      });
+        }
+
+        private void RegisterCommands() {
+            ContinueButtonClickedCommand = new Command(async () => { await ContinueButtonClicked(); });
+            ItemTappedCommand = new Command<Item>(async item => { await MenuItemTapped(item); });
+        }
+
+        private async Task SetItemAfterPick(Item item) {
+            if (item != null) {
+                switch (item.ItemType) {
+                case ItemType.Group:
+                    ItemCollection[0] = (Group)item;
+                    if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
+                        ItemCollection[0] = (Group)item;
+                    }
+                    if (((Group)item).topicList != null && ((Group)item).topicList.Any()) {
+                        GroupHasSingleTopics = true;
+                        IsPersonal = true;
+                    } else {
+                        GroupHasSingleTopics = false;
+                        IsPersonal = false;
+                    }
+                    break;
+                case ItemType.QuestionBlock:
+                    ItemCollection[1] = (QuestionBlock)item;
+                    if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
+                        ItemCollection[1] = (QuestionBlock)item;
+                    }
+                    if (item.Id == 0) {
+                        ItemCollection.Add(new Question {
+                            Id = -1,
+                            DisplayText = "Frage auswählen",
+                            ItemType = ItemType.Question
+                        });
+                    } else if (ItemCollection.Any(x => x.ItemType == ItemType.Question)) {
+                        ItemCollection.Remove(ItemCollection.First(x => x.ItemType == ItemType.Question));
+                    }
+                    break;
+                case ItemType.Question:
+                    ItemCollection[2] = (Question)item;
+                    if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
+                        ItemCollection[2] = (Question)item;
+                    }
+                    break;
+                }
+                var veranstaltungPicked = ItemCollection[0].Id != -1;
+                var fragenlistePicked = ItemCollection[1].Id != -1;
+                var mustPickSingleQuestion = ItemCollection[1].Id == 0;
+                if (veranstaltungPicked && fragenlistePicked) {
+                    if (mustPickSingleQuestion) {
+                        var singleQuestionPicked = ItemCollection[2].Id != -1;
+                        CanSend = singleQuestionPicked;
+                    } else {
+                        CanSend = true;
+                    }
+                } else {
+                    CanSend = false;
+                }
             }
-            var nextPage = new VotingSelectionPage(item);
-            nextPage.VotingSelectionViewModel.PickDone += SetItemAfterPick;
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
+        }
+
+        private async Task ContinueButtonClicked() {
+            var nextPage = new VotingResultLivePage(this);
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
                                                                                                     true);
         }
 
-        private async void SetItemAfterPick(object sender, MenuItemPickedEventArgs e) {
-            var item = e.Item;
-            if (item == null) {
-                return;
-            }
-            switch (item.ItemType) {
-            case ItemType.Group:
-                ItemCollection[0] = (Group)item;
-                if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                    ItemCollection[0] = (Group)item;
-                }
-                if (((Group)item).topicList != null
-                    && ((Group)item).topicList.Any()) {
-                    GroupHasSingleTopics = true;
-                    IsPersonal = true;
-                } else {
-                    GroupHasSingleTopics = false;
-                    IsPersonal = false;
-                }
-                break;
-            case ItemType.QuestionBlock:
-                ItemCollection[1] = (QuestionBlock)item;
-                if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                    ItemCollection[1] = (QuestionBlock)item;
-                }
-                if (item.Id == 0) {
-                    ItemCollection.Add(new Question {
-                        Id = -1,
-                        DisplayText = "Frage auswählen",
-                        ItemType = ItemType.Question
-                    });
-                } else if (ItemCollection.Any(x => x.ItemType == ItemType.Question)) {
-                    ItemCollection.Remove(ItemCollection.First(x => x.ItemType == ItemType.Question));
-                }
-                break;
-            case ItemType.Question:
-                ItemCollection[2] = (Question)item;
-                if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                    ItemCollection[2] = (Question)item;
-                }
-                break;
-            }
-            var veranstaltungPicked = ItemCollection[0].Id != -1;
-            var fragenlistePicked = ItemCollection[1].Id != -1;
-            var mustPickSingleQuestion = ItemCollection[1].Id == 0;
-            if (veranstaltungPicked && fragenlistePicked) {
-                if (mustPickSingleQuestion) {
-                    var singleQuestionPicked = ItemCollection[2].Id != -1;
-                    CanSend = singleQuestionPicked;
-                } else {
-                    CanSend = true;
-                }
-            } else {
-                CanSend = false;
-            }
+        private async Task MenuItemTapped(Item item) {
+            SelectedItem = null;
+            var nextPage = new VotingSelectionPage(item);
 
-            var previousPage =
-                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
-            ((VotingSelectionPage)previousPage).VotingSelectionViewModel.PickDone -= SetItemAfterPick;
-        }
-
-        public void timeEntry_OnFocused(object sender, FocusEventArgs e) {
-            var entry = e.VisualElement as Entry;
-            if (entry == null) {
-                return;
-            }
-            // TODO: not mvvm style
-            entry.Text = "";
-        }
-
-        public void timeEntry_OnUnfocused(object sender, FocusEventArgs e) {
-            var entry = e.VisualElement as Entry;
-            if (entry == null) {
-                return;
-            }
-            int newTime;
-            if (int.TryParse(entry.Text, out newTime)) {
-                if (newTime < 1) {
-                    newTime = 1;
-                } else if (newTime > 9999) {
-                    newTime = 9999;
-                }
-                TimeInSeconds = newTime;
-            } else {
-                TimeInSeconds = 30;
-            }
-        }
-
-        public void isPersonalSwitch_Toggled(object sender, ToggledEventArgs e) { IsPersonal = e.Value; }
-
-        public async void continueButton_Clicked(object sender, EventArgs e) {
-            var nextPage = new VotingResultLivePage(this);
+            MessagingCenter.Send(this, "Selected");
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),

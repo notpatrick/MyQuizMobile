@@ -20,7 +20,7 @@
                 <Entry Text="{Binding Group.DisplayText}" Grid.Row="0" Grid.Column="1" />
                 <Entry Text="{Binding Group.EnterGroupPin}" Grid.Row="1" Grid.Column="1" />
             </Grid>
-            <ListView Header="Personen" ItemsSource="{Binding Group.topicList}">
+            <ListView x:Name="listView" Header="Personen" ItemsSource="{Binding Group.topicList}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <EntryCell Text="{Binding DisplayText}" Placeholder="Name" />
@@ -29,13 +29,13 @@
             </ListView>
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                 <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"
-                        IsVisible="{Binding Id, Converter={StaticResource InvertIntToBoolConverter}}" 
-                        Command="{Binding CancelCommand}"/>
+                        IsVisible="{Binding Group.Id, Converter={StaticResource InvertIntToBoolConverter}}"
+                        Command="{Binding CancelCommand}" />
                 <Button Text="Löschen" HorizontalOptions="FillAndExpand"
-                        IsVisible="{Binding Id, Converter={StaticResource IntToBoolConverter}}" 
-                        Command="{Binding DeleteCommand}"/>
-                <Button Text="Speichern" HorizontalOptions="FillAndExpand" 
-                        Command="{Binding SaveCommand}"/>
+                        IsVisible="{Binding Group.Id, Converter={StaticResource IntToBoolConverter}}"
+                        Command="{Binding DeleteCommand}" />
+                <Button Text="Speichern" HorizontalOptions="FillAndExpand"
+                        Command="{Binding SaveCommand}" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

@@ -8,14 +8,16 @@ namespace MyQuizMobile {
             InitializeComponent();
             LoginViewModel = new LoginViewModel();
             BindingContext = LoginViewModel;
-            loginButton.Clicked += LoginViewModel.loginButton_Clicked;
+        }
+
+        private void Popup() {
+            Device.BeginInvokeOnMainThread(async () => { await DisplayAlert("Achtung!", "Passwort falsch", "Ok"); });
         }
 
         protected override void OnAppearing() {
             base.OnAppearing();
             MessagingCenter.Unsubscribe<LoginViewModel>(this, "WrongPassword");
-            MessagingCenter.Subscribe<LoginViewModel>(this, "WrongPassword",
-                                                      sender => { LoginViewModel.DisplayAlert(this); });
+            MessagingCenter.Subscribe<LoginViewModel>(this, "WrongPassword", sender => Popup());
         }
 
         protected override void OnDisappearing() {

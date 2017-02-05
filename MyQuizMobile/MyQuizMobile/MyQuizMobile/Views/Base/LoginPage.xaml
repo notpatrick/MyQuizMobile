@@ -5,10 +5,21 @@
              Padding="5"
              Title="MyQuizMobile">
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+        <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
             <Entry x:Name="passwordEntry" Text="{Binding InputText}" Placeholder="Passwort" IsPassword="True"
-                   HorizontalOptions="FillAndExpand" />
-            <Button x:Name="loginButton" Text="Login" HorizontalOptions="FillAndExpand" />
-        </StackLayout>
+                   HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0" />
+            <Button x:Name="loginButton" Text="Login" HorizontalOptions="FillAndExpand"
+                    Command="{Binding ButtonClickCommand}" Grid.Column="1" Grid.Row="1" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

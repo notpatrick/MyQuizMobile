@@ -7,6 +7,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <myQuizMobile:InvertBoolConverter x:Key="InvertBoolConverter" />
+            <myQuizMobile:IntStringConverter x:Key="IntStringConverter" />
             <myQuizMobile:ItemTypeToStringConverter x:Key="ItemTypeToStringConverter" />
             <myQuizMobile:IntToBoolConverter x:Key="IntToBoolConverter" />
             <myQuizMobile:ValueConverterGroup x:Key="InvertIntToBoolConverter">

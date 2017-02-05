@@ -13,9 +13,7 @@ namespace MYQuizMobile {
         private readonly HttpClient _client;
 
         public Networking(string DeviceId) {
-            _client = new HttpClient(new HttpClientHandler {
-                UseProxy = false
-            });
+            _client = new HttpClient(new HttpClientHandler {UseProxy = false});
             _client.BaseAddress = new Uri(HostAddress);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentType));

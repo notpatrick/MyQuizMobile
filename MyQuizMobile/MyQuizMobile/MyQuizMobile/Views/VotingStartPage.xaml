@@ -6,7 +6,8 @@
              Padding="5">
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="listView" ItemsSource="{Binding ItemCollection}" VerticalOptions="Fill">
+            <ListView x:Name="listView" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedItem}"
+                      VerticalOptions="Fill">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" />
@@ -16,8 +17,8 @@
             <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand">
                 <Grid HorizontalOptions="FillAndExpand" RowSpacing="20" ColumnSpacing="10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*" />
-                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="9*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -25,18 +26,24 @@
                     </Grid.RowDefinitions>
                     <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="End"
                            VerticalTextAlignment="Center" HorizontalOptions="End" Grid.Column="0" Grid.Row="0" />
-                    <Switch x:Name="personenbezogenSwitch" HorizontalOptions="Start"
+                    <Switch HorizontalOptions="Start"
                             IsToggled="{Binding IsPersonal}" Grid.Column="1" Grid.Row="0"
                             IsEnabled="{Binding GroupHasSingleTopics}" />
-                    <Label Text="Sekunden pro Frage" HorizontalTextAlignment="End" VerticalTextAlignment="Center"
+                    <Label Text="Zeit pro Frage" HorizontalTextAlignment="End" VerticalTextAlignment="Center"
                            HorizontalOptions="End" Grid.Column="0" Grid.Row="1" />
 
-                    <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric"
-                           HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand" Grid.Column="1"
-                           Grid.Row="1" />
+                    <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                        <Entry Text="{Binding TimeInSeconds, Converter={StaticResource IntStringConverter}}"
+                               Keyboard="Numeric"
+                               HorizontalTextAlignment="End" HorizontalOptions="FillAndExpand" />
+                        <Label Text="sek" VerticalTextAlignment="Center" VerticalOptions="Center"
+                               HorizontalOptions="End"
+                               Style="{DynamicResource SubtitleStyle}" />
+                    </StackLayout>
 
                 </Grid>
-                <Button x:Name="weiterButton" Text="Weiter" HorizontalOptions="FillAndExpand"
+                <Button Text="Weiter" HorizontalOptions="FillAndExpand"
+                        Command="{Binding ContinueButtonClickedCommand}"
                         IsEnabled="{Binding CanSend}" />
             </StackLayout>
         </StackLayout>

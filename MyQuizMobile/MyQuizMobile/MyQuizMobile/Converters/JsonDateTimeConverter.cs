@@ -34,7 +34,9 @@ namespace MyQuizMobile.Converters {
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) { return (string)reader.Value == "multi"; }
+                                        JsonSerializer serializer) {
+            return (string)reader.Value == "multi";
+        }
 
         public override bool CanConvert(Type objectType) { return false; }
     }
@@ -49,7 +51,9 @@ namespace MyQuizMobile.Converters {
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) { return (string)reader.Value == "1"; }
+                                        JsonSerializer serializer) {
+            return (string)reader.Value == "1";
+        }
 
         public override bool CanConvert(Type objectType) { return false; }
     }
@@ -64,7 +68,9 @@ namespace MyQuizMobile.Converters {
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) { return (int)reader.Value == 1; }
+                                        JsonSerializer serializer) {
+            return (int)reader.Value == 1;
+        }
 
         public override bool CanConvert(Type objectType) { return false; }
     }

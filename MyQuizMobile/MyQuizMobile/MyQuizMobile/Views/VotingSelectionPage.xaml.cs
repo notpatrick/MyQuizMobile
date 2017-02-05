@@ -8,16 +8,18 @@ namespace MyQuizMobile {
             InitializeComponent();
             VotingSelectionViewModel = new VotingSelectionViewModel(item);
             BindingContext = VotingSelectionViewModel;
+        }
 
-            listAuswahl.ItemSelected += VotingSelectionViewModel.OnItemSelected;
+        protected override void OnAppearing() {
+            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "Selected");
+            MessagingCenter.Subscribe<VotingSelectionViewModel>(this, "Selected",
+                                                                sender => { listView.SelectedItem = null; });
 
-            listAuswahl.Refreshing += VotingSelectionViewModel.listView_Refreshing;
-            searchBar.TextChanged += VotingSelectionViewModel.searchBar_TextChanged;
-            Appearing += VotingSelectionViewModel.OnAppearing;
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing() {
-            listAuswahl.SelectedItem = null;
+            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "Selected");
             base.OnDisappearing();
         }
     }
