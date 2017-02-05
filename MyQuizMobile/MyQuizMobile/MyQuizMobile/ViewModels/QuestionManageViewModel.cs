@@ -9,13 +9,13 @@ using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class GroupManageViewModel {
-        private List<Group> _allGroups = new List<Group>();
+    public class QuestionManageViewModel {
+        private List<Question> _allQuestions = new List<Question>();
         private bool _isSearching;
         private string _searchString = string.Empty;
         private Item _selectedItem;
         public bool IsLoading { get; private set; }
-        public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
+        public ObservableCollection<Question> Questions { get; set; } = new ObservableCollection<Question>();
         public string SearchString {
             get { return _searchString; }
             set {
@@ -41,47 +41,47 @@ namespace MyQuizMobile {
         public ICommand RefreshCommand { get; private set; }
         public ICommand SearchCommand { get; private set; }
 
-        public GroupManageViewModel() { Init(); }
+        public QuestionManageViewModel() { Init(); }
 
         private async void Init() {
             SubscribeEvents();
             RegisterCommands();
-            await GetAllGroups();
+            await GetAllQuestions();
         }
 
         private void SubscribeEvents() {
-            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Done");
-            MessagingCenter.Subscribe<GroupEditViewModel, Group>(this, "Done",
-                                                                 async (sender, arg) => { await Finished(); });
-            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Canceled");
-            MessagingCenter.Subscribe<GroupEditViewModel>(this, "Canceled",
-                                                          async sender => {
-                                                              await ((MasterDetailPage)Application.Current.MainPage)
-                                                                  .Detail.Navigation.PopModalAsync(true);
-                                                          });
+            MessagingCenter.Unsubscribe<QuestionEditViewModel>(this, "Done");
+            MessagingCenter.Subscribe<QuestionEditViewModel, Question>(this, "Done",
+                                                                       async (sender, arg) => { await Finished(); });
+            MessagingCenter.Unsubscribe<QuestionEditViewModel>(this, "Canceled");
+            MessagingCenter.Subscribe<QuestionEditViewModel>(this, "Canceled",
+                                                             async sender => {
+                                                                 await ((MasterDetailPage)Application.Current.MainPage)
+                                                                     .Detail.Navigation.PopModalAsync(true);
+                                                             });
         }
 
         private void RegisterCommands() {
             AddCommand = new Command(Add);
             ItemSelectedCommand = new Command<Item>(async item => { await ItemSelected(item); });
-            RefreshCommand = new Command(async () => { await GetAllGroups(); });
+            RefreshCommand = new Command(async () => { await GetAllQuestions(); });
             SearchCommand = new Command(Filter, () => !_isSearching && !IsLoading);
         }
 
-        private async Task GetAllGroups() {
+        private async Task GetAllQuestions() {
             if (IsLoading) {
                 return;
             }
             IsLoading = true;
             ((Command)RefreshCommand).ChangeCanExecute();
-            await Task.Run(async () => { _allGroups = await Group.GetAll(); });
+            await Task.Run(async () => { _allQuestions = await Question.GetAll(); });
             IsLoading = false;
             ((Command)RefreshCommand).ChangeCanExecute();
             SearchCommand.Execute(null);
         }
 
         private async void Add() {
-            var nextPage = new GroupEditPage(new Group());
+            var nextPage = new QuestionEditPage(new Question());
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(
                                                                                                                        nextPage),
@@ -97,18 +97,18 @@ namespace MyQuizMobile {
             _isSearching = true;
             ((Command)SearchCommand).ChangeCanExecute();
             var filtered = string.IsNullOrWhiteSpace(SearchString)
-                               ? _allGroups
-                               : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
-            Groups.Clear();
+                               ? _allQuestions
+                               : _allQuestions.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            Questions.Clear();
             foreach (var g in filtered) {
-                Groups.Add(g);
+                Questions.Add(g);
             }
             _isSearching = false;
             ((Command)SearchCommand).ChangeCanExecute();
         }
 
         private async Task ItemSelected(Item item) {
-            var nextPage = new GroupEditPage((Group)item);
+            var nextPage = new QuestionEditPage((Question)item);
             MessagingCenter.Send(this, "Selected");
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
                                                                                                     new NavigationPage(

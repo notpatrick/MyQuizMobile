@@ -6,7 +6,7 @@
     "PostSharp": "4.3.27",
     "PostSharp.Patterns.Common": "4.3.27",
     "PostSharp.Patterns.Model": "4.3.27",
-    "Xamarin.Forms": "2.3.3.180",
+    "Xamarin.Forms": "2.3.4.192-pre2",
     "Xamarin.Forms.Theme.Light": "1.0.0.43-pre1"
   },
   "frameworks": {

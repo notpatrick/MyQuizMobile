@@ -1,7 +1,8 @@
-﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
-             x:Class="MyQuizMobile.GroupEditPage"
+             x:Class="MyQuizMobile.QuestionEditPage"
              Title="Veranstaltung bearbeiten"
              Padding="5"
              x:Name="ContentPage">
@@ -18,20 +19,19 @@
                 </Grid.ColumnDefinitions>
                 <Label Text="Name" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
                 <Label Text="PIN" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Entry Text="{Binding Group.DisplayText}" Grid.Row="0" Grid.Column="1" />
-                <Entry Text="{Binding Group.EnterGroupPin}" Grid.Row="1" Grid.Column="1" />
+                <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1" />
             </Grid>
-            <ListView x:Name="listView" Header="Personen" ItemsSource="{Binding Group.SingleTopics}"
+            <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.Answers}"
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:SingleTopicCell
-                            Command="{Binding Path=BindingContext.RemoveSingleTopicCommand, Source={x:Reference ContentPage}}" />
+                            Command="{Binding Path=BindingContext.RemoveAnswerOptionCommand, Source={x:Reference ContentPage}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             <Button Text="Person hinzufügen" HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                    Command="{Binding AddSingleTopicCommand}" />
+                    Command="{Binding AddAnswerCommand}" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                 <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"
                         IsVisible="{Binding Group.Id, Converter={StaticResource InvertIntToBoolConverter}}"
@@ -45,13 +45,3 @@
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
-
-<!--
-<local:CustomCell Command="{Binding Path=BindingContext.RemoveSingleTopicCommand, Source={x:Reference ContentPage}}">
-  <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="10,0,10,0">
-    <TimePicker Time="{Binding DateTime, Converter={StaticResource DateTimeConverter}}" Format="HH:mm" ></TimePicker>
-    <Entry Text="{Binding DisplayText}" Placeholder="Name" HorizontalOptions="FillAndExpand" Margin="0,0,0,0"></Entry>
-    <Image Source="ic_delete_forever.png" Aspect="AspectFit"></Image>
-  </StackLayout>
-</local:CustomCell>
--->

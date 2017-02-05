@@ -52,7 +52,7 @@ namespace MyQuizMobile {
 
         private void RegisterCommands() {
             SearchCommand = new Command(Filter, () => !_isSearching && !IsLoading);
-            ItemSelectedCommand = new Command<Item>(ItemSelected);
+            ItemSelectedCommand = new Command<Item>(async i => { await ItemSelected(i); });
             RefreshCommand = new Command(async () => { await GetAll(); }, () => !IsLoading);
         }
 
@@ -107,7 +107,7 @@ namespace MyQuizMobile {
             ((Command)SearchCommand).ChangeCanExecute();
         }
 
-        private void ItemSelected(Item item) {
+        private async Task ItemSelected(Item item) {
             Item result = null;
             switch (ItemType) {
             case ItemType.Group:
@@ -120,8 +120,8 @@ namespace MyQuizMobile {
                 result = item as Question;
                 break;
             }
-            MessagingCenter.Send(this, "Selected");
             MessagingCenter.Send(this, "PickDone", result);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
         }
     }
 }

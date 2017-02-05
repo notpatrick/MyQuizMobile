@@ -64,7 +64,7 @@ namespace MyQuizMobile {
             _initialTime = asvm.TimeInSeconds;
             IsPersonal = asvm.IsPersonal;
             if (IsPersonal) {
-                SingleTopics = ((Group)asvm.ItemCollection[0]).topicList;
+                SingleTopics = ((Group)asvm.ItemCollection[0]).SingleTopics;
                 CurrentSingleTopic = SingleTopics.FirstOrDefault();
             }
         }

@@ -13,6 +13,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\BindablePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CustomCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CustomEditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\InvertBoolConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\ItemTypeToStringConverter.cs" />
@@ -31,8 +34,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Question.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\QuestionBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionBlockEditViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionBlockManageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionEditViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionManageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingStartViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingSelectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingResultLiveViewModel.cs" />
@@ -49,6 +57,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Base\SideMenuPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>SideMenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\QuestionBlockEditPage.xaml.cs">
+      <DependentUpon>QuestionBlockEditPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\QuestionEditPage.xaml.cs">
+      <DependentUpon>QuestionEditPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StatisticsPage.xaml.cs">
+      <DependentUpon>StatisticsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\VotingStartPage.xaml.cs">
       <DependentUpon>VotingStartPage.xaml</DependentUpon>
@@ -137,6 +157,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Base\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\QuestionBlockEditPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\QuestionEditPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\StatisticsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

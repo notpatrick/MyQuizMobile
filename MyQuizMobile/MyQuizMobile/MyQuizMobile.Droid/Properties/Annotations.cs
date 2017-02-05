@@ -46,9 +46,9 @@ namespace MyQuizMobile.Droid.Annotations {
     /// </code>
     /// </example>
     [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
-        AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event |
-        AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
+        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
+        | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Interface
+        | AttributeTargets.GenericParameter)]
     public sealed class CanBeNullAttribute : Attribute {}
 
     /// <summary>
@@ -62,9 +62,9 @@ namespace MyQuizMobile.Droid.Annotations {
     /// </code>
     /// </example>
     [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
-        AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event |
-        AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
+        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
+        | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Interface
+        | AttributeTargets.GenericParameter)]
     public sealed class NotNullAttribute : Attribute {}
 
     /// <summary>
@@ -73,8 +73,8 @@ namespace MyQuizMobile.Droid.Annotations {
     ///     or of the Lazy.Value property can never be null.
     /// </summary>
     [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
-        AttributeTargets.Delegate | AttributeTargets.Field)]
+        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
+        | AttributeTargets.Field)]
     public sealed class ItemNotNullAttribute : Attribute {}
 
     /// <summary>
@@ -83,8 +83,8 @@ namespace MyQuizMobile.Droid.Annotations {
     ///     or of the Lazy.Value property can be null.
     /// </summary>
     [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
-        AttributeTargets.Delegate | AttributeTargets.Field)]
+        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
+        | AttributeTargets.Field)]
     public sealed class ItemCanBeNullAttribute : Attribute {}
 
     /// <summary>
@@ -103,8 +103,7 @@ namespace MyQuizMobile.Droid.Annotations {
     /// </code>
     /// </example>
     [AttributeUsage(
-        AttributeTargets.Constructor | AttributeTargets.Method |
-        AttributeTargets.Property | AttributeTargets.Delegate)]
+        AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Delegate)]
     public sealed class StringFormatMethodAttribute : Attribute {
         [NotNull]
         public string FormatParameterName { get; private set; }
@@ -121,8 +120,7 @@ namespace MyQuizMobile.Droid.Annotations {
     ///     For a parameter that is expected to be one of the limited set of values.
     ///     Specify fields of which type should be used as values for this parameter.
     /// </summary>
-    [AttributeUsage(
-        AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field,
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field,
         AllowMultiple = true)]
     public sealed class ValueProviderAttribute : Attribute {
         [NotNull]
@@ -277,8 +275,7 @@ namespace MyQuizMobile.Droid.Annotations {
 
         public bool ForceFullStates { get; private set; }
 
-        public ContractAnnotationAttribute([NotNull] string contract)
-            : this(contract, false) {}
+        public ContractAnnotationAttribute([NotNull] string contract) : this(contract, false) { }
 
         public ContractAnnotationAttribute([NotNull] string contract, bool forceFullStates) {
             Contract = contract;
@@ -361,8 +358,7 @@ namespace MyQuizMobile.Droid.Annotations {
 
         public ImplicitUseTargetFlags TargetFlags { get; private set; }
 
-        public UsedImplicitlyAttribute()
-            : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) {}
+        public UsedImplicitlyAttribute() : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
         public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags)
             : this(useKindFlags, ImplicitUseTargetFlags.Default) {}
@@ -388,8 +384,7 @@ namespace MyQuizMobile.Droid.Annotations {
         [UsedImplicitly]
         public ImplicitUseTargetFlags TargetFlags { get; private set; }
 
-        public MeansImplicitUseAttribute()
-            : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) {}
+        public MeansImplicitUseAttribute() : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
         public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags)
             : this(useKindFlags, ImplicitUseTargetFlags.Default) {}
@@ -500,8 +495,8 @@ namespace MyQuizMobile.Droid.Annotations {
     /// </code>
     /// </example>
     [AttributeUsage(
-        AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.Method |
-        AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct
+        AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.Method
+        | AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct
         | AttributeTargets.GenericParameter)]
     public sealed class ProvidesContextAttribute : Attribute {}
 

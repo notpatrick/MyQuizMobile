@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using MyQuizMobile.Views;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
@@ -35,7 +34,8 @@ namespace MyQuizMobile {
                                  typeof(GroupManagePage)),
                 new SideMenuItem("Fragelisten verwalten", "Hier können Fragelisten verwaltet werden",
                                  typeof(QuestionBlockManagePage)),
-                new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden", typeof(QuestionManagePage))
+                new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden", typeof(QuestionManagePage)),
+                new SideMenuItem("Statistiken", "Hier können Statistiken eingesehen werden", typeof(StatisticsPage))
             };
         }
 

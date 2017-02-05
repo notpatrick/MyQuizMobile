@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
+    [NotifyPropertyChanged]
     public partial class SingleTopic : Item {
         [JsonIgnore]
         public bool IsVotingDone { get; set; } = false;

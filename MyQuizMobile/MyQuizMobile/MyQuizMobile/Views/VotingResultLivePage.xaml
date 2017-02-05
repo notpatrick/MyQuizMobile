@@ -7,7 +7,7 @@
     <ContentPage.Content>
         <StackLayout>
             <ListView x:Name="resultListView" ItemsSource="{Binding ResultCollection}" VerticalOptions="FillAndExpand"
-                      HasUnevenRows="True" RowHeight="-1">
+                      HasUnevenRows="True" RowHeight="-1" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

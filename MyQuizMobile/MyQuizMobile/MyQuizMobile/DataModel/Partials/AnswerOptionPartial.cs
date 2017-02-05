@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
+    [NotifyPropertyChanged]
     public partial class AnswerOption : Item {
         public override string DisplayText { get { return Text; } set { Text = value; } }
         public override ItemType ItemType => ItemType.AnswerOption;

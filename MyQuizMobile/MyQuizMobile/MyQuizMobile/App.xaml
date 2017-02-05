@@ -10,6 +10,7 @@
             <myQuizMobile:IntStringConverter x:Key="IntStringConverter" />
             <myQuizMobile:ItemTypeToStringConverter x:Key="ItemTypeToStringConverter" />
             <myQuizMobile:IntToBoolConverter x:Key="IntToBoolConverter" />
+            <myQuizMobile:DateTimeConverter x:Key="DateTimeConverter" />
             <myQuizMobile:ValueConverterGroup x:Key="InvertIntToBoolConverter">
                 <myQuizMobile:IntToBoolConverter />
                 <myQuizMobile:InvertBoolConverter />

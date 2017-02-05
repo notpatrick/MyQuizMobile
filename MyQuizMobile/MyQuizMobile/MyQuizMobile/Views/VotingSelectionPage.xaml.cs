@@ -11,15 +11,15 @@ namespace MyQuizMobile {
         }
 
         protected override void OnAppearing() {
-            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "Selected");
-            MessagingCenter.Subscribe<VotingSelectionViewModel>(this, "Selected",
+            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "PickDone");
+            MessagingCenter.Subscribe<VotingSelectionViewModel>(this, "PickDone",
                                                                 sender => { listView.SelectedItem = null; });
 
             base.OnAppearing();
         }
 
         protected override void OnDisappearing() {
-            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "Selected");
+            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "PickDone");
             base.OnDisappearing();
         }
     }
