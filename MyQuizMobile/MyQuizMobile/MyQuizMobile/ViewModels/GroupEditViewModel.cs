@@ -1,24 +1,31 @@
-﻿using System;
-using MyQuizMobile.DataModel;
+﻿using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class GroupEditViewModel {
         public Group Group { get; set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
 
-        public GroupEditViewModel(Group group) { Group = group; }
-
-        public void cancelButton_Clicked(object sender, EventArgs e) {
-            OnDone(new MenuItemPickedEventArgs {Item = Group});
+        public GroupEditViewModel(Group group) {
+            Group = group;
+            DeleteCommand = new Command(Delete);
+            SaveCommand = new Command(Save);
+            CancelCommand = new Command(Cancel);
         }
 
-        public async void saveButton_Clicked(object sender, EventArgs e) {
+        private void Cancel() { OnDone(new MenuItemPickedEventArgs {Item = Group}); }
+
+        private async void Save() {
             await Group.Post(Group);
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
 
-        public async void deleteButton_Clicked(object sender, EventArgs e) {
+        private async void Delete() {
             await Group.DeleteById(Group.Id);
             OnDone(new MenuItemPickedEventArgs {Item = Group});
         }
