@@ -46,7 +46,7 @@ namespace MyQuizMobile {
                 Device.StartTimer(TimeSpan.FromSeconds(1), Timer_OnElapsed);
                 // TODO: Open websocket connection here to start
             } else {
-                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync();
+                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
             }
         }
 
@@ -123,7 +123,7 @@ namespace MyQuizMobile {
                                                      "Wollen Sie die aktuelle Umfrage wirklich vorzeitig beenden? Ergebnisse können dann unvollständig sein!",
                                                      "Umfrage Beenden", "Zurück");
                 if (result) {
-                    await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync();
+                    await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
                 }
             });
 

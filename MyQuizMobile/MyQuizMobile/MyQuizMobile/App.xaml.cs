@@ -11,11 +11,12 @@ namespace MyQuizMobile {
         public App() {
             InitializeComponent();
             MainPage = new RootPage();
+            MainPage.Navigation.PushModalAsync(new NavigationPage(new LoginPage()), false);
         }
 
         protected override async void OnStart() {
             Current.Properties.Remove("DeviceID");
-            // TODO: Device authentication here
+            // TODO: This is one time authentication without password entry
             if (!Current.Properties.ContainsKey("DeviceID")) {
                 var n = new Networking("");
                 var regDevice = await n.Post("api/devices/", new {

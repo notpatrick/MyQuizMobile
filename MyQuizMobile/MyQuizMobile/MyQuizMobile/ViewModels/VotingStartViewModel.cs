@@ -33,7 +33,10 @@ namespace MyQuizMobile {
             }
             var nextPage = new VotingSelectionPage(item);
             nextPage.VotingSelectionViewModel.PickDone += SetItemAfterPick;
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
+                                                                                                    new NavigationPage(
+                                                                                                                       nextPage),
+                                                                                                    true);
         }
 
         private async void SetItemAfterPick(object sender, MenuItemPickedEventArgs e) {
@@ -93,7 +96,7 @@ namespace MyQuizMobile {
             }
 
             var previousPage =
-                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
+                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
             ((VotingSelectionPage)previousPage).VotingSelectionViewModel.PickDone -= SetItemAfterPick;
         }
 
@@ -128,7 +131,10 @@ namespace MyQuizMobile {
 
         public async void continueButton_Clicked(object sender, EventArgs e) {
             var nextPage = new VotingResultLivePage(this);
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
+                                                                                                    new NavigationPage(
+                                                                                                                       nextPage),
+                                                                                                    true);
         }
     }
 }

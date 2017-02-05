@@ -3,10 +3,8 @@ using Android.Content.PM;
 using Android.OS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms.Themes;
-using Xamarin.Forms.Themes.Android;
 
-[assembly: Application(Icon = "@drawable/Icon", Theme = "@android:style/Theme.Holo.Light")]
+[assembly: Application(Icon = "@drawable/Icon", Theme = "@android:style/Theme.Material.Light")]
 
 namespace MyQuizMobile.Droid {
     [Activity(Label = "MyQuizMobile", Icon = "@drawable/icon", MainLauncher = true,
@@ -17,10 +15,6 @@ namespace MyQuizMobile.Droid {
 
             Forms.Init(this, bundle);
             LoadApplication(new App());
-
-            var x = typeof(LightThemeResources);
-            x = typeof(DarkThemeResources);
-            x = typeof(UnderlineEffect);
         }
     }
 }

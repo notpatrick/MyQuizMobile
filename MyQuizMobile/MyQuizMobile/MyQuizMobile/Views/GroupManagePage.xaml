@@ -1,6 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MyQuizMobile.GroupManagePage"
              xmlns:local="clr-namespace:MyQuizMobile"
@@ -16,8 +14,7 @@
                           IsRefreshing="{Binding IsLoading}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextCell Text="{Binding DisplayText}" TextColor="#212121" Detail="{Binding DetailText}"
-                                      DetailColor="#616161" />
+                            <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

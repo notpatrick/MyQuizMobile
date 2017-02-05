@@ -9,7 +9,7 @@
             <ListView x:Name="listView" VerticalOptions="FillAndExpand" ItemsSource="{Binding SideMenuItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Title}" TextColor="#212121" DetailColor="#616161" />
+                        <TextCell Text="{Binding Title}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

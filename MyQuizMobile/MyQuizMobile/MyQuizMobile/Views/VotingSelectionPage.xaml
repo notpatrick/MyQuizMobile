@@ -14,8 +14,7 @@
                       IsRefreshing="{Binding IsLoading}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding DisplayText}" TextColor="#212121" Detail="{Binding DetailText}"
-                                  DetailColor="#616161" />
+                        <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

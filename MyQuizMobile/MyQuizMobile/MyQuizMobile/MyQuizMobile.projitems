@@ -14,7 +14,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\BindablePicker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\InvertBoolConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\ButtonEnabledToColorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\ItemTypeToStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\JsonDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\AnswerOption.cs" />
@@ -32,12 +31,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\QuestionBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingStartViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingSelectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VotingResultLiveViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SideMenuViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupEditViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupManageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Base\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Base\RootPage.xaml.cs">
       <DependentUpon>RootPage.xaml</DependentUpon>
     </Compile>
@@ -126,6 +130,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\GroupEditPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Base\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

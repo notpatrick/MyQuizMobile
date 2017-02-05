@@ -14,6 +14,7 @@ namespace MyQuizMobile {
             timeEntry.Unfocused += VotingResultLiveViewModel.timeEntry_OnUnfocused;
             listView.ItemTapped += VotingResultLiveViewModel.listView_ItemTapped;
             personPicker.ItemSelected += VotingResultLiveViewModel.personPicker_ItemSelected;
+            NavigationPage.SetHasBackButton(this, false);
         }
 
         protected override bool OnBackButtonPressed() { return VotingResultLiveViewModel.OnBackButtonPressed(this); }
