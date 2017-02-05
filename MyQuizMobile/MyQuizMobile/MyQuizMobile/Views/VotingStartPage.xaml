@@ -14,24 +14,27 @@
                 </ListView.ItemTemplate>
             </ListView>
             <StackLayout HorizontalOptions="Fill" VerticalOptions="EndAndExpand">
-                <Grid HorizontalOptions="FillAndExpand">
+                <Grid HorizontalOptions="FillAndExpand" RowSpacing="20" ColumnSpacing="10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*" />
-                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Switch x:Name="personenbezogenSwitch" HorizontalOptions="FillAndExpand"
-                            IsToggled="{Binding IsPersonal}" Grid.Column="0" Grid.Row="0"
+                    <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="End"
+                           VerticalTextAlignment="Center" HorizontalOptions="End" Grid.Column="0" Grid.Row="0" />
+                    <Switch x:Name="personenbezogenSwitch" HorizontalOptions="Start"
+                            IsToggled="{Binding IsPersonal}" Grid.Column="1" Grid.Row="0"
                             IsEnabled="{Binding GroupHasSingleTopics}" />
-                    <Label Text="Personenbezogene Fragen" HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="0" />
+                    <Label Text="Sekunden pro Frage" HorizontalTextAlignment="End" VerticalTextAlignment="Center"
+                           HorizontalOptions="End" Grid.Column="0" Grid.Row="1" />
+
                     <Entry x:Name="timeEntry" Text="{Binding TimeInSeconds}" Keyboard="Numeric"
-                           HorizontalTextAlignment="End" HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="1" />
-                    <Label Text="Sekunden pro Frage" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"
-                           HorizontalOptions="Start" Grid.Column="1" Grid.Row="1" />
+                           HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand" Grid.Column="1"
+                           Grid.Row="1" />
+
                 </Grid>
                 <Button x:Name="weiterButton" Text="Weiter" HorizontalOptions="FillAndExpand"
                         IsEnabled="{Binding CanSend}" />
