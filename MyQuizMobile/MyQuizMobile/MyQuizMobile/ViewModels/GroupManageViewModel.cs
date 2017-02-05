@@ -14,7 +14,7 @@ namespace MyQuizMobile {
         private bool _isSearching;
         private string _searchString = string.Empty;
         private Item _selectedItem;
-        public bool IsLoading { get; set; }
+        public bool IsLoading { get; private set; }
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
         public string SearchString {
             get { return _searchString; }

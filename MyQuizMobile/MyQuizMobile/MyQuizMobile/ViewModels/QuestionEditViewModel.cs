@@ -6,43 +6,43 @@ using Xamarin.Forms;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class GroupEditViewModel {
-        public Group Group { get; set; }
+    public class QuestionEditViewModel {
+        public Question Question { get; set; }
         public bool CanDelete { get; set; }
         public ICommand DeleteCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
-        public ICommand RemoveSingleTopicCommand { get; set; }
+        public ICommand RemoveAnswerOptionCommand { get; set; }
         public ICommand AddSingleTopicCommand { get; set; }
 
-        public GroupEditViewModel(Group group) {
-            Group = group;
-            CanDelete = Group.SingleTopics.Any();
+        public QuestionEditViewModel(Question q) {
+            Question = q;
+            CanDelete = Question.Answers.Any();
             DeleteCommand = new Command(Delete);
             SaveCommand = new Command(Save);
             CancelCommand = new Command(Cancel);
-            RemoveSingleTopicCommand = new Command<SingleTopic>(RemoveSingleTopic);
+            RemoveAnswerOptionCommand = new Command<AnswerOption>(RemoveAnswer);
             AddSingleTopicCommand = new Command(Add);
         }
 
         private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
 
         private async void Save() {
-            Group.SingleTopics.Remove(x => string.IsNullOrWhiteSpace(x.Name));
-            await Group.Post(Group);
-            MessagingCenter.Send(this, "Done", Group);
+            Question.Answers.Remove(x => string.IsNullOrWhiteSpace(x.Text));
+            await Question.Post(Question);
+            MessagingCenter.Send(this, "Done", Question);
         }
 
         private async void Delete() {
-            await Group.DeleteById(Group.Id);
-            MessagingCenter.Send(this, "Done", Group);
+            await Question.DeleteById(Question.Id);
+            MessagingCenter.Send(this, "Done", Question);
         }
 
-        private void Add() { Group.SingleTopics.Add(new SingleTopic()); }
+        private void Add() { Question.Answers.Add(new AnswerOption()); }
 
-        private void RemoveSingleTopic(SingleTopic st) {
-            if (Group.SingleTopics.Contains(st)) {
-                Group.SingleTopics.Remove(st);
+        private void RemoveAnswer(AnswerOption q) {
+            if (Question.Answers.Contains(q)) {
+                Question.Answers.Remove(q);
             }
         }
     }

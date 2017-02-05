@@ -4,22 +4,20 @@ using Newtonsoft.Json;
 namespace MyQuizMobile.Converters {
     public class JsonDateTimeConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            var text = value.ToString();
-
-            writer.WritePropertyName("DateTime");
-            writer.WriteValue(text);
-            writer.Flush();
+            serializer.Serialize(writer, value);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
                                         JsonSerializer serializer) {
-            var dataString = (string)reader.Value;
-            if (dataString != null) {
-                var datetime = DateTime.ParseExact(dataString, "HH:mm", null);
-                return datetime;
+            if (reader.Value == null) {
+                return null;
             }
-
-            return null;
+            var dataString = (string)reader.Value;
+            if (dataString == null) {
+                return null;
+            }
+            var datetime = DateTime.ParseExact(dataString, "HH:mm", null);
+            return datetime;
         }
 
         public override bool CanConvert(Type objectType) { return true; }

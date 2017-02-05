@@ -1,8 +1,9 @@
-﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MyQuizMobile.QuestionBlockEditPage"
              xmlns:local="clr-namespace:MyQuizMobile"
-             Title="Frageliste bearbeiten"
+             x:Class="MyQuizMobile.QuestionEditPage"
+             Title="Veranstaltung bearbeiten"
              Padding="5"
              x:Name="ContentPage">
     <ContentPage.Content>
@@ -10,32 +11,33 @@
             <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Name" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Entry Text="{Binding QuestionBlock.DisplayText}" Grid.Row="0" Grid.Column="1" />
+                <Label Text="PIN" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
+                <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1" />
             </Grid>
-            <ListView x:Name="listView" ItemsSource="{Binding QuestionBlock.Questions}"
-                      HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement"
-                      HasUnevenRows="True">
+            <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.Answers}"
+                      HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <local:QuestionCell
-                            Command="{Binding Path=BindingContext.RemoveQuestionCommand, Source={x:Reference ContentPage}}" />
+                        <local:SingleTopicCell
+                            Command="{Binding Path=BindingContext.RemoveAnswerOptionCommand, Source={x:Reference ContentPage}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Frage hinzufügen" HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                    Command="{Binding AddQuestionCommand}" />
+            <Button Text="Person hinzufügen" HorizontalOptions="FillAndExpand" VerticalOptions="End"
+                    Command="{Binding AddAnswerCommand}" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                 <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"
-                        IsVisible="{Binding QuestionBlock.Id, Converter={StaticResource InvertIntToBoolConverter}}"
+                        IsVisible="{Binding Group.Id, Converter={StaticResource InvertIntToBoolConverter}}"
                         Command="{Binding CancelCommand}" />
-                <Button Text="Liste Löschen" HorizontalOptions="FillAndExpand"
-                        IsVisible="{Binding QuestionBlock.Id, Converter={StaticResource IntToBoolConverter}}"
+                <Button Text="Löschen" HorizontalOptions="FillAndExpand"
+                        IsVisible="{Binding Group.Id, Converter={StaticResource IntToBoolConverter}}"
                         Command="{Binding DeleteCommand}" />
                 <Button Text="Speichern" HorizontalOptions="FillAndExpand"
                         Command="{Binding SaveCommand}" />

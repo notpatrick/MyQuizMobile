@@ -78,44 +78,62 @@ namespace MyQuizMobile {
     }
 
     public class QuestionCell : CustomCell {
-        public QuestionCell()
-        {
-            var stack = new StackLayout
-            {
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                Padding = new Thickness(10, 0, 10, 0)
-            };
-            View = stack;
+        public Grid Container { get; set; }
 
-            var editor = new CustomEditor() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.StartAndExpand};
-            var editorBinding = new Binding("DisplayText", BindingMode.TwoWay);
-            editor.SetBinding(Editor.TextProperty, editorBinding);
-
-            var image = new Image { Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit };
-
-            var tapper = new TapGestureRecognizer();
-            tapper.Tapped += (sender, args) => {
-                if (Command == null)
-                {
-                    return;
-                }
-                if (Command.CanExecute(this))
-                {
-                    Command.Execute(BindingContext);
-                }
+        public QuestionCell() {
+            var label = new Label {
+                HorizontalOptions = LayoutOptions.StartAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
+            var labelBinding = new Binding("DisplayText", BindingMode.TwoWay);
+            label.SetBinding(Label.TextProperty, labelBinding);
+
+            var image = new Image {
+                Source = "ic_delete_forever.png",
+                Aspect = Aspect.AspectFit,
+                HorizontalOptions = LayoutOptions.EndAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+            var tapper = new TapGestureRecognizer {
+                Command = new Command(() => {
+                    if (Command == null) {
+                        return;
+                    }
+                    if (Command.CanExecute(this)) {
+                        Command.Execute(BindingContext);
+                    }
+                })
+            };
             image.GestureRecognizers.Add(tapper);
-            //TODO use grid instead of stackpanel
-            //Grid.SetRow(image,1);
 
-            stack.Children.Add(editor);
-            stack.Children.Add(image);
+            Container = new Grid {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Padding = new Thickness(10, 0, 10, 0),
+                ColumnDefinitions =
+                    new ColumnDefinitionCollection {
+                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition {Width = new GridLength(9, GridUnitType.Star)},
+                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                    },
+                RowDefinitions =
+                    new RowDefinitionCollection {new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}}
+            };
+
+            Grid.SetRow(label, 0);
+            Grid.SetColumn(label, 0);
+            Grid.SetColumnSpan(label, 2);
+
+            Grid.SetRow(image, 0);
+            Grid.SetColumn(image, 2);
+
+            Container.Children.Add(label);
+            Container.Children.Add(image);
+            View = Container;
         }
 
-        protected override void OnTapped()
-        {
+        protected override void OnTapped() {
             //base.OnTapped();
         }
     }

@@ -12,7 +12,7 @@
             <StackLayout VerticalOptions="FillAndExpand">
                 <ListView x:Name="listView" ItemsSource="{Binding QuestionBlocks}" IsPullToRefreshEnabled="True"
                           IsRefreshing="{Binding IsLoading, Mode=OneWay}" SelectedItem="{Binding SelectedItem}"
-                          RefreshCommand="{Binding RefreshCommand}">
+                          RefreshCommand="{Binding RefreshCommand}" CachingStrategy="RecycleElement">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextCell Text="{Binding DisplayText}" Detail="{Binding DetailText}" />

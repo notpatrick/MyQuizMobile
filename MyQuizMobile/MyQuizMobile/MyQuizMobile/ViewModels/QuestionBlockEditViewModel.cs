@@ -17,7 +17,7 @@ namespace MyQuizMobile {
 
         public QuestionBlockEditViewModel(QuestionBlock qb) {
             QuestionBlock = qb;
-            CanDelete = QuestionBlock.questionList.Any();
+            CanDelete = QuestionBlock.Questions.Any();
             DeleteCommand = new Command(Delete);
             SaveCommand = new Command(Save);
             CancelCommand = new Command(Cancel);
@@ -28,7 +28,7 @@ namespace MyQuizMobile {
         private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
 
         private async void Save() {
-            QuestionBlock.questionList.Remove(x => string.IsNullOrWhiteSpace(x.Text));
+            QuestionBlock.Questions.Remove(x => string.IsNullOrWhiteSpace(x.Text));
             await QuestionBlock.Post(QuestionBlock);
             MessagingCenter.Send(this, "Done", QuestionBlock);
         }
@@ -38,11 +38,11 @@ namespace MyQuizMobile {
             MessagingCenter.Send(this, "Done", QuestionBlock);
         }
 
-        private void Add() { QuestionBlock.questionList.Add(new Question()); }
+        private void Add() { QuestionBlock.Questions.Add(new Question {Text = "Neue Frage"}); }
 
         private void RemoveQuestion(Question q) {
-            if (QuestionBlock.questionList.Contains(q)) {
-                QuestionBlock.questionList.Remove(q);
+            if (QuestionBlock.Questions.Contains(q)) {
+                QuestionBlock.Questions.Remove(q);
             }
         }
     }

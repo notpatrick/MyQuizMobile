@@ -79,7 +79,7 @@ namespace MyQuizMobile {
                     if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
                         ItemCollection[0] = (Group)item;
                     }
-                    if (((Group)item).topicList != null && ((Group)item).topicList.Any()) {
+                    if (((Group)item).SingleTopics != null && ((Group)item).SingleTopics.Any()) {
                         GroupHasSingleTopics = true;
                         IsPersonal = true;
                     } else {
@@ -123,7 +123,6 @@ namespace MyQuizMobile {
                     CanSend = false;
                 }
             }
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
         }
 
         private async Task ContinueButtonClicked() {

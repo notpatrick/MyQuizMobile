@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
+    [NotifyPropertyChanged]
     public class GivenAnswer : Item {
         public DateTime TimeStamp { get; set; }
         public QuestionBlock QuestionBlock { get; set; }

@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
+    [NotifyPropertyChanged]
     public partial class Question {
-        public List<AnswerOption> answerList { get; set; } = new List<AnswerOption>();
+        public ObservableCollection<AnswerOption> Answers { get; set; } = new ObservableCollection<AnswerOption>();
         public override string DisplayText { get { return Text; } set { Text = value; } }
-        public override string DetailText => $"{answerList.Count} Antwortmöglichkeiten";
+        public override string DetailText => $"{Answers.Count} Antwortmöglichkeiten";
         public override ItemType ItemType => ItemType.Question;
 
         #region POST
@@ -15,7 +18,7 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int id) { await App.Networking.Delete($"api/questions/{id}"); }
+        public static async Task DeleteById(int id) { await App.Networking.Delete($"api/questions/{id}"); }
         #endregion
 
         #region GET

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using Xamarin.Forms;
 
 namespace MyQuizMobile {
     public static class Extensions {
@@ -15,19 +13,5 @@ namespace MyQuizMobile {
 
             return itemsToRemove.Count;
         }
-
-        public static void Invalidate(this View view)
-        {
-            if (view == null)
-            {
-                return;
-            }
-
-            var method = typeof(View).GetMethod("InvalidateMeasure", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            method.Invoke(view, null);
-        }
     }
-
-
 }

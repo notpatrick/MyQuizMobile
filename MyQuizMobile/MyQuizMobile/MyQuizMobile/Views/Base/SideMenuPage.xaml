@@ -7,7 +7,7 @@
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">
             <ListView x:Name="listView" VerticalOptions="FillAndExpand" ItemsSource="{Binding SideMenuItems}"
-                      SelectedItem="{Binding SelectedItem}">
+                      SelectedItem="{Binding SelectedItem}" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding Title}" />

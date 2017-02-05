@@ -5,13 +5,14 @@ using Xamarin.Forms;
 namespace MyQuizMobile {
     public class DateTimeConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            var input = (DateTime?)value;
-            return input?.TimeOfDay ?? TimeSpan.FromHours(0);
+            if (value != null) {
+                return DateTime.Parse(value.ToString()).TimeOfDay;
+            }
+            return new TimeSpan(12, 0, 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            var result = DateTime.ParseExact(value.ToString(), "HH:mm:ss", null);
-            return result;
+            return value?.ToString();
         }
     }
 }

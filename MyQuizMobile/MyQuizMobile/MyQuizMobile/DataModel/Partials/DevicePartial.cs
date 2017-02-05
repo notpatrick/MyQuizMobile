@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
+    [NotifyPropertyChanged]
     public partial class Device : Item {
         public override string DisplayText => $"{Id}";
         public override string DetailText => IsAdmin ? "Admin" : "Client";

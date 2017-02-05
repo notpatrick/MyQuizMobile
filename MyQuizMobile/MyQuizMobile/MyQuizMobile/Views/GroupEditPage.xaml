@@ -21,7 +21,7 @@
                 <Entry Text="{Binding Group.DisplayText}" Grid.Row="0" Grid.Column="1" />
                 <Entry Text="{Binding Group.EnterGroupPin}" Grid.Row="1" Grid.Column="1" />
             </Grid>
-            <ListView x:Name="listView" Header="Personen" ItemsSource="{Binding Group.topicList}"
+            <ListView x:Name="listView" Header="Personen" ItemsSource="{Binding Group.SingleTopics}"
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
