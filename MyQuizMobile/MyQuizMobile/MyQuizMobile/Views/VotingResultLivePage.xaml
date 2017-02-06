@@ -1,24 +1,15 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.VotingResultLivePage"
              Title="Ergebnisse"
              Padding="5">
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="resultListView" ItemsSource="{Binding ResultCollection}" VerticalOptions="FillAndExpand"
-                      HasUnevenRows="True" RowHeight="-1" CachingStrategy="RecycleElement">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label Text="{Binding DisplayText}" />
-                                <Label Text="{Binding AnswerCount, StringFormat='{0} Antworten erhalten'}" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <sync:SfListView x:Name="listView">
+              
+            </sync:SfListView>
             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="End">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />
