@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Socket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionBlockEditViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionBlockManageViewModel.cs" />

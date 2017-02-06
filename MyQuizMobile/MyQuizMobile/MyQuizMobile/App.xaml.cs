@@ -7,6 +7,7 @@ using Xamarin.Forms.Xaml;
 namespace MyQuizMobile {
     public partial class App : Application {
         public static Networking Networking = new Networking("");
+        public static Socket Socket = new Socket();
 
         public App() {
             InitializeComponent();
