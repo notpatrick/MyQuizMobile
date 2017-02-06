@@ -18,6 +18,7 @@ namespace MyQuizMobile {
         private int _initialTime;
         private int _timeInSeconds;
         private bool _voteFinished;
+        private Socket _socket = App.Socket;
 
         public ObservableCollection<Item> ResultCollection { get; set; } = new ObservableCollection<Item>();
         public int TimeInSeconds {
@@ -35,6 +36,7 @@ namespace MyQuizMobile {
         public bool CanSend { get; set; }
         public bool CanEdit { get; set; }
         public bool IsPersonal { get; set; }
+        public Group Group { get; set; }
         public ObservableCollection<SingleTopic> SingleTopics { get; set; }
         public string ButtonText { get; set; }
         public SingleTopic CurrentSingleTopic {
@@ -80,6 +82,8 @@ namespace MyQuizMobile {
                 CanEdit = false;
                 Device.StartTimer(TimeSpan.FromSeconds(1), TimerElapsed);
                 // TODO: Open websocket connection here to start
+
+                
             } else {
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
             }

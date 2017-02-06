@@ -10,40 +10,67 @@ namespace MYQuizMobile {
         private const string HostAddress = "http://h2653223.stratoserver.net/";
         private const string ContentType = "application/json";
 
-        private readonly HttpClient _client;
+        private HttpClient _client;
 
-        public Networking(string DeviceId) {
-            _client = new HttpClient(new HttpClientHandler {UseProxy = false});
-            _client.BaseAddress = new Uri(HostAddress);
-            _client.DefaultRequestHeaders.Accept.Clear();
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentType));
-            _client.DefaultRequestHeaders.Add("DeviceId", DeviceId);
+        public Networking(string deviceId) { Connect(deviceId); }
+
+        private void Connect(string deviceId) {
+            try {
+                _client = new HttpClient(new HttpClientHandler {UseProxy = false});
+                _client.BaseAddress = new Uri(HostAddress);
+                _client.DefaultRequestHeaders.Accept.Clear();
+                _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentType));
+                _client.DefaultRequestHeaders.Add("DeviceId", deviceId);
+            } catch (Exception) {
+                // TODO: Handle exception
+                throw;
+            }
         }
 
         public async Task<T> Get<T>(string path) {
-            var response = await _client.GetAsync(path);
-            if (!response.IsSuccessStatusCode) {
-                return default(T);
+            T result;
+
+            try {
+                var response = await _client.GetAsync(path);
+                if (!response.IsSuccessStatusCode) {
+                    return default(T);
+                }
+                var serializedResult = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<T>(serializedResult);
+            } catch (Exception) {
+                // TODO: Handle exception
+                throw;
             }
-            var serializedResult = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<T>(serializedResult);
             return result;
         }
 
         public async Task<T> Post<T>(string path, T value) {
-            var serializedValue = JsonConvert.SerializeObject(value);
-            var response = await _client.PostAsync(path, new StringContent(serializedValue, Encoding.UTF8, ContentType));
-            if (!response.IsSuccessStatusCode) {
-                return default(T);
+            T result;
+            try {
+                var serializedValue = JsonConvert.SerializeObject(value);
+                var response = await _client.PostAsync(path, new StringContent(serializedValue, Encoding.UTF8, ContentType));
+                if (!response.IsSuccessStatusCode) {
+                    return default(T);
+                }
+                var serializedResult = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<T>(serializedResult);
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                throw;
             }
-            var serializedResult = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<T>(serializedResult);
             return result;
         }
 
         public async Task<bool> Delete(string path) {
-            var response = await _client.DeleteAsync(path);
-            return response.IsSuccessStatusCode;
+            var result = false;
+            try {
+                var response = await _client.DeleteAsync(path);
+                result = response.IsSuccessStatusCode;
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                throw;
+            }
+            return result;
         }
     }
 }
