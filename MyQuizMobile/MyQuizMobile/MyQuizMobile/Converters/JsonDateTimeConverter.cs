@@ -57,7 +57,7 @@ namespace MyQuizMobile.Converters {
             writer.Flush();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) { return (int)reader.Value == 1; }
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) { return (long)reader.Value == 1; }
 
         public override bool CanConvert(Type objectType) { return false; }
     }

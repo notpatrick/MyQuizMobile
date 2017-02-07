@@ -16,12 +16,12 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region DELETE
-        public static async Task DeleteById(int id) { await App.Networking.Delete($"api/groups/{id}"); }
+        public static async Task DeleteById(long id) { await App.Networking.Delete($"api/groups/{id}"); }
         #endregion
 
         #region GET
         public static async Task<List<Group>> GetAll() { return await App.Networking.Get<List<Group>>("api/groups/"); }
-        public static async Task<Group> GetById(int id) { return await App.Networking.Get<Group>($"api/groups/{id}"); }
+        public static async Task<Group> GetById(long id) { return await App.Networking.Get<Group>($"api/groups/{id}"); }
         #endregion
     }
 }

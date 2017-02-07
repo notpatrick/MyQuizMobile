@@ -29,8 +29,8 @@ namespace MyQuizMobile {
         }
 
         private bool IsRegistered() {
-            int id;
-            int.TryParse(Application.Current.Properties["DeviceID"].ToString(), out id);
+            long id;
+            long.TryParse(Application.Current.Properties["DeviceID"].ToString(), out id);
             return id != 0;
         }
 

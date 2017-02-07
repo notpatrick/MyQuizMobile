@@ -8,8 +8,8 @@ namespace MyQuizMobile {
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             var input = value.ToString();
-            int result;
-            int.TryParse(input, out result);
+            long result;
+            long.TryParse(input, out result);
             return result;
         }
     }

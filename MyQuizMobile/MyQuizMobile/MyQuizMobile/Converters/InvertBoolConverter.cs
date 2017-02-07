@@ -18,7 +18,7 @@ namespace MyQuizMobile {
     }
 
     public class IntToBoolConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) { return (int)value != 0; }
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) { return (long)value != 0; }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { return null; }
     }
@@ -27,7 +27,7 @@ namespace MyQuizMobile {
         #region IValueConverter Members
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) { return this.Aggregate(value, (current, converter) => converter.Convert(current, targetType, parameter, culture)); }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { throw new NotImplementedException(); }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { return null; }
         #endregion
     }
 }

@@ -15,13 +15,13 @@ namespace MyQuizMobile {
         private const string TextExit = "Umfrage beenden";
         private const string TextAlreadySent = "Bereits gesendet";
         private SingleTopic _currentSingleTopic;
-        private int _initialTime;
+        private long _initialTime;
         private Socket _socket = App.Socket;
-        private int _timeInSeconds;
+        private long _timeInSeconds;
         private bool _voteFinished;
 
         public ObservableCollection<Item> ResultCollection { get; set; } = new ObservableCollection<Item>();
-        public int TimeInSeconds {
+        public long TimeInSeconds {
             get { return _timeInSeconds; }
             set {
                 if (value < 0) {

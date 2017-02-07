@@ -13,7 +13,7 @@ namespace MyQuizMobile.DataModel {
         public SingleTopic SingleTopic { get; set; }
         public Group Group { get; set; }
         public Device Device { get; set; }
-        public override int Id { get; set; }
+        public override long Id { get; set; }
         public override string DisplayText => $"Given Answer {Id}";
         public override ItemType ItemType => ItemType.GivenAnswer;
 
@@ -22,13 +22,13 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region DELETE
-        public static async void DeleteById(int id) { await App.Networking.Delete($"api/groups/{id}"); }
+        public static async void DeleteById(long id) { await App.Networking.Delete($"api/groups/{id}"); }
         #endregion
 
         #region GET
         public static async Task<List<GivenAnswer>> GetAll() { return await App.Networking.Get<List<GivenAnswer>>("api/groups/"); }
 
-        public static async Task<GivenAnswer> GetById(int id) { return await App.Networking.Get<GivenAnswer>($"api/groups/{id}"); }
+        public static async Task<GivenAnswer> GetById(long id) { return await App.Networking.Get<GivenAnswer>($"api/groups/{id}"); }
         #endregion
     }
 

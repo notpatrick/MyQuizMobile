@@ -11,7 +11,7 @@ namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class VotingStartViewModel {
         private Item _selectedItem;
-        private int _timeInSeconds;
+        private long _timeInSeconds;
         public ObservableCollection<Item> ItemCollection { get; set; }
         public Item SelectedItem {
             get { return _selectedItem; }
@@ -26,7 +26,7 @@ namespace MyQuizMobile {
                 SelectedItem = null;
             }
         }
-        public int TimeInSeconds {
+        public long TimeInSeconds {
             get { return _timeInSeconds; }
             set {
                 if (value < 1) {
