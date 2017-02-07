@@ -23,13 +23,9 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region GET
-        public static async Task<List<SingleTopic>> GetAll() {
-            return await App.Networking.Get<List<SingleTopic>>("api/groups/");
-        }
+        public static async Task<List<SingleTopic>> GetAll() { return await App.Networking.Get<List<SingleTopic>>("api/groups/"); }
 
-        public static async Task<SingleTopic> GetById(int id) {
-            return await App.Networking.Get<SingleTopic>($"api/groups/{id}");
-        }
+        public static async Task<SingleTopic> GetById(int id) { return await App.Networking.Get<SingleTopic>($"api/groups/{id}"); }
         #endregion
     }
 }

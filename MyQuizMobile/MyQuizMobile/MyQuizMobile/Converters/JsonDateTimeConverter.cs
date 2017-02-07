@@ -3,12 +3,9 @@ using Newtonsoft.Json;
 
 namespace MyQuizMobile.Converters {
     public class JsonDateTimeConverter : JsonConverter {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            serializer.Serialize(writer, value);
-        }
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) { serializer.Serialize(writer, value); }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) {
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
             if (reader.Value == null) {
                 return null;
             }
@@ -32,10 +29,7 @@ namespace MyQuizMobile.Converters {
             writer.Flush();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) {
-            return (string)reader.Value == "multi";
-        }
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) { return (string)reader.Value == "multi"; }
 
         public override bool CanConvert(Type objectType) { return false; }
     }
@@ -49,10 +43,7 @@ namespace MyQuizMobile.Converters {
             writer.Flush();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) {
-            return (string)reader.Value == "1";
-        }
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) { return (string)reader.Value == "1"; }
 
         public override bool CanConvert(Type objectType) { return false; }
     }
@@ -66,10 +57,7 @@ namespace MyQuizMobile.Converters {
             writer.Flush();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                                        JsonSerializer serializer) {
-            return (int)reader.Value == 1;
-        }
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) { return (int)reader.Value == 1; }
 
         public override bool CanConvert(Type objectType) { return false; }
     }

@@ -11,8 +11,6 @@ namespace MyQuizMobile {
             return new TimeSpan(12, 0, 0);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value?.ToString();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { return value?.ToString(); }
     }
 }

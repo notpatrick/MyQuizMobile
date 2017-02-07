@@ -18,9 +18,7 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType => ItemType.GivenAnswer;
 
         #region POST
-        public static async Task<GivenAnswer> Post(GivenAnswer givenAnswer) {
-            return await App.Networking.Post("api/groups/", givenAnswer);
-        }
+        public static async Task<GivenAnswer> Post(GivenAnswer givenAnswer) { return await App.Networking.Post("api/groups/", givenAnswer); }
         #endregion
 
         #region DELETE
@@ -28,13 +26,9 @@ namespace MyQuizMobile.DataModel {
         #endregion
 
         #region GET
-        public static async Task<List<GivenAnswer>> GetAll() {
-            return await App.Networking.Get<List<GivenAnswer>>("api/groups/");
-        }
+        public static async Task<List<GivenAnswer>> GetAll() { return await App.Networking.Get<List<GivenAnswer>>("api/groups/"); }
 
-        public static async Task<GivenAnswer> GetById(int id) {
-            return await App.Networking.Get<GivenAnswer>($"api/groups/{id}");
-        }
+        public static async Task<GivenAnswer> GetById(int id) { return await App.Networking.Get<GivenAnswer>($"api/groups/{id}"); }
         #endregion
     }
 

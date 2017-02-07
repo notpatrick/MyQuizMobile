@@ -20,7 +20,7 @@ namespace MYQuizMobile {
                 _client.BaseAddress = new Uri(HostAddress);
                 _client.DefaultRequestHeaders.Accept.Clear();
                 _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentType));
-                _client.DefaultRequestHeaders.Add("DeviceId", deviceId);
+                _client.DefaultRequestHeaders.Add("DeviceID", deviceId);
             } catch (Exception) {
                 // TODO: Handle exception
                 throw;

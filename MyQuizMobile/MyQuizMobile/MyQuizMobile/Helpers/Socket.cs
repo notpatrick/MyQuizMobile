@@ -4,19 +4,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyQuizMobile
-{
+namespace MyQuizMobile {
     public class Socket {
         private const string HostAddress = "ws://h2653223.stratoserver.net/ws";
         private const int ChunkSize = 4096;
-        private bool _isReceiving = false;
         private readonly UTF8Encoding _encoder = new UTF8Encoding();
         private readonly ClientWebSocket _webSocket = new ClientWebSocket();
+        private bool _isReceiving;
 
         public async Task Connect() {
             try {
-                if (_webSocket.State == WebSocketState.Closed ||
-                    _webSocket.State == WebSocketState.None) {
+                if (_webSocket.State == WebSocketState.Closed || _webSocket.State == WebSocketState.None) {
                     await _webSocket.ConnectAsync(new Uri(HostAddress), CancellationToken.None);
                 }
             } catch (Exception) {

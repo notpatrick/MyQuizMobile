@@ -16,9 +16,9 @@ namespace MyQuizMobile {
         private const string TextAlreadySent = "Bereits gesendet";
         private SingleTopic _currentSingleTopic;
         private int _initialTime;
+        private Socket _socket = App.Socket;
         private int _timeInSeconds;
         private bool _voteFinished;
-        private Socket _socket = App.Socket;
 
         public ObservableCollection<Item> ResultCollection { get; set; } = new ObservableCollection<Item>();
         public int TimeInSeconds {
@@ -65,6 +65,7 @@ namespace MyQuizMobile {
             TimeInSeconds = asvm.TimeInSeconds;
             _initialTime = asvm.TimeInSeconds;
             IsPersonal = asvm.IsPersonal;
+            // TODO: Create GivenAnswer from VotingStartViewModel
             if (IsPersonal) {
                 SingleTopics = ((Group)asvm.ItemCollection[0]).SingleTopics;
                 CurrentSingleTopic = SingleTopics.FirstOrDefault();
@@ -81,9 +82,7 @@ namespace MyQuizMobile {
                 CanSend = false;
                 CanEdit = false;
                 Device.StartTimer(TimeSpan.FromSeconds(1), TimerElapsed);
-                // TODO: Open websocket connection here to start
-
-                
+                // TODO: Open websocket connection here to start and update ListView when new givenanswers come in
             } else {
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
             }
@@ -135,9 +134,7 @@ namespace MyQuizMobile {
 
         public bool OnBackButtonPressed(ContentPage page) {
             Device.BeginInvokeOnMainThread(async () => {
-                var result = await page.DisplayAlert("Achtung!",
-                                                     "Wollen Sie die aktuelle Umfrage wirklich vorzeitig beenden? Ergebnisse können dann unvollständig sein!",
-                                                     "Umfrage Beenden", "Zurück");
+                var result = await page.DisplayAlert("Achtung!", "Wollen Sie die aktuelle Umfrage wirklich vorzeitig beenden? Ergebnisse können dann unvollständig sein!", "Umfrage Beenden", "Zurück");
                 if (result) {
                     await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
                 }

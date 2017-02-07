@@ -52,18 +52,12 @@ namespace MyQuizMobile {
             RegisterCommands();
             TimeInSeconds = 30;
             CanSend = false;
-            ItemCollection = new ObservableCollection<Item> {
-                new Group {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"},
-                new QuestionBlock {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}
-            };
+            ItemCollection = new ObservableCollection<Item> {new Group {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"}, new QuestionBlock {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}};
         }
 
         private void SubscribeEvents() {
             MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "PickDone");
-            MessagingCenter.Subscribe<VotingSelectionViewModel, Item>(this, "PickDone",
-                                                                      async (sender, arg) => {
-                                                                          await SetItemAfterPick(arg);
-                                                                      });
+            MessagingCenter.Subscribe<VotingSelectionViewModel, Item>(this, "PickDone", async (sender, arg) => { await SetItemAfterPick(arg); });
         }
 
         private void RegisterCommands() {
@@ -93,11 +87,7 @@ namespace MyQuizMobile {
                         ItemCollection[1] = (QuestionBlock)item;
                     }
                     if (item.Id == 0) {
-                        ItemCollection.Add(new Question {
-                            Id = -1,
-                            DisplayText = "Frage auswählen",
-                            ItemType = ItemType.Question
-                        });
+                        ItemCollection.Add(new Question {Id = -1, DisplayText = "Frage auswählen", ItemType = ItemType.Question});
                     } else if (ItemCollection.Any(x => x.ItemType == ItemType.Question)) {
                         ItemCollection.Remove(ItemCollection.First(x => x.ItemType == ItemType.Question));
                     }
@@ -129,10 +119,7 @@ namespace MyQuizMobile {
             CanSend = false;
             ((Command)ContinueButtonClickedCommand).ChangeCanExecute();
             var nextPage = new VotingResultLivePage(this);
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
-                                                                                                    new NavigationPage(
-                                                                                                                       nextPage),
-                                                                                                    true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
             CanSend = true;
             ((Command)ContinueButtonClickedCommand).ChangeCanExecute();
         }
@@ -140,10 +127,7 @@ namespace MyQuizMobile {
         private async Task MenuItemTapped(Item item) {
             var nextPage = new VotingSelectionPage(item);
             MessagingCenter.Send(this, "Selected");
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
-                                                                                                    new NavigationPage(
-                                                                                                                       nextPage),
-                                                                                                    true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
         }
     }
 }

@@ -38,7 +38,10 @@ namespace MyQuizMobile {
             MessagingCenter.Send(this, "Done", QuestionBlock);
         }
 
-        private void Add() { QuestionBlock.Questions.Add(new Question {Text = "Neue Frage"}); }
+        private async void Add() {
+            // TODO: Create QuestionList for this 
+            // TODO: Open Questionlist with multipick, cancel/ok button
+        }
 
         private void RemoveQuestion(Question q) {
             if (QuestionBlock.Questions.Contains(q)) {

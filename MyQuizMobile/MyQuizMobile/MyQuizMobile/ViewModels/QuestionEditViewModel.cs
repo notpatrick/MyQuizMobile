@@ -13,7 +13,7 @@ namespace MyQuizMobile {
         public ICommand SaveCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
         public ICommand RemoveAnswerOptionCommand { get; set; }
-        public ICommand AddSingleTopicCommand { get; set; }
+        public ICommand AddAnswerCommand { get; set; }
 
         public QuestionEditViewModel(Question q) {
             Question = q;
@@ -22,7 +22,7 @@ namespace MyQuizMobile {
             SaveCommand = new Command(Save);
             CancelCommand = new Command(Cancel);
             RemoveAnswerOptionCommand = new Command<AnswerOption>(RemoveAnswer);
-            AddSingleTopicCommand = new Command(Add);
+            AddAnswerCommand = new Command(Add);
         }
 
         private void Cancel() { MessagingCenter.Send(this, "Canceled"); }

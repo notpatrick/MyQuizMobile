@@ -12,8 +12,7 @@ namespace MyQuizMobile {
 
         protected override void OnAppearing() {
             MessagingCenter.Unsubscribe<VotingStartViewModel>(this, "Selected");
-            MessagingCenter.Subscribe<VotingStartViewModel>(this, "Selected",
-                                                            sender => { listView.SelectedItem = null; });
+            MessagingCenter.Subscribe<VotingStartViewModel>(this, "Selected", sender => { listView.SelectedItem = null; });
             base.OnAppearing();
         }
 

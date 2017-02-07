@@ -10,9 +10,7 @@ namespace MyQuizMobile {
             BindingContext = LoginViewModel;
         }
 
-        private void Popup() {
-            Device.BeginInvokeOnMainThread(async () => { await DisplayAlert("Achtung!", "Passwort falsch", "Ok"); });
-        }
+        private void Popup() { Device.BeginInvokeOnMainThread(async () => { await DisplayAlert("Achtung!", "Passwort falsch", "Ok"); }); }
 
         protected override void OnAppearing() {
             base.OnAppearing();

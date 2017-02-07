@@ -2,8 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MyQuizMobile"
+             xmlns:dataModel="clr-namespace:MyQuizMobile.DataModel;assembly=MyQuizMobile.Droid"
              x:Class="MyQuizMobile.QuestionEditPage"
-             Title="Veranstaltung bearbeiten"
+             Title="Frage bearbeiten"
              Padding="5"
              x:Name="ContentPage">
     <ContentPage.Content>
@@ -12,25 +13,31 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Text="Name" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Label Text="PIN" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
+                <Label Text="Frage" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
                 <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1" />
+                <!-- TODO: Use pickers with predefined values instead of entry for category/type-->
+                <Label Text="Typ" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
+                <Entry Text="{Binding Question.TypText}" Grid.Row="1" Grid.Column="1" />
+                <Label Text="Kategorie" Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" />
+                <Entry Text="{Binding Question.Category}" Grid.Row="2" Grid.Column="1" />
             </Grid>
             <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.Answers}"
-                      HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement">
+                      HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement"
+                      HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <local:SingleTopicCell
+                        <local:AnswerCell
                             Command="{Binding Path=BindingContext.RemoveAnswerOptionCommand, Source={x:Reference ContentPage}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Person hinzufügen" HorizontalOptions="FillAndExpand" VerticalOptions="End"
+            <Button Text="Anwort hinzufügen" HorizontalOptions="FillAndExpand" VerticalOptions="End"
                     Command="{Binding AddAnswerCommand}" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                 <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"

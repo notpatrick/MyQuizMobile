@@ -15,8 +15,7 @@ namespace MyQuizMobile {
         private string _searchString = string.Empty;
         private Item _selectedItem;
         public bool IsLoading { get; set; }
-        public ObservableCollection<QuestionBlock> QuestionBlocks { get; set; } =
-            new ObservableCollection<QuestionBlock>();
+        public ObservableCollection<QuestionBlock> QuestionBlocks { get; set; } = new ObservableCollection<QuestionBlock>();
         public string SearchString {
             get { return _searchString; }
             set {
@@ -53,10 +52,7 @@ namespace MyQuizMobile {
         private void SubscribeEvents() {
             // TODO Questionblock edit view models
             MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Done");
-            MessagingCenter.Subscribe<QuestionBlockEditViewModel, QuestionBlock>(this, "Done",
-                                                                                 async (sender, arg) => {
-                                                                                     await Finished();
-                                                                                 });
+            MessagingCenter.Subscribe<QuestionBlockEditViewModel, QuestionBlock>(this, "Done", async (sender, arg) => { await Finished(); });
             MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Canceled");
             MessagingCenter.Subscribe<QuestionBlockEditViewModel>(this, "Canceled", async sender => {
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
@@ -85,10 +81,7 @@ namespace MyQuizMobile {
 
         private async void Add() {
             var nextPage = new QuestionBlockEditPage(new QuestionBlock());
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
-                                                                                                    new NavigationPage(
-                                                                                                                       nextPage),
-                                                                                                    true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
         }
 
         private async Task Finished() {
@@ -99,9 +92,7 @@ namespace MyQuizMobile {
         private void Filter() {
             _isSearching = true;
             ((Command)SearchCommand).ChangeCanExecute();
-            var filtered = string.IsNullOrWhiteSpace(SearchString)
-                               ? _allQuestionBlocks
-                               : _allQuestionBlocks.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            var filtered = string.IsNullOrWhiteSpace(SearchString) ? _allQuestionBlocks : _allQuestionBlocks.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
             QuestionBlocks.Clear();
             foreach (var g in filtered) {
                 QuestionBlocks.Add(g);
@@ -113,10 +104,7 @@ namespace MyQuizMobile {
         private async Task ItemSelected(Item item) {
             var nextPage = new QuestionBlockEditPage((QuestionBlock)item);
             MessagingCenter.Send(this, "Selected");
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
-                                                                                                    new NavigationPage(
-                                                                                                                       nextPage),
-                                                                                                    true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
         }
     }
 }
