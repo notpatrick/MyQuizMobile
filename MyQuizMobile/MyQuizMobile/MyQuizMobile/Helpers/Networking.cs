@@ -20,6 +20,7 @@ namespace MYQuizMobile {
 
         private async void Connect(string deviceId) {
             try {
+                logger.Info($"Creating connection with DeviceID = {deviceId}");
                 _client = new HttpClient(new HttpClientHandler {UseProxy = false});
                 _client.BaseAddress = new Uri(HostAddress);
                 _client.DefaultRequestHeaders.Accept.Clear();

@@ -7,7 +7,7 @@ using Xamarin.Forms.Xaml;
 
 namespace MyQuizMobile {
     public partial class App : Application {
-        public static Networking Networking = new Networking("");
+        public static Networking Networking;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public App() {
@@ -18,13 +18,16 @@ namespace MyQuizMobile {
         protected override async void OnStart() {
 #if !DEBUG
             await MainPage.Navigation.PushModalAsync(new NavigationPage(new LoginPage()), false);
+#else
+            Current.Properties["DeviceID"] = 1;
+            Networking = new Networking(Current.Properties["DeviceID"].ToString());
 #endif
-            if (!Current.Properties.ContainsKey("DeviceID")) {
-                Current.Properties["DeviceID"] = 0;
-                logger.Info("OnStart without DeviceID");
-            } else {
-                logger.Info($"OnStart with DeviceID {Current.Properties["DeviceID"]}");
-            }
+            logger.Info($"OnStart with DeviceID {Current.Properties["DeviceID"]}");
+        }
+
+        protected override async void OnSleep() {
+            await Current.SavePropertiesAsync();
+            base.OnSleep();
         }
     }
 }
