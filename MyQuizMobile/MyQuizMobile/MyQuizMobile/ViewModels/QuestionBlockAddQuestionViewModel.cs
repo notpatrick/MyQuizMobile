@@ -1,59 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 
-namespace MyQuizMobile
-{
+namespace MyQuizMobile {
     [NotifyPropertyChanged]
-    public class QuestionBlockAddQuestionViewModel
-    {
+    public class QuestionBlockAddQuestionViewModel {
         private readonly List<Question> _items = new List<Question>();
         private bool _isSearching;
         private string _searchString = string.Empty;
-        public ObservableCollection<Question> ItemCollection { get; set; } = new ObservableCollection<Question>();
+        public ObservableCollection<Question> Questions { get; set; } = new ObservableCollection<Question>();
+        public ObservableCollection<Question> SelectedQuestions { get; set; } = new ObservableCollection<Question>();
         public bool IsLoading { get; set; }
-        public string SearchString
-        {
+        public string SearchString {
             get { return _searchString; }
-            set
-            {
+            set {
                 _searchString = value;
                 SearchCommand.Execute(null);
             }
         }
         public ICommand SearchCommand { get; private set; }
-        public ICommand ItemSelectedCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
-        public QuestionBlockAddQuestionViewModel()
-        {
-            Init();
-        }
+        public QuestionBlockAddQuestionViewModel(QuestionBlock qb) { Init(qb); }
 
-        private void Init()
-        {
+        private void Init(QuestionBlock qb) {
             RegisterCommands();
+            foreach (var selectedQuestion in qb.Questions) {
+                selectedQuestion.IsSelected = true;
+                SelectedQuestions.Add(selectedQuestion);
+            }
             RefreshCommand.Execute(null);
         }
 
-        private void RegisterCommands()
-        {
+        private void RegisterCommands() {
             SearchCommand = new Command(Filter, () => !_isSearching && !IsLoading);
-            ItemSelectedCommand = new Command<Question>(async i => { await ItemSelected(i); });
             RefreshCommand = new Command(async () => { await GetAll(); }, () => !IsLoading);
+            CancelCommand = new Command(Cancel);
+            SaveCommand = new Command(Save);
         }
 
-        private async Task GetAll()
-        {
-            if (IsLoading)
-            {
+        private async Task GetAll() {
+            if (IsLoading) {
                 return;
             }
             IsLoading = true;
@@ -62,8 +56,10 @@ namespace MyQuizMobile
                 var resultQuestion = await Question.GetAll();
                 _items.Clear();
 
-                foreach (var g in resultQuestion)
-                {
+                foreach (var g in resultQuestion) {
+                    var x = SelectedQuestions.FirstOrDefault(q => q.Id == g.Id);
+                    if (x != null)
+                        g.IsSelected = x.IsSelected;
                     _items.Add(g);
                 }
             });
@@ -72,29 +68,32 @@ namespace MyQuizMobile
             SearchCommand.Execute(null);
         }
 
-        private void Filter()
-        {
+        private void Filter() {
             _isSearching = true;
             ((Command)SearchCommand).ChangeCanExecute();
             var filtered = SearchString == string.Empty ? _items : _items.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
-            ItemCollection.Clear();
-            foreach (var g in filtered)
-            {
-                ItemCollection.Add(g);
+            Questions.Clear();
+            foreach (var g in filtered) {
+                Questions.Add(g);
             }
             _isSearching = false;
             ((Command)SearchCommand).ChangeCanExecute();
         }
 
-        private async Task ItemSelected(Question item)
-        {
-            // TODO add item to selecteditems list
+        public void Switched(object sender, ToggledEventArgs e) {
+            var q = ((SwitchCell)sender).BindingContext as Question;
+            if (SelectedQuestions.Any(x => x.Id == q?.Id))
+                SelectedQuestions.First(x => x.Id == q?.Id).IsSelected = e.Value;
+            else {
+                SelectedQuestions.Add(q);
+            }
         }
 
-        private async Task Save() {
-
-            // TODO send selected items via mesaage
-            MessagingCenter.Send(this, "PickDone");
+        private void Save() {
+            MessagingCenter.Send(this, "Saved", SelectedQuestions);
         }
+
+        private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
+
     }
 }

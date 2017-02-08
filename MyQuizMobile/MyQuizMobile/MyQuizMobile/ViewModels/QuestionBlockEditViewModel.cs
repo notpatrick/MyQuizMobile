@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
@@ -24,8 +23,7 @@ namespace MyQuizMobile {
             CanDelete = QuestionBlock.Questions.Any();
         }
 
-        private void RegisterCommads()
-        {
+        private void RegisterCommads() {
             DeleteCommand = new Command(Delete);
             SaveCommand = new Command(Save);
             CancelCommand = new Command(Cancel);
@@ -50,6 +48,8 @@ namespace MyQuizMobile {
             // TODO: Set questionlist with new input
         }
 
+        private void SetQuestions(ObservableCollection<Question> list) { QuestionBlock.Questions = list; }
+
         private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
 
         private async void Save() {
@@ -63,10 +63,9 @@ namespace MyQuizMobile {
             MessagingCenter.Send(this, "Done", QuestionBlock);
         }
 
-        private async void Add()
-        {
-            var nextPage = new QuestionBlockAddQuestionPage();
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(nextPage,true);
+        private async void Add() {
+            var nextPage = new QuestionBlockAddQuestionPage(QuestionBlock);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
         }
 
         private void RemoveQuestion(Question q) {

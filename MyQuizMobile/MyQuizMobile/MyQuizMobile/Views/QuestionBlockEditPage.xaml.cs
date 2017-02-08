@@ -11,5 +11,13 @@ namespace MyQuizMobile {
             QuestionBlockEditViewModel = new QuestionBlockEditViewModel(qb);
             BindingContext = QuestionBlockEditViewModel;
         }
+
+        protected override void OnAppearing() {
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing() {
+            base.OnDisappearing();
+        }
     }
 }

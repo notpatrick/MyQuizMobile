@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using MyQuizMobile.DataModel;
 using Xamarin.Forms;
 
-namespace MyQuizMobile
-{
-	public partial class QuestionBlockAddQuestionPage : ContentPage {
-	    public QuestionBlockAddQuestionViewModel QuestionBlockAddQuestionViewModel;
-		public QuestionBlockAddQuestionPage ()
-		{
-			InitializeComponent ();
-            QuestionBlockAddQuestionViewModel = new QuestionBlockAddQuestionViewModel();
+namespace MyQuizMobile {
+    public partial class QuestionBlockAddQuestionPage : ContentPage {
+        public QuestionBlockAddQuestionViewModel QuestionBlockAddQuestionViewModel;
+
+        public QuestionBlockAddQuestionPage(QuestionBlock qb) {
+            InitializeComponent();
+            QuestionBlockAddQuestionViewModel = new QuestionBlockAddQuestionViewModel(qb);
             BindingContext = QuestionBlockAddQuestionViewModel;
+            NavigationPage.SetHasBackButton(this, false);
         }
+
+        private void SwitchCell_OnOnChanged(object sender, ToggledEventArgs e) { QuestionBlockAddQuestionViewModel.Switched(sender, e); }
     }
 }
