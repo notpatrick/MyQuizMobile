@@ -13,6 +13,7 @@ namespace MyQuizMobile {
         public LoginViewModel() { ButtonClickCommand = new Command(async () => { await Login(); }); }
 
         private async Task Login() {
+            // TODO: UI lags on button press
             if (InputText == Password) {
                 if (!IsRegistered()) {
                     var id = await Register(InputText);
@@ -20,6 +21,7 @@ namespace MyQuizMobile {
                 } else {
                     App.Networking = new Networking(Application.Current.Properties["DeviceID"].ToString());
                 }
+
                 await Application.Current.MainPage.Navigation.PopModalAsync(true);
             } else {
                 MessagingCenter.Send(this, "WrongPassword");
@@ -27,8 +29,8 @@ namespace MyQuizMobile {
         }
 
         private bool IsRegistered() {
-            int id;
-            int.TryParse(Application.Current.Properties["DeviceID"].ToString(), out id);
+            long id;
+            long.TryParse(Application.Current.Properties["DeviceID"].ToString(), out id);
             return id != 0;
         }
 

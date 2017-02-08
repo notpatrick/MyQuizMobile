@@ -6,35 +6,17 @@ using Xamarin.Forms;
 
 namespace MyQuizMobile {
     public class BindablePicker : Picker {
-        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource",
-                                                                                              typeof(IEnumerable),
-                                                                                              typeof(BindablePicker),
-                                                                                              null,
-                                                                                              propertyChanged:
-                                                                                              OnItemsSourceChanged);
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(BindablePicker), null, propertyChanged: OnItemsSourceChanged);
 
-        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem",
-                                                                                               typeof(object),
-                                                                                               typeof(BindablePicker),
-                                                                                               null, BindingMode.TwoWay,
-                                                                                               propertyChanged:
-                                                                                               OnSelectedItemChanged);
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem", typeof(object), typeof(BindablePicker), null, BindingMode.TwoWay, propertyChanged: OnSelectedItemChanged);
 
-        public static readonly BindableProperty SelectedValueProperty = BindableProperty.Create("SelectedValue",
-                                                                                                typeof(object),
-                                                                                                typeof(BindablePicker),
-                                                                                                null, BindingMode.TwoWay,
-                                                                                                propertyChanged:
-                                                                                                OnSelectedValueChanged);
+        public static readonly BindableProperty SelectedValueProperty = BindableProperty.Create("SelectedValue", typeof(object), typeof(BindablePicker), null, BindingMode.TwoWay, propertyChanged: OnSelectedValueChanged);
 
         private bool _disableNestedCalls;
 
         public string DisplayMemberPath { get; set; }
 
-        public IEnumerable ItemsSource {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
-            set { SetValue(ItemsSourceProperty, value); }
-        }
+        public IEnumerable ItemsSource { get { return (IEnumerable)GetValue(ItemsSourceProperty); } set { SetValue(ItemsSourceProperty, value); } }
 
         public object SelectedItem {
             get { return GetValue(SelectedItemProperty); }

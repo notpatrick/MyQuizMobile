@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
@@ -16,29 +18,46 @@ namespace MyQuizMobile {
         public ICommand AddQuestionCommand { get; set; }
 
         public QuestionBlockEditViewModel(QuestionBlock qb) {
+            RegisterCommads();
+            SubscribeEvents();
             QuestionBlock = qb;
             CanDelete = QuestionBlock.Questions.Any();
-            DeleteCommand = new Command(Delete);
-            SaveCommand = new Command(Save);
-            CancelCommand = new Command(Cancel);
-            RemoveQuestionCommand = new Command<Question>(RemoveQuestion);
-            AddQuestionCommand = new Command(Add);
         }
 
-        private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
+        private void RegisterCommads() {
+            DeleteCommand = new Command(async () => { await Delete(); });
+            SaveCommand = new Command(async () => { await Save(); });
+            CancelCommand = new Command(async () => { await Cancel(); });
+            RemoveQuestionCommand = new Command<Question>(RemoveQuestion);
+            AddQuestionCommand = new Command(async () => { await Add(); });
+        }
 
-        private async void Save() {
+        private void SubscribeEvents() {
+            MessagingCenter.Unsubscribe<QuestionBlockAddQuestionViewModel>(this, "Saved");
+            MessagingCenter.Subscribe<QuestionBlockAddQuestionViewModel, ObservableCollection<Question>>(this, "Saved", async (s, args) => { await SetQuestions(args); });
+        }
+
+        private async Task SetQuestions(ObservableCollection<Question> list) { QuestionBlock.Questions = list; }
+
+        private async Task Cancel() { await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true); }
+
+        private async Task Save() {
             QuestionBlock.Questions.Remove(x => string.IsNullOrWhiteSpace(x.Text));
             await QuestionBlock.Post(QuestionBlock);
             MessagingCenter.Send(this, "Done", QuestionBlock);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private async void Delete() {
+        private async Task Delete() {
             await QuestionBlock.DeleteById(QuestionBlock.Id);
             MessagingCenter.Send(this, "Done", QuestionBlock);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private void Add() { QuestionBlock.Questions.Add(new Question {Text = "Neue Frage"}); }
+        private async Task Add() {
+            var nextPage = new QuestionBlockAddQuestionPage(QuestionBlock);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
+        }
 
         private void RemoveQuestion(Question q) {
             if (QuestionBlock.Questions.Contains(q)) {

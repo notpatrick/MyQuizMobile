@@ -10,17 +10,7 @@ namespace MyQuizMobile {
             NavigationPage.SetHasBackButton(this, false);
             GroupEditViewModel = new GroupEditViewModel(group);
             BindingContext = GroupEditViewModel;
-        }
-
-        protected override void OnAppearing() {
-            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Selected");
-            MessagingCenter.Subscribe<GroupEditViewModel>(this, "Selected", sender => { listView.SelectedItem = null; });
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing() {
-            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Selected");
-            base.OnDisappearing();
+            listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
     }
 }

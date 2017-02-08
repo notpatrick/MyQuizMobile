@@ -9,7 +9,6 @@ namespace MyQuizMobile {
             VotingResultLiveViewModel = new VotingResultLiveViewModel(asvm);
             BindingContext = VotingResultLiveViewModel;
             NavigationPage.SetHasBackButton(this, false);
-            resultListView.ItemSelected += (sender, args) => { ((ListView)sender).SelectedItem = null; };
         }
 
         protected override bool OnBackButtonPressed() { return VotingResultLiveViewModel.OnBackButtonPressed(this); }

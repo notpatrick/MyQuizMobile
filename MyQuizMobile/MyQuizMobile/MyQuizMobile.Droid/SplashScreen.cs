@@ -9,8 +9,7 @@ namespace MyQuizMobile.Droid {
         protected override void OnResume() {
             base.OnResume();
 
-            var task = new Task(t => { StartActivity(new Intent(Application.Context, typeof(MainActivity))); },
-                                TaskScheduler.FromCurrentSynchronizationContext());
+            var task = new Task(t => { StartActivity(new Intent(Application.Context, typeof(MainActivity))); }, TaskScheduler.FromCurrentSynchronizationContext());
             task.Start();
         }
     }

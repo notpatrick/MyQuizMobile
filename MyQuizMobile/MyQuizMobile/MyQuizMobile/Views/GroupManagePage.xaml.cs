@@ -8,18 +8,7 @@ namespace MyQuizMobile {
             InitializeComponent();
             GroupManageViewModel = new GroupManageViewModel();
             BindingContext = GroupManageViewModel;
-        }
-
-        protected override void OnAppearing() {
-            MessagingCenter.Unsubscribe<GroupManageViewModel>(this, "Selected");
-            MessagingCenter.Subscribe<GroupManageViewModel>(this, "Selected",
-                                                            sender => { listView.SelectedItem = null; });
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing() {
-            MessagingCenter.Unsubscribe<GroupManageViewModel>(this, "Selected");
-            base.OnDisappearing();
+            listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
     }
 }

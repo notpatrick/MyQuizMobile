@@ -45,10 +45,7 @@ namespace MyQuizMobile.Droid.Annotations {
     /// }
     /// </code>
     /// </example>
-    [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
-        | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Interface
-        | AttributeTargets.GenericParameter)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
     public sealed class CanBeNullAttribute : Attribute {}
 
     /// <summary>
@@ -61,10 +58,7 @@ namespace MyQuizMobile.Droid.Annotations {
     /// }
     /// </code>
     /// </example>
-    [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
-        | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Interface
-        | AttributeTargets.GenericParameter)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
     public sealed class NotNullAttribute : Attribute {}
 
     /// <summary>
@@ -72,9 +66,7 @@ namespace MyQuizMobile.Droid.Annotations {
     ///     and Lazy classes to indicate that the value of a collection item, of the Task.Result property
     ///     or of the Lazy.Value property can never be null.
     /// </summary>
-    [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
-        | AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate | AttributeTargets.Field)]
     public sealed class ItemNotNullAttribute : Attribute {}
 
     /// <summary>
@@ -82,9 +74,7 @@ namespace MyQuizMobile.Droid.Annotations {
     ///     and Lazy classes to indicate that the value of a collection item, of the Task.Result property
     ///     or of the Lazy.Value property can be null.
     /// </summary>
-    [AttributeUsage(
-        AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
-        | AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate | AttributeTargets.Field)]
     public sealed class ItemCanBeNullAttribute : Attribute {}
 
     /// <summary>
@@ -102,8 +92,7 @@ namespace MyQuizMobile.Droid.Annotations {
     /// }
     /// </code>
     /// </example>
-    [AttributeUsage(
-        AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Delegate)]
+    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Delegate)]
     public sealed class StringFormatMethodAttribute : Attribute {
         [NotNull]
         public string FormatParameterName { get; private set; }
@@ -111,17 +100,14 @@ namespace MyQuizMobile.Droid.Annotations {
         /// <param name="formatParameterName">
         ///     Specifies which parameter of an annotated method should be treated as format-string
         /// </param>
-        public StringFormatMethodAttribute([NotNull] string formatParameterName) {
-            FormatParameterName = formatParameterName;
-        }
+        public StringFormatMethodAttribute([NotNull] string formatParameterName) { FormatParameterName = formatParameterName; }
     }
 
     /// <summary>
     ///     For a parameter that is expected to be one of the limited set of values.
     ///     Specify fields of which type should be used as values for this parameter.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field,
-        AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public sealed class ValueProviderAttribute : Attribute {
         [NotNull]
         public string Name { get; private set; }
@@ -207,9 +193,7 @@ namespace MyQuizMobile.Droid.Annotations {
         public string ParameterName { get; private set; }
         public NotifyPropertyChangedInvocatorAttribute() { }
 
-        public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName) {
-            ParameterName = parameterName;
-        }
+        public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName) { ParameterName = parameterName; }
     }
 
     /// <summary>
@@ -360,11 +344,9 @@ namespace MyQuizMobile.Droid.Annotations {
 
         public UsedImplicitlyAttribute() : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
-        public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags)
-            : this(useKindFlags, ImplicitUseTargetFlags.Default) {}
+        public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags) : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
 
-        public UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags)
-            : this(ImplicitUseKindFlags.Default, targetFlags) {}
+        public UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags) : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
         public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags) {
             UseKindFlags = useKindFlags;
@@ -386,11 +368,9 @@ namespace MyQuizMobile.Droid.Annotations {
 
         public MeansImplicitUseAttribute() : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
-        public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags)
-            : this(useKindFlags, ImplicitUseTargetFlags.Default) {}
+        public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags) : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
 
-        public MeansImplicitUseAttribute(ImplicitUseTargetFlags targetFlags)
-            : this(ImplicitUseKindFlags.Default, targetFlags) {}
+        public MeansImplicitUseAttribute(ImplicitUseTargetFlags targetFlags) : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
         public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags) {
             UseKindFlags = useKindFlags;
@@ -494,10 +474,7 @@ namespace MyQuizMobile.Droid.Annotations {
     /// }
     /// </code>
     /// </example>
-    [AttributeUsage(
-        AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.Method
-        | AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct
-        | AttributeTargets.GenericParameter)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.GenericParameter)]
     public sealed class ProvidesContextAttribute : Attribute {}
 
     /// <summary>
@@ -805,9 +782,7 @@ namespace MyQuizMobile.Droid.Annotations {
     public sealed class CollectionAccessAttribute : Attribute {
         public CollectionAccessType CollectionAccessType { get; private set; }
 
-        public CollectionAccessAttribute(CollectionAccessType collectionAccessType) {
-            CollectionAccessType = collectionAccessType;
-        }
+        public CollectionAccessAttribute(CollectionAccessType collectionAccessType) { CollectionAccessType = collectionAccessType; }
     }
 
     [Flags]
@@ -890,8 +865,7 @@ namespace MyQuizMobile.Droid.Annotations {
     /// <remarks>
     ///     The attribute must be mentioned in your member reordering patterns
     /// </remarks>
-    [AttributeUsage(
-        AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum)]
     public sealed class NoReorderAttribute : Attribute {}
 
     /// <summary>
@@ -947,9 +921,7 @@ namespace MyQuizMobile.Droid.Annotations {
     public sealed class AspTypePropertyAttribute : Attribute {
         public bool CreateConstructorReferences { get; private set; }
 
-        public AspTypePropertyAttribute(bool createConstructorReferences) {
-            CreateConstructorReferences = createConstructorReferences;
-        }
+        public AspTypePropertyAttribute(bool createConstructorReferences) { CreateConstructorReferences = createConstructorReferences; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]

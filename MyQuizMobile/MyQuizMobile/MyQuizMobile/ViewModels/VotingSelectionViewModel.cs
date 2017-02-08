@@ -96,9 +96,7 @@ namespace MyQuizMobile {
         private void Filter() {
             _isSearching = true;
             ((Command)SearchCommand).ChangeCanExecute();
-            var filtered = SearchString == string.Empty
-                               ? _items
-                               : _items.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            var filtered = SearchString == string.Empty ? _items : _items.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
             ItemCollection.Clear();
             foreach (var g in filtered) {
                 ItemCollection.Add(g);

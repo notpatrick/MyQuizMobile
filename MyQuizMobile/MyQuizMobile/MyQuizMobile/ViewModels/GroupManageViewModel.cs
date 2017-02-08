@@ -51,14 +51,7 @@ namespace MyQuizMobile {
 
         private void SubscribeEvents() {
             MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Done");
-            MessagingCenter.Subscribe<GroupEditViewModel, Group>(this, "Done",
-                                                                 async (sender, arg) => { await Finished(); });
-            MessagingCenter.Unsubscribe<GroupEditViewModel>(this, "Canceled");
-            MessagingCenter.Subscribe<GroupEditViewModel>(this, "Canceled",
-                                                          async sender => {
-                                                              await ((MasterDetailPage)Application.Current.MainPage)
-                                                                  .Detail.Navigation.PopModalAsync(true);
-                                                          });
+            MessagingCenter.Subscribe<GroupEditViewModel, Group>(this, "Done", async (sender, arg) => { await Finished(); });
         }
 
         private void RegisterCommands() {
@@ -82,23 +75,15 @@ namespace MyQuizMobile {
 
         private async void Add() {
             var nextPage = new GroupEditPage(new Group());
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
-                                                                                                    new NavigationPage(
-                                                                                                                       nextPage),
-                                                                                                    true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
-        private async Task Finished() {
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
-            RefreshCommand.Execute(null);
-        }
+        private async Task Finished() { RefreshCommand.Execute(null); }
 
         private void Filter() {
             _isSearching = true;
             ((Command)SearchCommand).ChangeCanExecute();
-            var filtered = string.IsNullOrWhiteSpace(SearchString)
-                               ? _allGroups
-                               : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
+            var filtered = string.IsNullOrWhiteSpace(SearchString) ? _allGroups : _allGroups.Where(x => x.DisplayText.ToLower().Contains(SearchString.ToLower()));
             Groups.Clear();
             foreach (var g in filtered) {
                 Groups.Add(g);
@@ -109,11 +94,7 @@ namespace MyQuizMobile {
 
         private async Task ItemSelected(Item item) {
             var nextPage = new GroupEditPage((Group)item);
-            MessagingCenter.Send(this, "Selected");
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(
-                                                                                                    new NavigationPage(
-                                                                                                                       nextPage),
-                                                                                                    true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
     }
 }

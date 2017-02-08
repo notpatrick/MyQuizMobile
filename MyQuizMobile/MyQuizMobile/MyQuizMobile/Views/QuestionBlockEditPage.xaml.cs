@@ -10,18 +10,7 @@ namespace MyQuizMobile {
             NavigationPage.SetHasBackButton(this, false);
             QuestionBlockEditViewModel = new QuestionBlockEditViewModel(qb);
             BindingContext = QuestionBlockEditViewModel;
-        }
-
-        protected override void OnAppearing() {
-            MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Selected");
-            MessagingCenter.Subscribe<QuestionBlockEditViewModel>(this, "Selected",
-                                                                  sender => { listView.SelectedItem = null; });
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing() {
-            MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Selected");
-            base.OnDisappearing();
+            listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
     }
 }
