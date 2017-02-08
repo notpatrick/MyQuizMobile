@@ -14,7 +14,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\BindablePicker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CustomCell.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\CustomEditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\AnswerResultConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\InvertBoolConverter.cs" />
@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Question.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\QuestionBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SingleTopic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Socket.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
@@ -7,6 +8,12 @@ using Xamarin.Forms;
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
     public class QuestionEditViewModel {
+        public ObservableCollection<string> Types { get; set; } = new ObservableCollection<string>() {
+            Constants.QuestionTypeVoteText, Constants.QuestionTypeQuizText
+        };
+        public ObservableCollection<string> Categories { get; set; } = new ObservableCollection<string>() {
+            Constants.QuestionCategorySingleText, Constants.QuestionCategoryMultiText
+        };
         public Question Question { get; set; }
         public bool CanDelete { get; set; }
         public ICommand DeleteCommand { get; private set; }

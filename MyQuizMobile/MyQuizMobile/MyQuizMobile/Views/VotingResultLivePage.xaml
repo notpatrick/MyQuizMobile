@@ -7,9 +7,7 @@
              Padding="5">
     <ContentPage.Content>
         <StackLayout>
-            <sync:SfListView x:Name="listView">
-              
-            </sync:SfListView>
+            <sync:SfListView x:Name="listView" />
             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="End">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />

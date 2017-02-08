@@ -36,7 +36,7 @@ namespace MYQuizMobile {
                     return default(T);
                 }
                 var serializedResult = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<T>(serializedResult);
+                result = JsonConvert.DeserializeObject<T>(serializedResult, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate });
             } catch (Exception) {
                 // TODO: Handle exception
                 throw;
@@ -47,13 +47,14 @@ namespace MYQuizMobile {
         public async Task<T> Post<T>(string path, T value) {
             T result;
             try {
-                var serializedValue = JsonConvert.SerializeObject(value);
+                var serializedValue = JsonConvert.SerializeObject(value, Formatting.None, new JsonSerializerSettings {DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate});
                 var response = await _client.PostAsync(path, new StringContent(serializedValue, Encoding.UTF8, ContentType));
                 if (!response.IsSuccessStatusCode) {
+                    var msg = await response.Content.ReadAsStringAsync();
                     return default(T);
                 }
                 var serializedResult = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<T>(serializedResult);
+                result = JsonConvert.DeserializeObject<T>(serializedResult, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate });
             } catch (Exception e) {
                 Console.WriteLine(e);
                 throw;

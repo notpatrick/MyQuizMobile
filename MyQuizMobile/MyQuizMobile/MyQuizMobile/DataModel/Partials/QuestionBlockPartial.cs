@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
-    [NotifyPropertyChanged]
     public partial class QuestionBlock : Item {
         public ObservableCollection<Question> Questions { get; set; } = new ObservableCollection<Question>();
         public override string DisplayText { get { return Title; } set { Title = value; } }
         public override ItemType ItemType => ItemType.QuestionBlock;
-        public override string DetailText => Questions.Count > 0 ? $"{Questions.Count} Fragen" : string.Empty;
+        public override string DetailText => Questions.Count > 0 ? $"{Questions.Count} Fragen" : "Enthält noch keine Fragen";
 
         #region POST
         public static async Task<QuestionBlock> Post(QuestionBlock questionBlock) { return await App.Networking.Post("api/questionBlock/", questionBlock); }

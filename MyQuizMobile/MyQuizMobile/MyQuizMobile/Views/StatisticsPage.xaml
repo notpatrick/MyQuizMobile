@@ -4,6 +4,6 @@
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              x:Class="MyQuizMobile.StatisticsPage">
     <ContentPage.Content>
-      <sync:SfListView x:Name="listView" />
+        <sync:SfListView x:Name="listView" />
     </ContentPage.Content>
 </ContentPage>

@@ -5,16 +5,14 @@ using Newtonsoft.Json;
 using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
-    [NotifyPropertyChanged]
     public partial class Question {
         public ObservableCollection<AnswerOption> Answers { get; set; } = new ObservableCollection<AnswerOption>();
         public override string DisplayText { get { return Text; } set { Text = value; } }
-        public override string DetailText => $"{Answers.Count} Antwortmöglichkeiten";
+        public override string DetailText => Answers.Count > 0 ? $"{Answers.Count} Antwortmöglichkeiten" : "Enthält noch keine Antwortmöglichkeiten";
         public override ItemType ItemType => ItemType.Question;
+
         [JsonIgnore]
-        public bool HasCorrectAnswers => Category == "Quiz";
-        [JsonIgnore]
-        public string TypText => MultipleChoice == "multi" ? "Multiple Choice" : "Single Choice";
+        public bool IsSelected { get; set; }
 
         #region POST
         public static async Task<Question> Post(Question question) { return await App.Networking.Post("api/questions/", question); }
@@ -29,10 +27,5 @@ namespace MyQuizMobile.DataModel {
 
         public static async Task<Question> GetById(long id) { return await App.Networking.Get<Question>($"api/questions/{id}"); }
         #endregion
-    }
-
-    public enum QuestionCategory {
-        Vote,
-        Quiz
     }
 }

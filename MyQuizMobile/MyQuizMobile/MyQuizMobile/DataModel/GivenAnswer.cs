@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
-    [NotifyPropertyChanged]
     public class GivenAnswer : Item {
-        public DateTime TimeStamp { get; set; }
+        public long SurveyId { get; set; }
+        public string TimeStamp { get; set; }
         public QuestionBlock QuestionBlock { get; set; }
         public Question Question { get; set; }
         public AnswerOption AnswerOption { get; set; }
@@ -30,15 +29,5 @@ namespace MyQuizMobile.DataModel {
 
         public static async Task<GivenAnswer> GetById(long id) { return await App.Networking.Get<GivenAnswer>($"api/groups/{id}"); }
         #endregion
-    }
-
-    public class IdGivenAnswer {
-        public DateTime? TimeStamp { get; set; }
-        public int? QuestionBlockId { get; set; }
-        public int QuestionId { get; set; }
-        public int? AnswerOptionId { get; set; }
-        public int? SingleTopicId { get; set; }
-        public int GroupId { get; set; }
-        public int? DeviceId { get; set; }
     }
 }

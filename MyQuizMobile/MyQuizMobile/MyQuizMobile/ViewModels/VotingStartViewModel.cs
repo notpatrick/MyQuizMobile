@@ -52,7 +52,7 @@ namespace MyQuizMobile {
             RegisterCommands();
             TimeInSeconds = 30;
             CanSend = false;
-            ItemCollection = new ObservableCollection<Item> {new Group {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"}, new QuestionBlock {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}};
+            ItemCollection = new ObservableCollection<Item> {new MenuItem() {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"}, new MenuItem() {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}};
         }
 
         private void SubscribeEvents() {

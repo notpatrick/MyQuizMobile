@@ -20,19 +20,21 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Frage" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1" />
+                <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1" Placeholder="Hier den Fragetext eingeben" />
                 <!-- TODO: Use pickers with predefined values instead of entry for category/type-->
                 <Label Text="Typ" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Entry Text="{Binding Question.TypText}" Grid.Row="1" Grid.Column="1" />
+                <Picker ItemsSource="{Binding Types}" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding Question.Type}" >
+                </Picker>
                 <Label Text="Kategorie" Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Entry Text="{Binding Question.Category}" Grid.Row="2" Grid.Column="1" />
+              <Picker ItemsSource="{Binding Categories}" Grid.Row="2" Grid.Column="1" SelectedItem="{Binding Question.Category}"></Picker>
             </Grid>
             <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.Answers}"
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement"
-                      HasUnevenRows="True">
+                      HasUnevenRows="True" ItemSelected="ListView_OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:AnswerCell
+                          QuestionType="{Binding Path=BindingContext.Question.Type, Source={x:Reference ContentPage}}"
                             Command="{Binding Path=BindingContext.RemoveAnswerOptionCommand, Source={x:Reference ContentPage}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>

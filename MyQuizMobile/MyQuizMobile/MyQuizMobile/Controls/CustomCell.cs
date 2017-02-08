@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
+using MyQuizMobile.Converters;
 using Xamarin.Forms;
 
 namespace MyQuizMobile {
@@ -69,37 +71,33 @@ namespace MyQuizMobile {
     }
 
     public class QuestionCell : CustomCell {
-        public Grid Container { get; set; }
 
         public QuestionCell() {
-            var label = new Label {HorizontalOptions = LayoutOptions.StartAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand};
+            var stack = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0) };
+            View = stack;
 
+            var label = new Label { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center };
             var labelBinding = new Binding("DisplayText", BindingMode.TwoWay);
             label.SetBinding(Label.TextProperty, labelBinding);
 
-            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand};
-            var tapper = new TapGestureRecognizer {Command = new Command(() => {
-                if (Command == null) {
+            var image = new Image { Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit };
+
+            var tapper = new TapGestureRecognizer();
+            tapper.Tapped += (sender, args) => {
+                if (Command == null)
+                {
                     return;
                 }
-                if (Command.CanExecute(this)) {
+                if (Command.CanExecute(this))
+                {
                     Command.Execute(BindingContext);
                 }
-            })};
+            };
+
             image.GestureRecognizers.Add(tapper);
-
-            Container = new Grid {HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand, Padding = new Thickness(10, 0, 10, 0), ColumnDefinitions = new ColumnDefinitionCollection {new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}, new ColumnDefinition {Width = new GridLength(9, GridUnitType.Star)}, new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}}, RowDefinitions = new RowDefinitionCollection {new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}}};
-
-            Grid.SetRow(label, 0);
-            Grid.SetColumn(label, 0);
-            Grid.SetColumnSpan(label, 2);
-
-            Grid.SetRow(image, 0);
-            Grid.SetColumn(image, 2);
-
-            Container.Children.Add(label);
-            Container.Children.Add(image);
-            View = Container;
+            
+            stack.Children.Add(label);
+            stack.Children.Add(image);
         }
 
         protected override void OnTapped() {
@@ -109,19 +107,21 @@ namespace MyQuizMobile {
 
     public class AnswerCell : CustomCell {
         public AnswerCell() {
+            QuestionType = string.Empty;
             var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0)};
             View = stack;
 
             var swStack = new StackLayout();
             //TODO: Bind to questions.iscorrectbool to hide it if not true
-            //var swStackBinding = new Binding("HasCorrectAnswers", BindingMode.Default, null,null,null, q);
+            var swStackBinding = new Binding("QuestionType", BindingMode.OneWay, new QuestionTypeAnswerConverter(), null,null,this);
+            swStack.SetBinding(VisualElement.IsVisibleProperty, swStackBinding);
 
             var sw = new Switch {IsToggled = false};
-            var swBinding = new Binding("IsCorrect", BindingMode.TwoWay);
+            var swBinding = new Binding("Result", BindingMode.TwoWay, new AnswerResultConverter());
             sw.SetBinding(Switch.IsToggledProperty, swBinding);
 
-            var swLabel = new Label {Text = "test", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center};
-            var swLabelBinding = new Binding("IsCorrectText", BindingMode.OneWay);
+            var swLabel = new Label {HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center};
+            var swLabelBinding = new Binding("Result", BindingMode.OneWay, new AnswerResultTextConverter());
             swLabel.SetBinding(Label.TextProperty, swLabelBinding);
 
             swStack.Children.Add(swLabel);
@@ -149,6 +149,24 @@ namespace MyQuizMobile {
             stack.Children.Add(entry);
             stack.Children.Add(image);
         }
+
+        #region QuestionType
+        public static readonly BindableProperty QuestionTypeProperty = BindableProperty.Create<AnswerCell, string>(p => p.QuestionType, default(string), BindingMode.OneWay, null, OnQuestionTypePropertyChanged);
+
+        private static void OnQuestionTypePropertyChanged(BindableObject bindable, string oldValue, string newValue)
+        {
+            var source = bindable as AnswerCell;
+            if (source == null)
+            {
+                return;
+            }
+            source.OnQuestionTypeChanged();
+        }
+
+        private void OnQuestionTypeChanged() { OnPropertyChanged("QuestionType"); }
+
+        public string QuestionType { get { return (string)GetValue(QuestionTypeProperty); } set { SetValue(QuestionTypeProperty, value); } }
+        #endregion QuestionType
 
         protected override void OnTapped() {
             //base.OnTapped();

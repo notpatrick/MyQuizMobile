@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
-    [NotifyPropertyChanged]
     public partial class Group : Item {
         public ObservableCollection<SingleTopic> SingleTopics { get; set; } = new ObservableCollection<SingleTopic>();
         public override string DisplayText { get { return Title; } set { Title = value; } }

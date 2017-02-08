@@ -5,10 +5,7 @@ using Xamarin.Forms;
 namespace MyQuizMobile {
     public class DateTimeConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (value != null) {
-                return DateTime.Parse(value.ToString()).TimeOfDay;
-            }
-            return new TimeSpan(12, 0, 0);
+            return value != null ? DateTime.Parse(value.ToString()).TimeOfDay : new TimeSpan(9, 0, 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { return value?.ToString(); }
