@@ -20,21 +20,23 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Frage" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1" Placeholder="Hier den Fragetext eingeben" />
+                <Entry Text="{Binding Question.DisplayText}" Grid.Row="0" Grid.Column="1"
+                       Placeholder="Hier den Fragetext eingeben" />
                 <!-- TODO: Use pickers with predefined values instead of entry for category/type-->
                 <Label Text="Typ" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" />
-                <Picker ItemsSource="{Binding Types}" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding Question.Type}" >
-                </Picker>
+                <Picker ItemsSource="{Binding Types}" Grid.Row="1" Grid.Column="1"
+                        SelectedItem="{Binding Question.Type}" />
                 <Label Text="Kategorie" Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" />
-              <Picker ItemsSource="{Binding Categories}" Grid.Row="2" Grid.Column="1" SelectedItem="{Binding Question.Category}"></Picker>
+                <Picker ItemsSource="{Binding Categories}" Grid.Row="2" Grid.Column="1"
+                        SelectedItem="{Binding Question.Category}" />
             </Grid>
-            <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.Answers}"
+            <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.AnswerOptions}"
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement"
                       HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:AnswerCell
-                          QuestionType="{Binding Path=BindingContext.Question.Type, Source={x:Reference ContentPage}}"
+                            QuestionCategory="{Binding Path=BindingContext.Question.Category, Source={x:Reference ContentPage}}"
                             Command="{Binding Path=BindingContext.RemoveAnswerOptionCommand, Source={x:Reference ContentPage}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>

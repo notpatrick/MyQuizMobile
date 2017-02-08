@@ -79,9 +79,7 @@ namespace MyQuizMobile {
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
-        private async Task Finished() {
-            RefreshCommand.Execute(null);
-        }
+        private async Task Finished() { RefreshCommand.Execute(null); }
 
         private void Filter() {
             _isSearching = true;

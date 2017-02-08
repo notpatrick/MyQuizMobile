@@ -1,4 +1,5 @@
 ﻿using MYQuizMobile;
+using NLog;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,7 +8,7 @@ using Xamarin.Forms.Xaml;
 namespace MyQuizMobile {
     public partial class App : Application {
         public static Networking Networking = new Networking("");
-        public static Socket Socket = new Socket();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public App() {
             InitializeComponent();
@@ -20,6 +21,9 @@ namespace MyQuizMobile {
 #endif
             if (!Current.Properties.ContainsKey("DeviceID")) {
                 Current.Properties["DeviceID"] = 0;
+                logger.Info("OnStart without DeviceID");
+            } else {
+                logger.Info($"OnStart with DeviceID {Current.Properties["DeviceID"]}");
             }
         }
     }

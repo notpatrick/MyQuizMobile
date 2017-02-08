@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using MyQuizMobile.Converters;
 using Xamarin.Forms;
 
@@ -71,31 +70,28 @@ namespace MyQuizMobile {
     }
 
     public class QuestionCell : CustomCell {
-
         public QuestionCell() {
-            var stack = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0) };
+            var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0)};
             View = stack;
 
-            var label = new Label { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center };
+            var label = new Label {HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center};
             var labelBinding = new Binding("DisplayText", BindingMode.TwoWay);
             label.SetBinding(Label.TextProperty, labelBinding);
 
-            var image = new Image { Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit };
+            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit};
 
             var tapper = new TapGestureRecognizer();
             tapper.Tapped += (sender, args) => {
-                if (Command == null)
-                {
+                if (Command == null) {
                     return;
                 }
-                if (Command.CanExecute(this))
-                {
+                if (Command.CanExecute(this)) {
                     Command.Execute(BindingContext);
                 }
             };
 
             image.GestureRecognizers.Add(tapper);
-            
+
             stack.Children.Add(label);
             stack.Children.Add(image);
         }
@@ -107,13 +103,13 @@ namespace MyQuizMobile {
 
     public class AnswerCell : CustomCell {
         public AnswerCell() {
-            QuestionType = string.Empty;
+            QuestionCategory = string.Empty;
             var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0)};
             View = stack;
 
             var swStack = new StackLayout();
             //TODO: Bind to questions.iscorrectbool to hide it if not true
-            var swStackBinding = new Binding("QuestionType", BindingMode.OneWay, new QuestionTypeAnswerConverter(), null,null,this);
+            var swStackBinding = new Binding("QuestionCategory", BindingMode.OneWay, new QuestionTypeAnswerConverter(), null, null, this);
             swStack.SetBinding(VisualElement.IsVisibleProperty, swStackBinding);
 
             var sw = new Switch {IsToggled = false};
@@ -150,26 +146,24 @@ namespace MyQuizMobile {
             stack.Children.Add(image);
         }
 
-        #region QuestionType
-        public static readonly BindableProperty QuestionTypeProperty = BindableProperty.Create<AnswerCell, string>(p => p.QuestionType, default(string), BindingMode.OneWay, null, OnQuestionTypePropertyChanged);
-
-        private static void OnQuestionTypePropertyChanged(BindableObject bindable, string oldValue, string newValue)
-        {
-            var source = bindable as AnswerCell;
-            if (source == null)
-            {
-                return;
-            }
-            source.OnQuestionTypeChanged();
-        }
-
-        private void OnQuestionTypeChanged() { OnPropertyChanged("QuestionType"); }
-
-        public string QuestionType { get { return (string)GetValue(QuestionTypeProperty); } set { SetValue(QuestionTypeProperty, value); } }
-        #endregion QuestionType
-
         protected override void OnTapped() {
             //base.OnTapped();
         }
+
+        #region QuestionCategory
+        public static readonly BindableProperty QuestionCategoryProperty = BindableProperty.Create<AnswerCell, string>(p => p.QuestionCategory, default(string), BindingMode.OneWay, null, OnQuestionCategoryPropertyChanged);
+
+        private static void OnQuestionCategoryPropertyChanged(BindableObject bindable, string oldValue, string newValue) {
+            var source = bindable as AnswerCell;
+            if (source == null) {
+                return;
+            }
+            source.OnQuestionCategoryChanged();
+        }
+
+        private void OnQuestionCategoryChanged() { OnPropertyChanged("QuestionCategory"); }
+
+        public string QuestionCategory { get { return (string)GetValue(QuestionCategoryProperty); } set { SetValue(QuestionCategoryProperty, value); } }
+        #endregion QuestionCategory
     }
 }

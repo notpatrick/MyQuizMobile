@@ -2,17 +2,18 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
     public partial class Question {
-        public ObservableCollection<AnswerOption> Answers { get; set; } = new ObservableCollection<AnswerOption>();
+        public ObservableCollection<AnswerOption> AnswerOptions { get; set; } = new ObservableCollection<AnswerOption>();
         public override string DisplayText { get { return Text; } set { Text = value; } }
-        public override string DetailText => Answers != null ? Answers.Count > 0 ? $"{Answers.Count} Antwortmöglichkeiten" : "Enthält noch keine Antwortmöglichkeiten" : string.Empty;
+        public override string DetailText => AnswerOptions != null ? AnswerOptions.Count > 0 ? $"{AnswerOptions.Count} Antwortmöglichkeiten" : "Enthält noch keine Antwortmöglichkeiten" : string.Empty;
         public override ItemType ItemType => ItemType.Question;
 
         [JsonIgnore]
         public bool IsSelected { get; set; }
+        [JsonIgnore]
+        public int AnswerCount { get; set; } = 0;
 
         #region POST
         public static async Task<Question> Post(Question question) { return await App.Networking.Post("api/questions/", question); }

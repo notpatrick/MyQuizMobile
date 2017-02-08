@@ -10,6 +10,5 @@ namespace MyQuizMobile {
             BindingContext = QuestionBlockManageViewModel;
             listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
-
     }
 }

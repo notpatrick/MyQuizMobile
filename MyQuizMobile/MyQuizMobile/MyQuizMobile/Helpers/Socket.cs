@@ -3,73 +3,55 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 
 namespace MyQuizMobile {
     public class Socket {
         private const string HostAddress = "ws://h2653223.stratoserver.net/ws";
-        private const int ChunkSize = 4096;
+        //private const string HostAddress = "ws://10.0.2.2:5000/ws";
+        private const int ChunkSize = 64 * 1024;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly UTF8Encoding _encoder = new UTF8Encoding();
-        private readonly ClientWebSocket _webSocket = new ClientWebSocket();
-        private bool _isReceiving;
+        public CancellationTokenSource cts;
+        public ClientWebSocket WebSocket = new ClientWebSocket();
 
-        public async Task Connect() {
+        public Socket() { cts = new CancellationTokenSource(); }
+
+        public async Task Connect(int surveyId) {
             try {
-                if (_webSocket.State == WebSocketState.Closed || _webSocket.State == WebSocketState.None) {
-                    await _webSocket.ConnectAsync(new Uri(HostAddress), CancellationToken.None);
-                }
-            } catch (Exception) {
-                // TODO: Handle exception
-                throw;
+                await WebSocket.ConnectAsync(new Uri($"{HostAddress}/{surveyId}"), cts.Token);
+            } catch (Exception e) {
+                logger.Error(e, "ReceiveLoop Exception");
             }
         }
 
-        public async Task Send(string message) {
-            // message is the json string to send
-            var buffer = _encoder.GetBytes(message);
+        public async void ReceiveLoop(Action<string> callback) {
+            // TODO : EXCEPTION IF IT RECEIVES MESSAGE AFTER NEW WEBOSCKET IS CREATED
             try {
-                await _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-            } catch (Exception) {
-                // TODO: Handle exception
-                throw;
-            }
-        }
+                while (WebSocket.State == WebSocketState.Open) {
+                    var stringBuffer = new ArraySegment<byte>(new byte[ChunkSize]);
+                    var result = await WebSocket.ReceiveAsync(stringBuffer, cts.Token);
 
-        // pass action that takes the result string
-        //  Action<string> callback = s => { dologichere(); };
-        public void StartReceiving(Action<string> callback) {
-            if (!_isReceiving) {
-                ReceiveLoop(callback);
-            }
-        }
-
-        private async void ReceiveLoop(Action<string> callback) {
-            _isReceiving = true;
-            var stringBuffer = new byte[ChunkSize];
-            try {
-                while (_webSocket.State == WebSocketState.Open) {
-                    var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(stringBuffer), CancellationToken.None);
                     if (result.MessageType == WebSocketMessageType.Close) {
-                        // close when server sends close message
-                        await Disconnect();
-                    } else {
-                        var resultString = _encoder.GetString(stringBuffer, 0, result.Count);
-                        callback(resultString);
+                        logger.Info("Received close message on Socket");
+                        break;
                     }
+
+                    var resultString = _encoder.GetString(stringBuffer.Array, stringBuffer.Offset, result.Count);
+                    if (string.IsNullOrWhiteSpace(resultString)) {
+                        continue;
+                    }
+                    callback(resultString);
+                    logger.Info("Received a message on Socket");
                 }
-            } catch (Exception) {
-                // TODO: Handle exception
-                throw;
+            } catch (Exception e) {
+                logger.Error(e, "ReceiveLoop Exception");
             }
-            _isReceiving = false;
         }
 
-        public async Task Disconnect() {
-            try {
-                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-            } catch (Exception) {
-                // TODO: Handle exception
-                throw;
-            }
+        public async Task Close() {
+            cts.Cancel();
+            await WebSocket.CloseOutputAsync(WebSocketCloseStatus.EndpointUnavailable, "", CancellationToken.None);
         }
     }
 }

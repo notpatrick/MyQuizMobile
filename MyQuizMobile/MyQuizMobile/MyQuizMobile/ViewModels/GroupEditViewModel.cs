@@ -19,14 +19,14 @@ namespace MyQuizMobile {
         public GroupEditViewModel(Group group) {
             Group = group;
             CanDelete = Group.SingleTopics.Any();
-            DeleteCommand = new Command(async ()=> { await Delete(); });
+            DeleteCommand = new Command(async () => { await Delete(); });
             SaveCommand = new Command(async () => { await Save(); });
             CancelCommand = new Command(async () => { await Cancel(); });
             RemoveSingleTopicCommand = new Command<SingleTopic>(RemoveSingleTopic);
             AddSingleTopicCommand = new Command(Add);
         }
 
-        private async Task Cancel() { await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true); }
+        private async Task Cancel() { await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true); }
 
         private async Task Save() {
             Group.SingleTopics.Remove(x => string.IsNullOrWhiteSpace(x.Name));

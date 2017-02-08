@@ -3,11 +3,35 @@
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.VotingResultLivePage"
-             Title="Ergebnisse"
+             Title="Live Übersicht"
              Padding="5">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="headerstyle" TargetType="Label" BaseResourceKey="BodyStyle">
+                <Setter Property="TextColor" Value="Accent" />
+            </Style>
+            <Style x:Key="lowerstyle" TargetType="Label" BaseResourceKey="BodyStyle">
+                <Setter Property="FontSize" Value="11" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <sync:SfListView x:Name="listView" />
+            <sync:SfListView x:Name="listView" ItemsSource="{Binding ResultCollection}" SelectionMode="None"
+                             ItemSize="50" ItemSpacing="0,0,0,5">
+                <sync:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame HasShadow="True" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                               OutlineColor="Black" CornerRadius="0" Padding="5">
+                            <StackLayout>
+                                <Label Text="{Binding DisplayText}" Style="{StaticResource headerstyle}" />
+                                <Label Text="{Binding AnswerCount, StringFormat='{0} Antworten erhalten'}"
+                                       Style="{StaticResource lowerstyle}" />
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </sync:SfListView.ItemTemplate>
+            </sync:SfListView>
             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="End">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />

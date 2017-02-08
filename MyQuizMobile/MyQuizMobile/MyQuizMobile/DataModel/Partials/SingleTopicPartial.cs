@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using PostSharp.Patterns.Model;
+﻿using Newtonsoft.Json;
 
 namespace MyQuizMobile.DataModel {
     public partial class SingleTopic : Item {

@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Networking.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Socket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\TimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionBlockAddQuestionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QuestionBlockEditViewModel.cs" />

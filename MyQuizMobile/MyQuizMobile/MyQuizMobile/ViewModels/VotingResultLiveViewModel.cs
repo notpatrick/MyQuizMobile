@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
+using MyQuizMobile.Helpers;
+using Newtonsoft.Json;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
@@ -16,11 +18,13 @@ namespace MyQuizMobile {
         private const string TextAlreadySent = "Bereits gesendet";
         private SingleTopic _currentSingleTopic;
         private long _initialTime;
-        private Socket _socket = App.Socket;
         private long _timeInSeconds;
         private bool _voteFinished;
+        private DateTime DestinationTime;
+        private Socket prevSocket;
+        private VotingStartViewModel vsvm;
 
-        public ObservableCollection<Item> ResultCollection { get; set; } = new ObservableCollection<Item>();
+        public ObservableCollection<Question> ResultCollection { get; set; }
         public long TimeInSeconds {
             get { return _timeInSeconds; }
             set {
@@ -37,6 +41,7 @@ namespace MyQuizMobile {
         public bool CanEdit { get; set; }
         public bool IsPersonal { get; set; }
         public Group Group { get; set; }
+        public QuestionBlock QuestionBlock { get; set; }
         public ObservableCollection<SingleTopic> SingleTopics { get; set; }
         public string ButtonText { get; set; }
         public SingleTopic CurrentSingleTopic {
@@ -52,24 +57,32 @@ namespace MyQuizMobile {
             }
         }
 
+        public int SurveyId { get; set; }
+
         public ICommand ButtonClickedCommand { get; private set; }
         public ICommand SingleTopicSelectedCommand { get; private set; }
 
         public VotingResultLiveViewModel(VotingStartViewModel asvm) { Init(asvm); }
 
-        private void Init(VotingStartViewModel asvm) {
+        private void Init(VotingStartViewModel vm) {
             RegisterCommands();
+            vsvm = vm;
+            ResultCollection = new ObservableCollection<Question>();
+            Group = vm.ItemCollection[0] as Group;
+            QuestionBlock = vm.ItemCollection[1] as QuestionBlock;
             CanSend = true;
             CanEdit = true;
             ButtonText = TextSend;
-            TimeInSeconds = asvm.TimeInSeconds;
-            _initialTime = asvm.TimeInSeconds;
-            IsPersonal = asvm.IsPersonal;
-            // TODO: Create GivenAnswer from VotingStartViewModel
+            TimeInSeconds = vm.TimeInSeconds;
+            _initialTime = vm.TimeInSeconds;
+            IsPersonal = vm.IsPersonal;
             if (IsPersonal) {
-                SingleTopics = ((Group)asvm.ItemCollection[0]).SingleTopics;
+                SingleTopics = ((Group)vm.ItemCollection[0]).SingleTopics;
                 CurrentSingleTopic = SingleTopics.FirstOrDefault();
+            } else {
+                CurrentSingleTopic = null;
             }
+            // TODO: Create GivenAnswer from VotingStartViewModel
         }
 
         private void RegisterCommands() {
@@ -81,16 +94,65 @@ namespace MyQuizMobile {
             if (!_voteFinished) {
                 CanSend = false;
                 CanEdit = false;
-                Device.StartTimer(TimeSpan.FromSeconds(1), TimerElapsed);
-                // TODO: Open websocket connection here to start and update ListView when new givenanswers come in
+                Device.StartTimer(TimeSpan.FromMilliseconds(200), TimerElapsed);
+
+                // Prepare POST message to initiate vote
+                var s = CurrentSingleTopic;
+                var now = TimeHelper.ConvertToUnixTimestamp(DateTime.Now);
+                var destUnix = (int)(now + TimeInSeconds);
+                DestinationTime = DateTime.Now + TimeSpan.FromSeconds(TimeInSeconds);
+
+                var givenAnswersToSend = QuestionBlock?.Questions.Select(q => new GivenAnswer {Group = Group, QuestionBlock = QuestionBlock, Question = q, SingleTopic = s, TimeStamp = destUnix.ToString()}).ToList();
+
+                ResultCollection.Clear();
+                foreach (var quest in QuestionBlock?.Questions) {
+                    quest.AnswerCount = 0;
+                    ResultCollection.Add(quest);
+                }
+
+                // Send POST
+                try {
+                    var result = await GivenAnswer.Start(givenAnswersToSend, TimeInSeconds);
+                    SurveyId = (int)result.First().SurveyId;
+                } catch (Exception) {
+                    throw;
+                }
+
+                // Create Socket connection with surveyId
+                try {
+                    var close = prevSocket?.Close();
+                    if (close != null) {
+                        await close;
+                    }
+                    var sock = new Socket();
+                    prevSocket = sock;
+                    await sock.Connect(SurveyId);
+                    sock.ReceiveLoop(incomingString => {
+                        try {
+                            var givenanswer = JsonConvert.DeserializeObject<GivenAnswer>(incomingString);
+                            if (givenanswer == null) {
+                                return;
+                            }
+                            var q = ResultCollection.First(x => x.Id == givenanswer.Question.Id);
+                            q.AnswerCount++;
+                        } catch (JsonSerializationException e) {
+                            e.Data.Add("incoming", incomingString);
+                            throw e;
+                        }
+                    });
+                } catch (Exception) {
+                    throw;
+                }
             } else {
-                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
+                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
+                ((MasterDetailPage)Application.Current.MainPage).Detail = new NavigationPage((Page)Activator.CreateInstance(typeof(VotingStartPage)));
             }
         }
 
         private bool TimerElapsed() {
-            if (TimeInSeconds > 0) {
-                TimeInSeconds -= 1;
+            var remaining = DestinationTime.Subtract(DateTime.Now).Seconds;
+            if (remaining > 0) {
+                TimeInSeconds = remaining;
                 return true;
             }
             CanSend = true;
@@ -136,7 +198,8 @@ namespace MyQuizMobile {
             Device.BeginInvokeOnMainThread(async () => {
                 var result = await page.DisplayAlert("Achtung!", "Wollen Sie die aktuelle Umfrage wirklich vorzeitig beenden? Ergebnisse können dann unvollständig sein!", "Umfrage Beenden", "Zurück");
                 if (result) {
-                    await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync();
+                    await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
+                    ((MasterDetailPage)Application.Current.MainPage).Detail = new NavigationPage((Page)Activator.CreateInstance(typeof(VotingStartPage)));
                 }
             });
 

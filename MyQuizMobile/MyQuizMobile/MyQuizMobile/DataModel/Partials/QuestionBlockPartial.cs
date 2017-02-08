@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
     public partial class QuestionBlock : Item {

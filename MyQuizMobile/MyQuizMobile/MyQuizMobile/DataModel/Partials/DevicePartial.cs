@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using PostSharp.Patterns.Model;
 
 namespace MyQuizMobile.DataModel {
     public partial class Device : Item {

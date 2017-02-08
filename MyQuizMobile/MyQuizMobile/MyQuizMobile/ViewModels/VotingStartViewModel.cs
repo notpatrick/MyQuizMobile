@@ -5,7 +5,6 @@ using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
 using Xamarin.Forms;
-using Device = Xamarin.Forms.Device;
 
 namespace MyQuizMobile {
     [NotifyPropertyChanged]
@@ -52,7 +51,7 @@ namespace MyQuizMobile {
             RegisterCommands();
             TimeInSeconds = 30;
             CanSend = false;
-            ItemCollection = new ObservableCollection<Item> {new MenuItem() {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"}, new MenuItem() {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}};
+            ItemCollection = new ObservableCollection<Item> {new MenuItem {Id = -1, ItemType = ItemType.Group, DisplayText = "Veranstaltung wählen"}, new MenuItem {Id = -1, ItemType = ItemType.QuestionBlock, DisplayText = "Frageliste wählen"}};
         }
 
         private void SubscribeEvents() {
@@ -70,9 +69,7 @@ namespace MyQuizMobile {
                 switch (item.ItemType) {
                 case ItemType.Group:
                     ItemCollection[0] = (Group)item;
-                    if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                        ItemCollection[0] = (Group)item;
-                    }
+
                     if (((Group)item).SingleTopics != null && ((Group)item).SingleTopics.Any()) {
                         GroupHasSingleTopics = true;
                         IsPersonal = true;
@@ -83,20 +80,6 @@ namespace MyQuizMobile {
                     break;
                 case ItemType.QuestionBlock:
                     ItemCollection[1] = (QuestionBlock)item;
-                    if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                        ItemCollection[1] = (QuestionBlock)item;
-                    }
-                    if (item.Id == 0) {
-                        ItemCollection.Add(new Question {Id = -1, DisplayText = "Frage auswählen", ItemType = ItemType.Question});
-                    } else if (ItemCollection.Any(x => x.ItemType == ItemType.Question)) {
-                        ItemCollection.Remove(ItemCollection.First(x => x.ItemType == ItemType.Question));
-                    }
-                    break;
-                case ItemType.Question:
-                    ItemCollection[2] = (Question)item;
-                    if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
-                        ItemCollection[2] = (Question)item;
-                    }
                     break;
                 }
                 var veranstaltungPicked = ItemCollection[0].Id != -1;

@@ -9,20 +9,21 @@
             <!-- TODO Replace with sync listview for multiselect-->
             <ListView x:Name="listView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                       ItemsSource="{Binding Questions}" IsPullToRefreshEnabled="True"
-                      IsRefreshing="{Binding IsLoading, Mode=OneWay}"  
+                      IsRefreshing="{Binding IsLoading, Mode=OneWay}"
                       RefreshCommand="{Binding RefreshCommand}" CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <SwitchCell Text="{Binding DisplayText}" On="{Binding IsSelected}" OnChanged="SwitchCell_OnOnChanged" />
+                        <SwitchCell Text="{Binding DisplayText}" On="{Binding IsSelected}"
+                                    OnChanged="SwitchCell_OnOnChanged" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-          <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-            <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"
-                    Command="{Binding CancelCommand}" />
-            <Button Text="Übernehmen" HorizontalOptions="FillAndExpand"
-                    Command="{Binding AcceptCommand}" />
-          </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"
+                        Command="{Binding CancelCommand}" />
+                <Button Text="Übernehmen" HorizontalOptions="FillAndExpand"
+                        Command="{Binding AcceptCommand}" />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

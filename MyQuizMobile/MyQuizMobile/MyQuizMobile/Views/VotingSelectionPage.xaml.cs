@@ -11,6 +11,5 @@ namespace MyQuizMobile {
 
             listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
-
     }
 }

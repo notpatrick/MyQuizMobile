@@ -67,9 +67,7 @@ namespace MyQuizMobile {
             }
             IsLoading = true;
             ((Command)RefreshCommand).ChangeCanExecute();
-            await Task.Run(async () => {
-                _allQuestions = await Question.GetAll();
-            });
+            await Task.Run(async () => { _allQuestions = await Question.GetAll(); });
             IsLoading = false;
             ((Command)RefreshCommand).ChangeCanExecute();
             SearchCommand.Execute(null);
@@ -80,9 +78,7 @@ namespace MyQuizMobile {
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
-        private async Task Finished() {
-            RefreshCommand.Execute(null);
-        }
+        private async Task Finished() { RefreshCommand.Execute(null); }
 
         private void Filter() {
             _isSearching = true;

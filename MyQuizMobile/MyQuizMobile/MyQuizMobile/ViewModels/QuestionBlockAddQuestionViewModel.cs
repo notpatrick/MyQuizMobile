@@ -58,8 +58,9 @@ namespace MyQuizMobile {
 
                 foreach (var g in resultQuestion) {
                     var x = SelectedQuestions.FirstOrDefault(q => q.Id == g.Id);
-                    if (x != null)
+                    if (x != null) {
                         g.IsSelected = x.IsSelected;
+                    }
                     _items.Add(g);
                 }
             });
@@ -82,22 +83,18 @@ namespace MyQuizMobile {
 
         public void Switched(object sender, ToggledEventArgs e) {
             var q = ((SwitchCell)sender).BindingContext as Question;
-            if (SelectedQuestions.Any(x => x.Id == q?.Id))
+            if (SelectedQuestions.Any(x => x.Id == q?.Id)) {
                 SelectedQuestions.First(x => x.Id == q?.Id).IsSelected = e.Value;
-            else {
+            } else {
                 SelectedQuestions.Add(q);
             }
         }
 
         private async Task Save() {
             MessagingCenter.Send(this, "Saved", SelectedQuestions);
-            await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private async Task Cancel()
-        {
-            await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
-        }
-
+        private async Task Cancel() { await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true); }
     }
 }

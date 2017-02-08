@@ -15,7 +15,7 @@ namespace MyQuizMobile {
         public virtual string DetailText { get; set; }
     }
 
-    public class MenuItem : Item{
+    public class MenuItem : Item {
         public override long Id { get; set; }
         public override string DisplayText { get; set; }
         public override ItemType ItemType { get; set; }
