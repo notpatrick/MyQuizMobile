@@ -8,7 +8,7 @@ namespace MyQuizMobile.DataModel {
     public partial class Question {
         public ObservableCollection<AnswerOption> Answers { get; set; } = new ObservableCollection<AnswerOption>();
         public override string DisplayText { get { return Text; } set { Text = value; } }
-        public override string DetailText => Answers.Count > 0 ? $"{Answers.Count} Antwortmöglichkeiten" : "Enthält noch keine Antwortmöglichkeiten";
+        public override string DetailText => Answers != null ? Answers.Count > 0 ? $"{Answers.Count} Antwortmöglichkeiten" : "Enthält noch keine Antwortmöglichkeiten" : string.Empty;
         public override ItemType ItemType => ItemType.Question;
 
         [JsonIgnore]

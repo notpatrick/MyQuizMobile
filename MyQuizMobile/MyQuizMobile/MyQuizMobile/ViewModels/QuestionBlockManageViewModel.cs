@@ -53,11 +53,6 @@ namespace MyQuizMobile {
             // TODO Questionblock edit view models
             MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Done");
             MessagingCenter.Subscribe<QuestionBlockEditViewModel, QuestionBlock>(this, "Done", async (sender, arg) => { await Finished(); });
-            MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Canceled");
-            MessagingCenter.Subscribe<QuestionBlockEditViewModel>(this, "Canceled", async sender => {
-                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
-                RefreshCommand.Execute(null);
-            });
         }
 
         private void RegisterCommands() {
@@ -81,11 +76,10 @@ namespace MyQuizMobile {
 
         private async void Add() {
             var nextPage = new QuestionBlockEditPage(new QuestionBlock());
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
         private async Task Finished() {
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
             RefreshCommand.Execute(null);
         }
 
@@ -103,8 +97,7 @@ namespace MyQuizMobile {
 
         private async Task ItemSelected(Item item) {
             var nextPage = new QuestionBlockEditPage((QuestionBlock)item);
-            MessagingCenter.Send(this, "Selected");
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
     }
 }

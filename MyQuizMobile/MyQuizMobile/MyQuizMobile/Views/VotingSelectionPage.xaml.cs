@@ -8,18 +8,9 @@ namespace MyQuizMobile {
             InitializeComponent();
             VotingSelectionViewModel = new VotingSelectionViewModel(item);
             BindingContext = VotingSelectionViewModel;
+
+            listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
 
-        protected override void OnAppearing() {
-            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "PickDone");
-            MessagingCenter.Subscribe<VotingSelectionViewModel>(this, "PickDone", sender => { listView.SelectedItem = null; });
-
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing() {
-            MessagingCenter.Unsubscribe<VotingSelectionViewModel>(this, "PickDone");
-            base.OnDisappearing();
-        }
     }
 }

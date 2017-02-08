@@ -21,7 +21,7 @@
             <Button Text="Abbrechen" HorizontalOptions="FillAndExpand"
                     Command="{Binding CancelCommand}" />
             <Button Text="Übernehmen" HorizontalOptions="FillAndExpand"
-                    Command="{Binding SaveCommand}" />
+                    Command="{Binding AcceptCommand}" />
           </StackLayout>
         </StackLayout>
     </ContentPage.Content>

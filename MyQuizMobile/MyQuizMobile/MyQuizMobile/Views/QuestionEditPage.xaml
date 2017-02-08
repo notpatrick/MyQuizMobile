@@ -30,7 +30,7 @@
             </Grid>
             <ListView x:Name="listView" Header="Antworten" ItemsSource="{Binding Question.Answers}"
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement"
-                      HasUnevenRows="True" ItemSelected="ListView_OnItemSelected">
+                      HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:AnswerCell

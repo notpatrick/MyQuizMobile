@@ -36,7 +36,6 @@ namespace MyQuizMobile {
             if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
                 return; // Don't hide sidemenu on UWP
             }
-            MessagingCenter.Send(this, "Selected");
             ((MasterDetailPage)Application.Current.MainPage).IsPresented = false;
         }
     }

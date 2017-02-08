@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
@@ -25,24 +26,26 @@ namespace MyQuizMobile {
         public QuestionEditViewModel(Question q) {
             Question = q;
             CanDelete = Question.Answers.Any();
-            DeleteCommand = new Command(Delete);
-            SaveCommand = new Command(Save);
-            CancelCommand = new Command(Cancel);
+            DeleteCommand = new Command(async () => { await Delete(); });
+            SaveCommand = new Command(async () => { await Save(); });
+            CancelCommand = new Command(async ()=> { await Cancel(); });
             RemoveAnswerOptionCommand = new Command<AnswerOption>(RemoveAnswer);
             AddAnswerCommand = new Command(Add);
         }
 
-        private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
+        private async Task Cancel() { await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true); }
 
-        private async void Save() {
+        private async Task Save() {
             Question.Answers.Remove(x => string.IsNullOrWhiteSpace(x.Text));
             await Question.Post(Question);
             MessagingCenter.Send(this, "Done", Question);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private async void Delete() {
+        private async Task Delete() {
             await Question.DeleteById(Question.Id);
             MessagingCenter.Send(this, "Done", Question);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
         private void Add() { Question.Answers.Add(new AnswerOption()); }

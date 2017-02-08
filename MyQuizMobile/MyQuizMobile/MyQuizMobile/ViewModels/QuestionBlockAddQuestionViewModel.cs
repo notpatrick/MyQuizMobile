@@ -26,7 +26,7 @@ namespace MyQuizMobile {
         public ICommand SearchCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
+        public ICommand AcceptCommand { get; private set; }
 
         public QuestionBlockAddQuestionViewModel(QuestionBlock qb) { Init(qb); }
 
@@ -42,8 +42,8 @@ namespace MyQuizMobile {
         private void RegisterCommands() {
             SearchCommand = new Command(Filter, () => !_isSearching && !IsLoading);
             RefreshCommand = new Command(async () => { await GetAll(); }, () => !IsLoading);
-            CancelCommand = new Command(Cancel);
-            SaveCommand = new Command(Save);
+            CancelCommand = new Command(async () => { await Cancel(); });
+            AcceptCommand = new Command(async () => { await Save(); });
         }
 
         private async Task GetAll() {
@@ -89,11 +89,15 @@ namespace MyQuizMobile {
             }
         }
 
-        private void Save() {
+        private async Task Save() {
             MessagingCenter.Send(this, "Saved", SelectedQuestions);
+            await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
+        private async Task Cancel()
+        {
+            await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
+        }
 
     }
 }

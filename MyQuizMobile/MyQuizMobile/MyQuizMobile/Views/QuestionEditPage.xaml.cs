@@ -9,7 +9,7 @@ namespace MyQuizMobile {
             InitializeComponent();
             QuestionEditViewModel = new QuestionEditViewModel(q);
             BindingContext = QuestionEditViewModel;
+            listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
-        private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) { listView.SelectedItem = null; }
     }
 }

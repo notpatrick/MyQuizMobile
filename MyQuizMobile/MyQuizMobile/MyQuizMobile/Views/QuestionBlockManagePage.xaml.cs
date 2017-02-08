@@ -8,17 +8,8 @@ namespace MyQuizMobile {
             InitializeComponent();
             QuestionBlockManageViewModel = new QuestionBlockManageViewModel();
             BindingContext = QuestionBlockManageViewModel;
+            listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };
         }
 
-        protected override void OnAppearing() {
-            MessagingCenter.Unsubscribe<QuestionBlockManageViewModel>(this, "Selected");
-            MessagingCenter.Subscribe<QuestionBlockManageViewModel>(this, "Selected", sender => { listView.SelectedItem = null; });
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing() {
-            MessagingCenter.Unsubscribe<QuestionBlockManageViewModel>(this, "Selected");
-            base.OnDisappearing();
-        }
     }
 }

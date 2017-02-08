@@ -52,8 +52,6 @@ namespace MyQuizMobile {
         private void SubscribeEvents() {
             MessagingCenter.Unsubscribe<QuestionEditViewModel>(this, "Done");
             MessagingCenter.Subscribe<QuestionEditViewModel, Question>(this, "Done", async (sender, arg) => { await Finished(); });
-            MessagingCenter.Unsubscribe<QuestionEditViewModel>(this, "Canceled");
-            MessagingCenter.Subscribe<QuestionEditViewModel>(this, "Canceled", async sender => { await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true); });
         }
 
         private void RegisterCommands() {
@@ -69,7 +67,9 @@ namespace MyQuizMobile {
             }
             IsLoading = true;
             ((Command)RefreshCommand).ChangeCanExecute();
-            await Task.Run(async () => { _allQuestions = await Question.GetAll(); });
+            await Task.Run(async () => {
+                _allQuestions = await Question.GetAll();
+            });
             IsLoading = false;
             ((Command)RefreshCommand).ChangeCanExecute();
             SearchCommand.Execute(null);
@@ -77,11 +77,10 @@ namespace MyQuizMobile {
 
         private async void Add() {
             var nextPage = new QuestionEditPage(new Question());
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
         private async Task Finished() {
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
             RefreshCommand.Execute(null);
         }
 
@@ -99,8 +98,7 @@ namespace MyQuizMobile {
 
         private async Task ItemSelected(Item item) {
             var nextPage = new QuestionEditPage((Question)item);
-            MessagingCenter.Send(this, "Selected");
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using PostSharp.Patterns.Model;
@@ -24,48 +25,42 @@ namespace MyQuizMobile {
         }
 
         private void RegisterCommads() {
-            DeleteCommand = new Command(Delete);
-            SaveCommand = new Command(Save);
-            CancelCommand = new Command(Cancel);
+            DeleteCommand = new Command(async () => { await Delete(); });
+            SaveCommand = new Command(async () => { await Save(); });
+            CancelCommand = new Command(async () => { await Cancel(); });
             RemoveQuestionCommand = new Command<Question>(RemoveQuestion);
-            AddQuestionCommand = new Command(Add);
+            AddQuestionCommand = new Command(async () => { await Add(); });
         }
 
-        private void SubscribeEvents()
-        {
-            MessagingCenter.Unsubscribe<QuestionBlockAddQuestionViewModel>(this, "PickDone");
-            MessagingCenter.Subscribe<QuestionBlockAddQuestionViewModel, List<Question>>(this, "PickDone", async (s, args) => { await SetQuestions(args);
-                await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
-            });
-
-            MessagingCenter.Unsubscribe<QuestionBlockAddQuestionViewModel>(this, "Canceled");
-            MessagingCenter.Subscribe<QuestionBlockAddQuestionViewModel>(this, "Canceled", async (m) => {
-                await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
-            });
+        private void SubscribeEvents() {
+            MessagingCenter.Unsubscribe<QuestionBlockAddQuestionViewModel>(this, "Saved");
+            MessagingCenter.Subscribe<QuestionBlockAddQuestionViewModel, ObservableCollection<Question>>(this, "Saved", async (s, args) => { await SetQuestions(args); });
         }
 
-        private async Task SetQuestions(List<Question> list) {
-            // TODO: Set questionlist with new input
+        private async Task SetQuestions(ObservableCollection<Question> list) {
+            QuestionBlock.Questions = list;
         }
 
-        private void SetQuestions(ObservableCollection<Question> list) { QuestionBlock.Questions = list; }
+        private async Task Cancel() {
+            await((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
+        }
 
-        private void Cancel() { MessagingCenter.Send(this, "Canceled"); }
-
-        private async void Save() {
+        private async Task Save() {
             QuestionBlock.Questions.Remove(x => string.IsNullOrWhiteSpace(x.Text));
             await QuestionBlock.Post(QuestionBlock);
             MessagingCenter.Send(this, "Done", QuestionBlock);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private async void Delete() {
+        private async Task Delete() {
             await QuestionBlock.DeleteById(QuestionBlock.Id);
             MessagingCenter.Send(this, "Done", QuestionBlock);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true);
         }
 
-        private async void Add() {
+        private async Task Add() {
             var nextPage = new QuestionBlockAddQuestionPage(QuestionBlock);
-            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushModalAsync(new NavigationPage(nextPage), true);
+            await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
 
         private void RemoveQuestion(Question q) {
