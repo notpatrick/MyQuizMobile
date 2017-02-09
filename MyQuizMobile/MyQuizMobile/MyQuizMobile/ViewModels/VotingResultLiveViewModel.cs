@@ -94,14 +94,12 @@ namespace MyQuizMobile {
             if (!_voteFinished) {
                 CanSend = false;
                 CanEdit = false;
-                Device.StartTimer(TimeSpan.FromMilliseconds(200), TimerElapsed);
 
                 // Prepare POST message to initiate vote
                 var s = CurrentSingleTopic;
                 var now = TimeHelper.ConvertToUnixTimestamp(DateTime.Now);
                 var destUnix = (int)(now + TimeInSeconds);
                 DestinationTime = DateTime.Now + TimeSpan.FromSeconds(TimeInSeconds);
-
                 var givenAnswersToSend = QuestionBlock?.Questions.Select(q => new GivenAnswer {Group = Group, QuestionBlock = QuestionBlock, Question = q, SingleTopic = s, TimeStamp = destUnix.ToString()}).ToList();
 
                 ResultCollection.Clear();
@@ -109,10 +107,10 @@ namespace MyQuizMobile {
                     quest.AnswerCount = 0;
                     ResultCollection.Add(quest);
                 }
-
+                
                 // Send POST
                 try {
-                    var result = await GivenAnswer.Start(givenAnswersToSend, TimeInSeconds);
+                    var result = await GivenAnswer.Start(givenAnswersToSend);
                     SurveyId = (int)result.First().SurveyId;
                 } catch (Exception) {
                     throw;
@@ -120,13 +118,10 @@ namespace MyQuizMobile {
 
                 // Create Socket connection with surveyId
                 try {
-                    var close = prevSocket?.Close();
-                    if (close != null) {
-                        await close;
-                    }
                     var sock = new Socket();
                     prevSocket = sock;
                     await sock.Connect(SurveyId);
+                    Device.StartTimer(TimeSpan.FromMilliseconds(200), TimerElapsed);
                     sock.ReceiveLoop(incomingString => {
                         try {
                             var givenanswer = JsonConvert.DeserializeObject<GivenAnswer>(incomingString);
@@ -155,6 +150,7 @@ namespace MyQuizMobile {
                 TimeInSeconds = remaining;
                 return true;
             }
+            prevSocket?.Close();
             CanSend = true;
             CanEdit = true;
             TimeInSeconds = _initialTime;

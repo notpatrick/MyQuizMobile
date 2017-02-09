@@ -3,7 +3,7 @@
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:local="clr-namespace:MyQuizMobile"
              x:Class="MyQuizMobile.VotingResultLivePage"
-             Title="Live Übersicht"
+             Title="{Binding SurveyId}"
              Padding="5">
     <ContentPage.Resources>
         <ResourceDictionary>
