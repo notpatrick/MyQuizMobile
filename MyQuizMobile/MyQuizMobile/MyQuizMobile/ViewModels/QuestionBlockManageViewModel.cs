@@ -50,7 +50,6 @@ namespace MyQuizMobile {
         }
 
         private void SubscribeEvents() {
-            // TODO Questionblock edit view models
             MessagingCenter.Unsubscribe<QuestionBlockEditViewModel>(this, "Done");
             MessagingCenter.Subscribe<QuestionBlockEditViewModel, QuestionBlock>(this, "Done", async (sender, arg) => { await Finished(); });
         }

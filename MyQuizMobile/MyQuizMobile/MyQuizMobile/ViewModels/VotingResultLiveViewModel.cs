@@ -131,15 +131,13 @@ namespace MyQuizMobile {
                     Device.StartTimer(TimeSpan.FromMilliseconds(200), TimerElapsed);
                     socket.ReceiveLoop(incomingString => {
                         try {
-                            var givenanswer = JsonConvert.DeserializeObject<GivenAnswer>(incomingString);
+                            var givenanswer = JsonConvert.DeserializeObject<GivenAnswer>(incomingString, new JsonSerializerSettings() {NullValueHandling = NullValueHandling.Ignore});
                             if (givenanswer == null) {
                                 return;
                             }
                             ReceivedGivenAnswers.Add(givenanswer);
-                            var single = Group.DeviceCount * QuestionBlock.Questions.Select(x => x.Type != Constants.QuestionTypeMultiText).ToList().Count;
-                            var multi = Group.DeviceCount * QuestionBlock.Questions.Select(x => x.Type == Constants.QuestionTypeMultiText).ToList().Count * QuestionBlock.Questions.Where(x => x.Type == Constants.QuestionTypeMultiText).Select(x => x.AnswerOptions).ToList().Count;
 
-                            var possibleCount = single + multi;
+                            var possibleCount = Group.DeviceCount * QuestionBlock.Questions.Count;
                             var currentCount = ReceivedGivenAnswers.Distinct().Count();
                             if (possibleCount - currentCount >= 0) {
                                 Votes.Clear();

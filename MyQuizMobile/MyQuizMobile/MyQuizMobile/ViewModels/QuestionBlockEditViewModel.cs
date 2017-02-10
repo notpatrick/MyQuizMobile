@@ -38,6 +38,7 @@ namespace MyQuizMobile {
         }
 
         private async Task SetQuestions(ObservableCollection<Question> list) {
+            MessagingCenter.Unsubscribe<QuestionBlockAddQuestionViewModel>(this, "Saved");
             QuestionBlock.Questions = list;
             await QuestionBlock.Put(QuestionBlock);
         }
@@ -58,6 +59,7 @@ namespace MyQuizMobile {
         }
 
         private async Task Add() {
+            SubscribeEvents();
             var nextPage = new QuestionBlockAddQuestionPage(QuestionBlock);
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }
