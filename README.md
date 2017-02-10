@@ -19,7 +19,7 @@ The application represents an alternative implementation to combine the [**MyQui
 ### :trophy: Milestones
 
 - [ ] :mega: Full vote capabilities 
-- [ ] :open_file_folder: Full data management capabilities 
+- [X] :open_file_folder: Full data management capabilities 
 - [ ] :bar_chart: Full statistics capabilities 
 - [ ] :santa: Nice look and feel 
 
