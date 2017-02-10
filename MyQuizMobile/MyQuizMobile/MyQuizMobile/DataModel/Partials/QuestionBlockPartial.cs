@@ -9,12 +9,14 @@ namespace MyQuizMobile.DataModel {
         public override ItemType ItemType => ItemType.QuestionBlock;
         public override string DetailText => Questions != null ? Questions.Count > 0 ? $"{Questions.Count} Fragen" : "Enthält noch keine Fragen" : string.Empty;
 
-        #region POST
-        public static async Task<QuestionBlock> Post(QuestionBlock questionBlock) { return await App.Networking.Post("api/questionBlock/", questionBlock); }
-        #endregion
-
         #region DELETE
         public static async Task DeleteById(long id) { await App.Networking.Delete($"api/questionBlock/{id}"); }
+        #endregion
+
+        #region POST
+        public static async Task<QuestionBlock> Post(QuestionBlock questionBlock) { return await App.Networking.Post("api/questionBlock/", questionBlock); }
+
+        public static async Task<QuestionBlock> Put(QuestionBlock questionBlock) { return await App.Networking.Put("api/questionBlock/", questionBlock); }
         #endregion
 
         #region GET

@@ -4,7 +4,7 @@ namespace MyQuizMobile.Helpers {
     public class TimeHelper {
         public static DateTime UnixTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        public static long GetUnixTimeDifferenceToNow() { return (long)DateTime.Now.Subtract(UnixTime).TotalSeconds; }
+        public static long GetUnixTimeDifferenceToNow() { return (long)Math.Ceiling(DateTime.Now.Subtract(UnixTime).TotalSeconds); }
 
         public static DateTime ConvertFromUnixTimestamp(long timestamp) {
             var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -14,7 +14,7 @@ namespace MyQuizMobile.Helpers {
         public static long ConvertToUnixTimestamp(DateTime date) {
             var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var diff = date.ToUniversalTime() - origin;
-            return (long)diff.TotalSeconds;
+            return (long)Math.Ceiling(diff.TotalSeconds);
         }
     }
 }

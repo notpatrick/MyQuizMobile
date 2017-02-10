@@ -27,7 +27,13 @@ namespace MyQuizMobile {
 
         public SideMenuViewModel() {
             ItemTappedCommand = new Command<SideMenuItem>(OnItemSelected);
-            SideMenuItems = new ObservableCollection<SideMenuItem> {new SideMenuItem("Abstimmung starten", "Hier können Abstimmungen gestartet werden", typeof(VotingStartPage)), new SideMenuItem("Veranstaltungen verwalten", "Hier können Veranstaltungen verwaltet werden", typeof(GroupManagePage)), new SideMenuItem("Fragelisten verwalten", "Hier können Fragelisten verwaltet werden", typeof(QuestionBlockManagePage)), new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden", typeof(QuestionManagePage)), new SideMenuItem("Statistiken", "Hier können Statistiken eingesehen werden", typeof(StatisticsPage))};
+            SideMenuItems = new ObservableCollection<SideMenuItem> {
+                new SideMenuItem("Abstimmung starten", "Hier können Abstimmungen gestartet werden", typeof(VotingStartPage)),
+                new SideMenuItem("Veranstaltungen verwalten", "Hier können Veranstaltungen verwaltet werden", typeof(GroupManagePage)),
+                new SideMenuItem("Fragelisten verwalten", "Hier können Fragelisten verwaltet werden", typeof(QuestionBlockManagePage)),
+                new SideMenuItem("Fragen verwalten", "Hier können Fragen verwaltet werden", typeof(QuestionManagePage))
+                //new SideMenuItem("Statistiken", "Hier können Statistiken eingesehen werden", typeof(StatisticsPage))
+            };
         }
 
         public void OnItemSelected(SideMenuItem item) {

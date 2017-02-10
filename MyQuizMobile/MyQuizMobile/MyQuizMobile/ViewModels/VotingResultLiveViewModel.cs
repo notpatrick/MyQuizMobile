@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +7,9 @@ using System.Windows.Input;
 using MyQuizMobile.DataModel;
 using MyQuizMobile.Helpers;
 using Newtonsoft.Json;
+using NLog;
 using PostSharp.Patterns.Model;
+using Syncfusion.SfChart.XForms;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
 
@@ -16,14 +19,13 @@ namespace MyQuizMobile {
         private const string TextSend = "Absenden";
         private const string TextExit = "Umfrage beenden";
         private const string TextAlreadySent = "Bereits gesendet";
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private SingleTopic _currentSingleTopic;
+        private DateTime _destinationTime;
         private long _initialTime;
         private long _timeInSeconds;
         private bool _voteFinished;
-        private DateTime DestinationTime;
-        private Socket prevSocket;
-        private VotingStartViewModel vsvm;
-
+        public List<GivenAnswer> ReceivedGivenAnswers = new List<GivenAnswer>();
         public ObservableCollection<Question> ResultCollection { get; set; }
         public long TimeInSeconds {
             get { return _timeInSeconds; }
@@ -56,7 +58,7 @@ namespace MyQuizMobile {
                 SingleTopicSelectedCommand.Execute(_currentSingleTopic);
             }
         }
-
+        public ObservableCollection<ChartDataPoint> Votes { get; set; } = new ObservableCollection<ChartDataPoint>();
         public int SurveyId { get; set; }
 
         public ICommand ButtonClickedCommand { get; private set; }
@@ -66,7 +68,6 @@ namespace MyQuizMobile {
 
         private void Init(VotingStartViewModel vm) {
             RegisterCommands();
-            vsvm = vm;
             ResultCollection = new ObservableCollection<Question>();
             Group = vm.ItemCollection[0] as Group;
             QuestionBlock = vm.ItemCollection[1] as QuestionBlock;
@@ -82,7 +83,9 @@ namespace MyQuizMobile {
             } else {
                 CurrentSingleTopic = null;
             }
-            // TODO: Create GivenAnswer from VotingStartViewModel
+            var possibleCount = Group.DeviceCount * QuestionBlock.Questions.Count;
+            Votes.Add(new ChartDataPoint("Ausstehend", possibleCount));
+            Votes.Add(new ChartDataPoint("Abgestimmt", 0));
         }
 
         private void RegisterCommands() {
@@ -98,45 +101,60 @@ namespace MyQuizMobile {
                 // Prepare POST message to initiate vote
                 var s = CurrentSingleTopic;
                 var now = TimeHelper.ConvertToUnixTimestamp(DateTime.Now);
-                var destUnix = (int)(now + TimeInSeconds);
-                DestinationTime = DateTime.Now + TimeSpan.FromSeconds(TimeInSeconds);
-                var givenAnswersToSend = QuestionBlock?.Questions.Select(q => new GivenAnswer {Group = Group, QuestionBlock = QuestionBlock, Question = q, SingleTopic = s, TimeStamp = destUnix.ToString()}).ToList();
-
+                var destUnix = now + TimeInSeconds;
+                _destinationTime = DateTime.Now + TimeSpan.FromSeconds(TimeInSeconds);
+                //var givenAnswersToSend = QuestionBlock?.Questions.Select(q => new GivenAnswer {Group = Group, QuestionBlock = QuestionBlock, Question = q, SingleTopic = s, TimeStamp = destUnix.ToString()}).ToList();
+                var givenAnswerToSend = new GivenAnswer {Group = Group, QuestionBlock = QuestionBlock, SingleTopic = s, TimeStamp = destUnix.ToString()};
+                ReceivedGivenAnswers.Clear();
                 ResultCollection.Clear();
-                foreach (var quest in QuestionBlock?.Questions) {
-                    quest.AnswerCount = 0;
-                    ResultCollection.Add(quest);
+                if (QuestionBlock?.Questions != null) {
+                    foreach (var quest in QuestionBlock?.Questions) {
+                        quest.AnswerCount = 0;
+                        ResultCollection.Add(quest);
+                    }
                 }
-                
+
                 // Send POST
                 try {
-                    var result = await GivenAnswer.Start(givenAnswersToSend);
-                    SurveyId = (int)result.First().SurveyId;
-                } catch (Exception) {
-                    throw;
+                    var result = await GivenAnswer.Start(givenAnswerToSend);
+                    SurveyId = (int)result.SurveyId;
+                } catch (Exception e) {
+                    Logger.Error(e, "Exception while POSTing GivenAnswers to server");
+                    await Application.Current.MainPage.DisplayAlert("Ups!", "Exception beim POST zum server", "Ok");
                 }
 
                 // Create Socket connection with surveyId
                 try {
-                    var sock = new Socket();
-                    prevSocket = sock;
-                    await sock.Connect(SurveyId);
+                    var socket = new Socket();
+                    await socket.Connect(SurveyId, (int)destUnix);
+                    Logger.Info($"Survey ID is {SurveyId}");
                     Device.StartTimer(TimeSpan.FromMilliseconds(200), TimerElapsed);
-                    sock.ReceiveLoop(incomingString => {
+                    socket.ReceiveLoop(incomingString => {
                         try {
                             var givenanswer = JsonConvert.DeserializeObject<GivenAnswer>(incomingString);
                             if (givenanswer == null) {
                                 return;
                             }
-                            var q = ResultCollection.First(x => x.Id == givenanswer.Question.Id);
-                            q.AnswerCount++;
-                        } catch (JsonSerializationException e) {
-                            e.Data.Add("incoming", incomingString);
-                            throw e;
+                            ReceivedGivenAnswers.Add(givenanswer);
+                            var single = Group.DeviceCount * QuestionBlock.Questions.Select(x => x.Type != Constants.QuestionTypeMultiText).ToList().Count;
+                            var multi = Group.DeviceCount * QuestionBlock.Questions.Select(x => x.Type == Constants.QuestionTypeMultiText).ToList().Count * QuestionBlock.Questions.Where(x => x.Type == Constants.QuestionTypeMultiText).Select(x => x.AnswerOptions).ToList().Count;
+
+                            var possibleCount = single + multi;
+                            var currentCount = ReceivedGivenAnswers.Distinct().Count();
+                            if (possibleCount - currentCount >= 0) {
+                                Votes.Clear();
+                                Votes.Add(new ChartDataPoint("Ausstehend", possibleCount - currentCount));
+                                Votes.Add(new ChartDataPoint("Abgestimmt", currentCount));
+                            }
+                        } catch (JsonSerializationException ej) {
+                            ej.Data.Add("incoming", incomingString);
+                            Logger.Error(ej, "Exception in ReceiveLoop lambda");
+                            throw;
                         }
                     });
-                } catch (Exception) {
-                    throw;
+                } catch (Exception e) {
+                    Logger.Error(e, "Exception during socket creation in Start() method");
+                    await Application.Current.MainPage.DisplayAlert("Ups!", "Exception beim Öffnen des Sockets", "Ok");
                 }
             } else {
                 await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopModalAsync(true);
@@ -145,12 +163,11 @@ namespace MyQuizMobile {
         }
 
         private bool TimerElapsed() {
-            var remaining = DestinationTime.Subtract(DateTime.Now).Seconds;
+            var remaining = _destinationTime.Subtract(DateTime.Now).Seconds;
             if (remaining > 0) {
                 TimeInSeconds = remaining;
                 return true;
             }
-            prevSocket?.Close();
             CanSend = true;
             CanEdit = true;
             TimeInSeconds = _initialTime;

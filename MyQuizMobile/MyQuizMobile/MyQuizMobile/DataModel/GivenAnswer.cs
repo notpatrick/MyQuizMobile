@@ -34,7 +34,7 @@ namespace MyQuizMobile.DataModel {
 
         #region POST
         public static async Task<GivenAnswer> Post(GivenAnswer givenAnswer) { return await App.Networking.Post("api/groups/", givenAnswer); }
-        public static async Task<List<GivenAnswer>> Start(List<GivenAnswer> givenAnswers) { return await App.Networking.Post($"api/givenanswer/start/", givenAnswers); }
+        public static async Task<GivenAnswer> Start(GivenAnswer givenAnswers) { return await App.Networking.Post("api/givenanswer/start/", givenAnswers); }
         #endregion
 
         #region GET
