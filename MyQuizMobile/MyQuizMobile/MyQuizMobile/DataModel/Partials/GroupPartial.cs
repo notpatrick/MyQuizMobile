@@ -8,6 +8,7 @@ namespace MyQuizMobile.DataModel {
         public override string DisplayText { get { return Title; } set { Title = value; } }
         public override ItemType ItemType => ItemType.Group;
         public override string DetailText => $"{EnterGroupPin}";
+        public long DeviceCount { get; set; }
 
         #region POST
         public static async Task<Group> Post(Group group) { return await App.Networking.Post("api/groups/", group); }

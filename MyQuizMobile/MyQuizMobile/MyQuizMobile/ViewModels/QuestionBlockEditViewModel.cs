@@ -37,7 +37,11 @@ namespace MyQuizMobile {
             MessagingCenter.Subscribe<QuestionBlockAddQuestionViewModel, ObservableCollection<Question>>(this, "Saved", async (s, args) => { await SetQuestions(args); });
         }
 
-        private async Task SetQuestions(ObservableCollection<Question> list) { QuestionBlock.Questions = list; }
+        private async Task SetQuestions(ObservableCollection<Question> list) {
+            MessagingCenter.Unsubscribe<QuestionBlockAddQuestionViewModel>(this, "Saved");
+            QuestionBlock.Questions = list;
+            await QuestionBlock.Put(QuestionBlock);
+        }
 
         private async Task Cancel() { await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PopAsync(true); }
 
@@ -55,6 +59,7 @@ namespace MyQuizMobile {
         }
 
         private async Task Add() {
+            SubscribeEvents();
             var nextPage = new QuestionBlockAddQuestionPage(QuestionBlock);
             await ((MasterDetailPage)Application.Current.MainPage).Detail.Navigation.PushAsync(nextPage, true);
         }

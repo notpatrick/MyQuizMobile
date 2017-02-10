@@ -18,6 +18,7 @@
                 <Label Text="Name" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
                 <Entry Text="{Binding QuestionBlock.DisplayText}" Grid.Row="0" Grid.Column="1" />
             </Grid>
+            <Label Text="Fragen" />
             <ListView x:Name="listView" ItemsSource="{Binding QuestionBlock.Questions}"
                       HorizontalOptions="FillAndExpand" InputTransparent="True" CachingStrategy="RecycleElement"
                       HasUnevenRows="True">

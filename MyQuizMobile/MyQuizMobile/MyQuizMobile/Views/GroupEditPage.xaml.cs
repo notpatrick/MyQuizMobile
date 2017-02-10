@@ -7,7 +7,6 @@ namespace MyQuizMobile {
 
         public GroupEditPage(Group group) {
             InitializeComponent();
-            NavigationPage.SetHasBackButton(this, false);
             GroupEditViewModel = new GroupEditViewModel(group);
             BindingContext = GroupEditViewModel;
             listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };

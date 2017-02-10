@@ -9,7 +9,6 @@ namespace MyQuizMobile {
             InitializeComponent();
             QuestionBlockAddQuestionViewModel = new QuestionBlockAddQuestionViewModel(qb);
             BindingContext = QuestionBlockAddQuestionViewModel;
-            NavigationPage.SetHasBackButton(this, false);
             listView.ItemSelected += (sender, args) => { listView.SelectedItem = null; };
         }
 

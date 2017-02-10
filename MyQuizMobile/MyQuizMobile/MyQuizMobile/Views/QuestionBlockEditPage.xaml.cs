@@ -7,7 +7,6 @@ namespace MyQuizMobile {
 
         public QuestionBlockEditPage(QuestionBlock qb) {
             InitializeComponent();
-            NavigationPage.SetHasBackButton(this, false);
             QuestionBlockEditViewModel = new QuestionBlockEditViewModel(qb);
             BindingContext = QuestionBlockEditViewModel;
             listView.ItemSelected += (s, e) => { listView.SelectedItem = null; };

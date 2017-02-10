@@ -35,7 +35,8 @@ namespace MyQuizMobile {
         }
 
         private async Task<string> Register(string password) {
-            var regDevice = await App.Networking.Post("api/devices/", new {Password = password, DeviceId = 0, Id = 0});
+            var net = new Networking("");
+            var regDevice = await net.Post("api/devices/", new {Password = password, DeviceId = 0, Id = 0});
             Application.Current.Properties["DeviceID"] = regDevice.Id;
             await Application.Current.SavePropertiesAsync();
             return Application.Current.Properties["DeviceID"].ToString();

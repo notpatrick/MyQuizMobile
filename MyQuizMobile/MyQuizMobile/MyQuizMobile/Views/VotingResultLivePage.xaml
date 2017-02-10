@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:local="clr-namespace:MyQuizMobile"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              x:Class="MyQuizMobile.VotingResultLivePage"
-             Title="Live Übersicht"
+             Title="{Binding Group.Title, StringFormat='{0} Ergebnisse'}"
              Padding="5">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -17,7 +18,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <sync:SfListView x:Name="listView" ItemsSource="{Binding ResultCollection}" SelectionMode="None"
+            <!--<sync:SfListView x:Name="listView" ItemsSource="{Binding ResultCollection}" SelectionMode="None"
                              ItemSize="50" ItemSpacing="0,0,0,5">
                 <sync:SfListView.ItemTemplate>
                     <DataTemplate>
@@ -31,7 +32,27 @@
                         </Frame>
                     </DataTemplate>
                 </sync:SfListView.ItemTemplate>
-            </sync:SfListView>
+            </sync:SfListView>-->
+            <chart:SfChart HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <chart:SfChart.Legend>
+
+                    <chart:ChartLegend />
+
+                </chart:SfChart.Legend>
+                <chart:SfChart.Series>
+                    <chart:DoughnutSeries ItemsSource="{Binding Votes}">
+                        <chart:PieSeries.DataMarker>
+                            <chart:ChartDataMarker>
+                                <chart:ChartDataMarker.LabelStyle>
+
+                                    <chart:DataMarkerLabelStyle LabelPosition="Inner" BackgroundColor="White" />
+
+                                </chart:ChartDataMarker.LabelStyle>
+                            </chart:ChartDataMarker>
+                        </chart:PieSeries.DataMarker>
+                    </chart:DoughnutSeries>
+                </chart:SfChart.Series>
+            </chart:SfChart>
             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="End">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*" />

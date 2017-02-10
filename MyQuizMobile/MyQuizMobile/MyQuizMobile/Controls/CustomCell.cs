@@ -45,7 +45,7 @@ namespace MyQuizMobile {
             var entryBinding = new Binding("DisplayText", BindingMode.TwoWay);
             entry.SetBinding(Entry.TextProperty, entryBinding);
 
-            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit};
+            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, WidthRequest = 36};
 
             var tapper = new TapGestureRecognizer();
             tapper.Tapped += (sender, args) => {
@@ -71,14 +71,14 @@ namespace MyQuizMobile {
 
     public class QuestionCell : CustomCell {
         public QuestionCell() {
-            var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0)};
+            var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 5, 10, 5)};
             View = stack;
 
-            var label = new Label {HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center};
+            var label = new Label {HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Start};
             var labelBinding = new Binding("DisplayText", BindingMode.TwoWay);
             label.SetBinding(Label.TextProperty, labelBinding);
 
-            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit};
+            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, WidthRequest = 36};
 
             var tapper = new TapGestureRecognizer();
             tapper.Tapped += (sender, args) => {
@@ -104,7 +104,7 @@ namespace MyQuizMobile {
     public class AnswerCell : CustomCell {
         public AnswerCell() {
             QuestionCategory = string.Empty;
-            var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0)};
+            var stack = new StackLayout {Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 5, 10, 5)};
             View = stack;
 
             var swStack = new StackLayout();
@@ -127,7 +127,7 @@ namespace MyQuizMobile {
             var entryBinding = new Binding("DisplayText", BindingMode.TwoWay);
             entry.SetBinding(Entry.TextProperty, entryBinding);
 
-            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit};
+            var image = new Image {Source = "ic_delete_forever.png", Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, WidthRequest = 36};
 
             var tapper = new TapGestureRecognizer();
             tapper.Tapped += (sender, args) => {

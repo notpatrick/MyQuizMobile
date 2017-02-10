@@ -20,6 +20,7 @@ namespace MYQuizMobile {
 
         private async void Connect(string deviceId) {
             try {
+                logger.Info($"Creating connection with DeviceID = {deviceId}");
                 _client = new HttpClient(new HttpClientHandler {UseProxy = false});
                 _client.BaseAddress = new Uri(HostAddress);
                 _client.DefaultRequestHeaders.Accept.Clear();
@@ -46,7 +47,7 @@ namespace MYQuizMobile {
                 logger.Info("Successful GET");
             } catch (Exception e) {
                 logger.Error(e, "Get Exception");
-                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception {e.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception while GETTING", "Ok");
             }
             return result;
         }
@@ -66,7 +67,27 @@ namespace MYQuizMobile {
                 logger.Info("Successful POST");
             } catch (Exception e) {
                 logger.Error(e, "Post Exception");
-                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception {e.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception while POSTING", "Ok");
+            }
+            return result;
+        }
+
+        public async Task<T> Put<T>(string path, T value) {
+            var result = default(T);
+            try {
+                var serializedValue = JsonConvert.SerializeObject(value, Formatting.None, new JsonSerializerSettings {DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate});
+                var response = await _client.PutAsync(path, new StringContent(serializedValue, Encoding.UTF8, ContentType));
+                if (!response.IsSuccessStatusCode) {
+                    var msg = await response.Content.ReadAsStringAsync();
+                    logger.Warn(msg);
+                    return default(T);
+                }
+                var serializedResult = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<T>(serializedResult);
+                logger.Info("Successful PUT");
+            } catch (Exception e) {
+                logger.Error(e, "Post Exception");
+                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception while PUTTING", "Ok");
             }
             return result;
         }
@@ -84,7 +105,7 @@ namespace MYQuizMobile {
                 }
             } catch (Exception e) {
                 logger.Error(e, "Delete Exception");
-                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception {e.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Ups!", $"Exception while DELETING", "Ok");
             }
             return result;
         }
